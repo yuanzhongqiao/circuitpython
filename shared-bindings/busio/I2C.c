@@ -42,7 +42,7 @@
 //|         :param ~microcontroller.Pin scl: The clock pin
 //|         :param ~microcontroller.Pin sda: The data pin
 //|         :param int frequency: The clock frequency in Hertz
-//|         :param int timeout: The maximum clock stretching timeut - (used only for
+//|         :param int timeout: The maximum clock stretching timeout - (used only for
 //|             :class:`bitbangio.I2C`; ignored for :class:`busio.I2C`)
 //|         """
 //|         ...
@@ -62,6 +62,8 @@ static mp_obj_t busio_i2c_make_new(const mp_obj_type_t *type, size_t n_args, siz
     const mcu_pin_obj_t *scl = validate_obj_is_free_pin(args[ARG_scl].u_obj, MP_QSTR_scl);
     const mcu_pin_obj_t *sda = validate_obj_is_free_pin(args[ARG_sda].u_obj, MP_QSTR_sda);
 
+    busio_i2c_obj_t *self = m_new_obj_with_finaliser(busio_i2c_obj_t);
+    self->base.type = &busio_i2c_type;
     common_hal_busio_i2c_construct(self, scl, sda, args[ARG_frequency].u_int, args[ARG_timeout].u_int);
     return (mp_obj_t)self;
     #else
@@ -96,12 +98,12 @@ static void check_for_deinit(busio_i2c_obj_t *self) {
 //|         """Automatically deinitializes the hardware on context exit. See
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
-static mp_obj_t busio_i2c_obj___exit__(size_t n_args, const mp_obj_t *args) {
+STATIC mp_obj_t busio_i2c_obj___exit__(size_t n_args, const mp_obj_t *args) {
     (void)n_args;
     common_hal_busio_i2c_deinit(MP_OBJ_TO_PTR(args[0]));
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(busio_i2c___exit___obj, 4, 4, busio_i2c_obj___exit__);
+STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(busio_i2c___exit___obj, 4, 4, busio_i2c_obj___exit__);
 
 static void check_lock(busio_i2c_obj_t *self) {
     asm ("");

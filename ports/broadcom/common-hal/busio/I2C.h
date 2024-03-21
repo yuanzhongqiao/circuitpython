@@ -23,5 +23,3 @@ typedef struct {
     bool finish_write;
     uint8_t last_write_data;
 } busio_i2c_obj_t;
-
-void reset_i2c(void);

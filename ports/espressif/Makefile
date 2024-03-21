@@ -392,7 +392,6 @@ SRC_C += \
 	boards/$(BOARD)/board.c \
 	boards/$(BOARD)/pins.c \
 	shared/netutils/netutils.c \
-	peripherals/i2c.c \
 	peripherals/$(IDF_TARGET)/pins.c
 
 ifeq ($(CIRCUITPY_SSL),1)
