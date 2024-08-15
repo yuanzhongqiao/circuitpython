@@ -4,6 +4,7 @@
 //
 // SPDX-License-Identifier: MIT
 
+#include "board.h"
 #include "shared-bindings/board/__init__.h"
 
 #include "shared-module/displayio/__init__.h"
@@ -80,6 +81,10 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_TFT_SPI), MP_ROM_PTR(&board_spi_obj) },
     { MP_ROM_QSTR(MP_QSTR_SD_SPI), MP_ROM_PTR(&board_sd_spi_obj) },
 
-    { MP_ROM_QSTR(MP_QSTR_DISPLAY), MP_ROM_PTR(&displays[0].display)}
+    // Display object
+    { MP_ROM_QSTR(MP_QSTR_DISPLAY), MP_ROM_PTR(&displays[0].display)},
+
+    // Keyboard object
+    { MP_ROM_QSTR(MP_QSTR_KEYBOARD), MP_ROM_PTR(&board_keyboard)},
 };
 MP_DEFINE_CONST_DICT(board_module_globals, board_module_globals_table);

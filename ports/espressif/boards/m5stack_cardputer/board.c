@@ -4,6 +4,7 @@
 //
 // SPDX-License-Identifier: MIT
 
+#include "board.h"
 #include "keymap.h"
 #include "supervisor/board.h"
 #include "supervisor/shared/serial.h"
@@ -13,8 +14,8 @@
 #include "shared-bindings/microcontroller/Pin.h"
 #include "shared-module/displayio/__init__.h"
 #include "shared-module/displayio/mipi_constants.h"
+#include "shared-module/os/__init__.h"
 #include "shared-bindings/board/__init__.h"
-#include "shared-bindings/keypad_demux/DemuxKeyMatrix.h"
 #include "shared-bindings/keypad/EventQueue.h"
 #include "shared-bindings/keypad/Event.h"
 #include "supervisor/shared/reload.h"
@@ -23,6 +24,7 @@
 #include "shared/runtime/interrupt_char.h"
 
 keypad_demux_demuxkeymatrix_obj_t board_keyboard;
+bool board_keyboard_serial_enabled = false;
 
 void update_keyboard(keypad_eventqueue_obj_t *queue);
 void keyboard_seq(const char *seq);
@@ -123,7 +125,7 @@ void board_init(void) {
 }
 
 void board_serial_init() {
-    ringbuf_init(&keyqueue, (uint8_t *)keybuf, sizeof(keybuf));
+    board_keyboard.base.type = &keypad_demux_demuxkeymatrix_type;
     common_hal_keypad_demux_demuxkeymatrix_construct(
         &board_keyboard,     // self
         3,     // num_row_addr_pins
@@ -135,16 +137,30 @@ void board_serial_init() {
         2     // debounce_threshold
         );
     demuxkeymatrix_never_reset(&board_keyboard);
-    common_hal_keypad_eventqueue_set_event_handler(board_keyboard.events, update_keyboard);
 
+    // Wire the keyboard input to serial input (sys.stdin)
+    // unless M5STACK_CARDPUTER_KEYBOARD_SERIAL=0 in /settings.toml
+    mp_int_t enable_keyboard_serial;
+    os_getenv_err_t enable_keyboard_err = common_hal_os_getenv_int("M5STACK_CARDPUTER_KEYBOARD_SERIAL", &enable_keyboard_serial);
+    board_keyboard_serial_enabled = (enable_keyboard_err != GETENV_OK) || enable_keyboard_serial > 0;
+    if (!board_keyboard_serial_enabled) {
+        return;
+    }
+
+    ringbuf_init(&keyqueue, (uint8_t *)keybuf, sizeof(keybuf));
+    common_hal_keypad_eventqueue_set_event_handler(board_keyboard.events, update_keyboard);
 }
 
 bool board_serial_connected() {
-    return true;
+    return board_keyboard_serial_enabled;
 }
 
 uint32_t board_serial_bytes_available() {
-    return ringbuf_num_filled(&keyqueue);
+    if (board_keyboard_serial_enabled) {
+        return ringbuf_num_filled(&keyqueue);
+    } else {
+        return 0;
+    }
 }
 
 void keyboard_seq(const char *seq) {
@@ -219,7 +235,11 @@ void update_keyboard(keypad_eventqueue_obj_t *queue) {
 }
 
 char board_serial_read() {
-    return ringbuf_get(&keyqueue);
+    if (board_keyboard_serial_enabled) {
+        return ringbuf_get(&keyqueue);
+    } else {
+        return 0;
+    }
 }
 
 // Use the MP_WEAK supervisor/shared/board.c versions of routines not defined here.
