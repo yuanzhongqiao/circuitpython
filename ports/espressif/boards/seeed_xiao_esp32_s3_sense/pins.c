@@ -1,4 +1,6 @@
+#include "py/objtuple.h"
 #include "shared-bindings/board/__init__.h"
+#include "shared-module/displayio/__init__.h"
 
 static const mp_rom_obj_tuple_t camera_data_tuple = {
     // The order matters.
