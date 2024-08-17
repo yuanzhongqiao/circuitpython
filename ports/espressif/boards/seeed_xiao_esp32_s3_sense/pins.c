@@ -9,7 +9,7 @@ static const mp_rom_obj_tuple_t camera_data_tuple = {
     8,
     {
       MP_ROM_PTR(&pin_GPIO15), //CAM_D0
-	  MP_ROM_PTR(&pin_GPIO17), //CAM_D1
+      MP_ROM_PTR(&pin_GPIO17), //CAM_D1
       MP_ROM_PTR(&pin_GPIO18), //CAM_D2
       MP_ROM_PTR(&pin_GPIO16), //CAM_D3
       MP_ROM_PTR(&pin_GPIO14), //CAM_D4
