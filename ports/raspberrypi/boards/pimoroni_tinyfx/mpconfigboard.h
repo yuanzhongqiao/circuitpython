@@ -6,7 +6,7 @@
 
 #pragma once
 
-#define MICROPY_HW_BOARD_NAME "Pimoroni TinyFX"
+#define MICROPY_HW_BOARD_NAME "Pimoroni Tiny FX"
 #define MICROPY_HW_MCU_NAME "rp2040"
 
 #define DEFAULT_I2C_BUS_SCL (&pin_GPIO17)
