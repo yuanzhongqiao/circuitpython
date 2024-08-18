@@ -2,6 +2,8 @@
 #include "shared-bindings/board/__init__.h"
 #include "shared-module/displayio/__init__.h"
 
+CIRCUITPY_BOARD_BUS_SINGLETON(sscb_i2c, i2c, 2) // Camera sensor - copyied from aithinkercam
+
 static const mp_rom_obj_tuple_t camera_data_tuple = {
     // The order matters.
     // They must be ordered from low to high (CAM_D0, CAM_D1...CAM_D7).
