@@ -393,3 +393,16 @@ bool common_hal_mcu_pin_is_free(const mcu_pin_obj_t *pin) {
 uint8_t common_hal_mcu_pin_number(const mcu_pin_obj_t *pin) {
     return pin ? pin->number : NO_PIN;
 }
+
+void config_pin_as_output_with_level(gpio_num_t pin_number, bool level) {
+    gpio_config_t cfg = {
+        .pin_bit_mask = BIT64(pin_number),
+        .mode = GPIO_MODE_OUTPUT,
+        .pull_up_en = false,
+        .pull_down_en = false,
+        .intr_type = GPIO_INTR_DISABLE,
+    };
+    gpio_config(&cfg);
+
+    gpio_set_level(pin_number, level);
+}
