@@ -17,7 +17,9 @@ static const char *get_arg_str(mp_obj_t arg, qstr name) {
 //| """Utilities to compile possibly incomplete Python source code."""
 //|
 
-//| def compile_command(source: str, filename: str = "<input>", symbol: str = "single"):
+//| def compile_command(
+//|     source: str, filename: str = "<input>", symbol: str = "single"
+//| ) -> "code":  # NOTE(elpekenin): this type does not seem to exist
 //|     """Compile a command and determine whether it is incomplete
 //|
 //|     The 'completeness' determination is slightly different than in standard Python
