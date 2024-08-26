@@ -18,14 +18,14 @@ static const mp_rom_obj_tuple_t camera_data_tuple = {
     {&mp_type_tuple},
     8,
     {
-      MP_ROM_PTR(&pin_GPIO15),
-      MP_ROM_PTR(&pin_GPIO17),
-      MP_ROM_PTR(&pin_GPIO18),
-      MP_ROM_PTR(&pin_GPIO16),
-      MP_ROM_PTR(&pin_GPIO14),
-      MP_ROM_PTR(&pin_GPIO12),
-      MP_ROM_PTR(&pin_GPIO11),
-      MP_ROM_PTR(&pin_GPIO48),
+    MP_ROM_PTR(&pin_GPIO15),
+    MP_ROM_PTR(&pin_GPIO17),
+    MP_ROM_PTR(&pin_GPIO18),
+    MP_ROM_PTR(&pin_GPIO16),
+    MP_ROM_PTR(&pin_GPIO14),
+    MP_ROM_PTR(&pin_GPIO12),
+    MP_ROM_PTR(&pin_GPIO11),
+    MP_ROM_PTR(&pin_GPIO48),
     }
 };
 
