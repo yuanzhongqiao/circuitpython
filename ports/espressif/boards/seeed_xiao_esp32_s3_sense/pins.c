@@ -8,7 +8,7 @@
 #include "shared-bindings/board/__init__.h"
 #include "shared-module/displayio/__init__.h"
 
-CIRCUITPY_BOARD_BUS_SINGLETON(sscb_i2c, i2c, 2) 
+CIRCUITPY_BOARD_BUS_SINGLETON(sscb_i2c, i2c, 2)
 
 static const mp_rom_obj_tuple_t camera_data_tuple = {
     // The order matters.
@@ -31,7 +31,6 @@ static const mp_rom_obj_tuple_t camera_data_tuple = {
 
 STATIC const mp_rom_map_elem_t board_module_globals_table[] = {
     CIRCUITPYTHON_BOARD_DICT_STANDARD_ITEMS
-    
     { MP_ROM_QSTR(MP_QSTR_A0), MP_ROM_PTR(&pin_GPIO1) },
     { MP_ROM_QSTR(MP_QSTR_A1), MP_ROM_PTR(&pin_GPIO2) },
     { MP_ROM_QSTR(MP_QSTR_A2), MP_ROM_PTR(&pin_GPIO3) },
