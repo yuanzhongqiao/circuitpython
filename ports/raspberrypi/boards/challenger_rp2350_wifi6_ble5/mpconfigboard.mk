@@ -11,8 +11,6 @@ EXTERNAL_FLASH_DEVICES = "W25Q64JVxQ"
 
 CIRCUITPY__EVE = 1
 CIRCUITPY_ALARM = 0
-CIRCUITPY_PICODVI = 1
 
-FROZEN_MPY_DIRS += $(TOP)/ports/raspberrypi/boards/challenger_rp2350_wifi6_ble5
 FROZEN_MPY_DIRS += $(TOP)/frozen/Adafruit_CircuitPython_HID
 FROZEN_MPY_DIRS += $(TOP)/frozen/Adafruit_CircuitPython_Register
