@@ -18,6 +18,8 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_A2), MP_ROM_PTR(&pin_GPIO28) },
     { MP_ROM_QSTR(MP_QSTR_D2), MP_ROM_PTR(&pin_GPIO28) },
 
+    { MP_ROM_QSTR(MP_QSTR_D3), MP_ROM_PTR(&pin_GPIO5) },
+
     { MP_ROM_QSTR(MP_QSTR_BAT_ADC_EN), MP_ROM_PTR(&pin_GPIO19) },
 
     { MP_ROM_QSTR(MP_QSTR_A3), MP_ROM_PTR(&pin_GPIO29) },
