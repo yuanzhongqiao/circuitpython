@@ -134,7 +134,7 @@ MAKE_ENUM_TYPE(synthio, MathOperation, synthio_math_operation,
 //|         b: BlockInput = 0.0,
 //|         c: BlockInput = 1.0,
 //|     ) -> None:
-//|         """Initialize an instance of the class."""
+//|         pass
 static const mp_arg_t math_properties[] = {
     { MP_QSTR_operation, MP_ARG_OBJ | MP_ARG_REQUIRED, {.u_obj = NULL } },
     { MP_QSTR_a, MP_ARG_OBJ | MP_ARG_REQUIRED, {.u_obj = NULL } },

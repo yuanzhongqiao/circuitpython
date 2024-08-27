@@ -77,7 +77,7 @@ static const uint16_t triangle[] = {0, 32767, 0, -32767};
 //|         once: bool = False,
 //|         interpolate: bool = True,
 //|     ) -> None:
-//|         """Initialize an instance of the class."""
+//|         pass
 static const mp_arg_t lfo_properties[] = {
     { MP_QSTR_waveform, MP_ARG_OBJ, {.u_obj = MP_ROM_NONE } },
     { MP_QSTR_rate, MP_ARG_OBJ | MP_ARG_KW_ONLY, {.u_obj = MP_ROM_INT(1) } },
