@@ -25,23 +25,22 @@
  */
 #include <py/mpconfig.h>
 
+// CIRCUITPY-CHANGE: CIRCUITPY_SSL_MBEDTLS instead of MICROPY_SSL_MBEDTLS
 #if CIRCUITPY_SSL_MBEDTLS
 
-#include "mbedtls_config.h"
-#include "mbedtls/entropy_poll.h"
+#include "mbedtls_config_port.h"
 
 #include "hardware/rtc.h"
 #include "shared/timeutils/timeutils.h"
-#include "shared-bindings/os/__init__.h"
-
-#include "hardware/rtc.h"
-#include "shared/timeutils/timeutils.h"
+#include "mbedtls/platform_time.h"
 
 extern uint8_t rosc_random_u8(size_t cycles);
 
 int mbedtls_hardware_poll(void *data, unsigned char *output, size_t len, size_t *olen) {
     *olen = len;
-    common_hal_os_urandom(data, len);
+    for (size_t i = 0; i < len; i++) {
+        output[i] = rosc_random_u8(8);
+    }
     return 0;
 }
 
@@ -51,4 +50,10 @@ time_t rp2_rtctime_seconds(time_t *timer) {
     return timeutils_seconds_since_epoch(t.year, t.month, t.day, t.hour, t.min, t.sec);
 }
 
+mbedtls_ms_time_t mbedtls_ms_time(void) {
+    time_t *tv = NULL;
+    mbedtls_ms_time_t current_ms;
+    current_ms = rp2_rtctime_seconds(tv) * 1000;
+    return current_ms;
+}
 #endif

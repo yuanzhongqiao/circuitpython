@@ -414,6 +414,10 @@ msgstr ""
 msgid "'label' requires 1 argument"
 msgstr ""
 
+#: py/emitnative.c
+msgid "'not' not implemented"
+msgstr ""
+
 #: py/compile.c
 msgid "'return' outside function"
 msgstr ""
@@ -911,6 +915,10 @@ msgstr ""
 msgid "ESP-IDF memory allocation failed"
 msgstr ""
 
+#: extmod/modopenamp.c
+msgid "Endpoint not ready"
+msgstr ""
+
 #: extmod/modre.c
 msgid "Error in regex"
 msgstr ""
@@ -979,8 +987,32 @@ msgstr ""
 msgid "Failed to connect: timeout"
 msgstr ""
 
+#: extmod/modopenamp.c
+msgid "Failed to create RPMsg endpoint"
+msgstr ""
+
+#: extmod/modopenamp.c
+msgid "Failed to create virtio device"
+msgstr ""
+
+#: extmod/modopenamp.c
+msgid "Failed to initialize device io region"
+msgstr ""
+
+#: extmod/modopenamp.c
+msgid "Failed to initialize vrings"
+msgstr ""
+
+#: extmod/modopenamp.c
+msgid "Failed to open metal device"
+msgstr ""
+
 #: shared-module/audiomp3/MP3Decoder.c
 msgid "Failed to parse MP3 file"
+msgstr ""
+
+#: extmod/modopenamp.c
+msgid "Failed to register metal device"
 msgstr ""
 
 #: ports/nordic/sd_mutex.c
@@ -2637,6 +2669,10 @@ msgid "can't do binary op between '%q' and '%q'"
 msgstr ""
 
 #: py/emitnative.c
+msgid "can't do unary op of '%q'"
+msgstr ""
+
+#: py/emitnative.c
 msgid "can't implicitly convert '%q' to 'bool'"
 msgstr ""
 
@@ -2857,6 +2893,18 @@ msgstr ""
 
 #: shared-bindings/msgpack/__init__.c
 msgid "default is not a function"
+msgstr ""
+
+#: extmod/machine_usb_device.c
+msgid "desc_cfg"
+msgstr ""
+
+#: extmod/machine_usb_device.c
+msgid "desc_dev"
+msgstr ""
+
+#: extmod/machine_usb_device.c
+msgid "desc_strs"
 msgstr ""
 
 #: shared-bindings/audiobusio/PDMIn.c
@@ -3284,6 +3332,10 @@ msgstr ""
 msgid "invalid bits_per_pixel %d, must be, 1, 2, 4, 8, 16, 24, or 32"
 msgstr ""
 
+#: extmod/modopenamp.c
+msgid "invalid callback"
+msgstr ""
+
 #: shared-module/ssl/SSLSocket.c
 msgid "invalid cert"
 msgstr ""
@@ -3377,6 +3429,10 @@ msgstr ""
 
 #: py/objarray.c
 msgid "lhs and rhs should be compatible"
+msgstr ""
+
+#: extmod/modopenamp_remoteproc.c
+msgid "loading firmware is not supported."
 msgstr ""
 
 #: py/emitnative.c
@@ -4062,6 +4118,10 @@ msgstr ""
 msgid "timeout must be < 655.35 secs"
 msgstr ""
 
+#: extmod/modopenamp.c
+msgid "timeout waiting for a free buffer"
+msgstr ""
+
 #: ports/raspberrypi/common-hal/floppyio/__init__.c
 msgid "timeout waiting for flux"
 msgstr ""
@@ -4156,10 +4216,6 @@ msgstr ""
 
 #: py/objint_longlong.c
 msgid "ulonglong too large"
-msgstr ""
-
-#: py/emitnative.c
-msgid "unary op %q not implemented"
 msgstr ""
 
 #: py/parse.c

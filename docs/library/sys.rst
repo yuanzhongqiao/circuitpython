@@ -120,11 +120,11 @@ Constants
 
 .. data:: stdin
 
-   Standard input ``stream``.
+   Standard input `stream`.
 
 .. data:: stdout
 
-   Standard output ``stream``.
+   Standard output `stream`.
 
 .. data:: version
 

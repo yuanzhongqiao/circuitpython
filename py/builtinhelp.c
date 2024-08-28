@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+// CIRCUITPY-CHANGE: more includes
 #include "genhdr/mpversion.h"
 #include "py/builtin.h"
 #include "py/mpconfig.h"
@@ -49,7 +50,7 @@ const char mp_help_default_text[] =
     "For further help on a specific object, type help(obj)\n"
 ;
 
-STATIC void mp_help_print_info_about_object(mp_obj_t name_o, mp_obj_t value) {
+static void mp_help_print_info_about_object(mp_obj_t name_o, mp_obj_t value) {
     mp_print_str(MP_PYTHON_PRINTER, "  ");
     mp_obj_print(name_o, PRINT_STR);
     mp_print_str(MP_PYTHON_PRINTER, " -- ");
@@ -58,7 +59,7 @@ STATIC void mp_help_print_info_about_object(mp_obj_t name_o, mp_obj_t value) {
 }
 
 #if MICROPY_PY_BUILTINS_HELP_MODULES
-STATIC void mp_help_add_from_map(mp_obj_t list, const mp_map_t *map) {
+static void mp_help_add_from_map(mp_obj_t list, const mp_map_t *map) {
     for (size_t i = 0; i < map->alloc; i++) {
         if (mp_map_slot_is_filled(map, i)) {
             mp_obj_list_append(list, map->table[i].key);
@@ -67,7 +68,7 @@ STATIC void mp_help_add_from_map(mp_obj_t list, const mp_map_t *map) {
 }
 
 #if MICROPY_MODULE_FROZEN
-STATIC void mp_help_add_from_names(mp_obj_t list, const char *name) {
+static void mp_help_add_from_names(mp_obj_t list, const char *name) {
     while (*name) {
         size_t len = strlen(name);
         // name should end in '.py' and we strip it off
@@ -82,13 +83,14 @@ STATIC void mp_help_add_from_names(mp_obj_t list, const char *name) {
 extern const char mp_frozen_names[];
 #endif
 
-STATIC void mp_help_print_modules(void) {
+static void mp_help_print_modules(void) {
     mp_obj_t list = mp_obj_new_list(0, NULL);
 
     mp_help_add_from_map(list, &mp_builtin_module_map);
     mp_help_add_from_map(list, &mp_builtin_extensible_module_map);
 
     #if MICROPY_MODULE_FROZEN
+    // CIRCUITPY-CHANGE: extern const char mp_frozen_names[] is at top level
     mp_help_add_from_names(list, mp_frozen_names);
     #endif
 
