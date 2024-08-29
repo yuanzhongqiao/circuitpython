@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-08-10 14:09+0000\n"
+"PO-Revision-Date: 2024-08-28 18:09+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 
 #: main.c
 msgid ""
@@ -3553,7 +3553,7 @@ msgstr "name not defined"
 
 #: py/qstr.c
 msgid "name too long"
-msgstr ""
+msgstr "name too long"
 
 #: py/persistentcode.c
 msgid "native code in .mpy unsupported"
