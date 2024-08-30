@@ -72,15 +72,23 @@ static void enable_ldo(busio_i2c_obj_t *i2c, uint8_t ldo) {
     set_bit_in_register(i2c, 0x90, 1 << ldo);
 }
 
+static void enable_dldo(busio_i2c_obj_t *i2c, uint8_t ldo) {
+    if (ldo == 1) {
+        write_register8(i2c, 0x99, 0x1C); // 3300mV
+        set_bit_in_register(i2c, 0x90, 0x80);
+    }
+}
+
 // Init the AXP2101 by hand as to not include XPOWERS lib.
 static void pmic_init(busio_i2c_obj_t *i2c) {
-    enable_ldo(i2c, 0);
-    enable_ldo(i2c, 1);
-    enable_ldo(i2c, 2);
-    enable_ldo(i2c, 3);
-    enable_ldo(i2c, 5);
-    write_register8(i2c, 0x18, 0x0F);
-    write_register8(i2c, 0x27, 0x1F);
+    enable_ldo(i2c, 0); // _aldo1
+    enable_ldo(i2c, 1); // _aldo2
+    enable_ldo(i2c, 2); // _aldo3
+    enable_ldo(i2c, 3); // _aldo4
+    enable_ldo(i2c, 5); // _bldo2
+    enable_dldo(i2c, 1); // _dldo1
+    write_register8(i2c, 0x18, 0x0F); // RTC coin cell + 300mAh main charge limit
+    write_register8(i2c, 0x27, 0x1F); // 2s on time + 10s off time
 }
 
 
