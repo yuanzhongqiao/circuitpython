@@ -75,6 +75,9 @@ static void enable_ldo(busio_i2c_obj_t *i2c, uint8_t ldo) {
 // Init the AXP2101 by hand as to not include XPOWERS lib.
 static void pmic_init(busio_i2c_obj_t *i2c) {
     enable_ldo(i2c, 0);
+    enable_ldo(i2c, 1);
+    enable_ldo(i2c, 2);
+    enable_ldo(i2c, 3);
     enable_ldo(i2c, 5);
     write_register8(i2c, 0x18, 0x0F);
     write_register8(i2c, 0x27, 0x1F);
