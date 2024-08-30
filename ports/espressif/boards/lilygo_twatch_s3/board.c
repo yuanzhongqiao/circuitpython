@@ -7,6 +7,7 @@
 #include "supervisor/board.h"
 #include "mpconfigboard.h"
 #include "shared-bindings/busio/SPI.h"
+#include "shared-bindings/busio/I2C.h"
 #include "shared-bindings/fourwire/FourWire.h"
 #include "shared-bindings/microcontroller/Pin.h"
 #include "shared-module/displayio/__init__.h"
@@ -48,8 +49,42 @@ uint8_t display_init_sequence[] = {
     0x29, 0 | DELAY, 255,
 };
 
+#define AXP2101_I2C_ADDRESS 0x34
+
+static void write_register8(busio_i2c_obj_t *i2c, uint8_t reg, uint8_t value) {
+    uint8_t buffer[2];
+    buffer[0] = reg;
+    buffer[1] = value;
+    common_hal_busio_i2c_write(i2c, AXP2101_I2C_ADDRESS, buffer, 2);
+}
+
+static void set_bit_in_register(busio_i2c_obj_t *i2c, uint8_t reg, uint8_t bitmask) {
+    uint8_t buffer[2];
+    buffer[0] = reg;
+    buffer[1] = 0;
+    common_hal_busio_i2c_write_read(i2c, AXP2101_I2C_ADDRESS, &buffer[0], 1, &buffer[1], 1);
+    buffer[1] |= bitmask;
+    common_hal_busio_i2c_write(i2c, AXP2101_I2C_ADDRESS, buffer, 2);
+}
+
+static void enable_ldo(busio_i2c_obj_t *i2c, uint8_t ldo) {
+    write_register8(i2c, ldo + 0x92, 0x1C); // 3300mV
+    set_bit_in_register(i2c, 0x90, 1 << ldo);
+}
+
+// Init the AXP2101 by hand as to not include XPOWERS lib.
+static void pmic_init(busio_i2c_obj_t *i2c) {
+    enable_ldo(i2c, 0);
+    enable_ldo(i2c, 5);
+    write_register8(i2c, 0x18, 0x0F);
+    write_register8(i2c, 0x27, 0x1F);
+}
+
 
 void board_init(void) {
+    busio_i2c_obj_t *internal_i2c = common_hal_board_create_i2c(0);
+    pmic_init(internal_i2c);
+
     busio_spi_obj_t *spi = common_hal_board_create_spi(0);
     fourwire_fourwire_obj_t *bus = &allocate_display_bus()->fourwire_bus;
     bus->base.type = &fourwire_fourwire_type;
