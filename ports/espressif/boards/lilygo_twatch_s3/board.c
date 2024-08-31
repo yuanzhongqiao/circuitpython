@@ -93,6 +93,7 @@ static void pmic_init(busio_i2c_obj_t *i2c) {
     write_register8(i2c, 0x16, 0x04); // 1.5A INcurr limit
     write_register8(i2c, 0x61, 0x06); // 150mA Precharge limit
     write_register8(i2c, 0x64, 0x03); // 4.2V Voltage target
+    write_register8(i2c, 0x63, 0x11); // 25mA Charging termination current
 }
 
 
