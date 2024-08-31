@@ -89,6 +89,10 @@ static void pmic_init(busio_i2c_obj_t *i2c) {
     enable_dldo(i2c, 1); // _dldo1
     write_register8(i2c, 0x18, 0x0F); // RTC coin cell + 300mAh main charge limit
     write_register8(i2c, 0x27, 0x1F); // 2s on time + 10s off time
+    write_register8(i2c, 0x62, 0x0B); // 500mA Current limit
+    write_register8(i2c, 0x16, 0x04); // 1.5A INcurr limit
+    write_register8(i2c, 0x61, 0x06); // 150mA Precharge limit
+    write_register8(i2c, 0x64, 0x03); // 4.2V Voltage target
 }
 
 
