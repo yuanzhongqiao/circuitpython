@@ -728,7 +728,7 @@ void mp_obj_exception_get_traceback(mp_obj_t self_in, size_t *n, size_t **values
 
 // CIRCUITPY-CHANGE: here until end
 #if MICROPY_PY_SYS_EXC_INFO
-STATIC const mp_obj_namedtuple_type_t code_type_obj = {
+static const mp_obj_namedtuple_type_t code_type_obj = {
     NAMEDTUPLE_TYPE_BASE_AND_SLOTS(MP_QSTR_code),
     .n_fields = 15,
     .fields = {
@@ -750,7 +750,7 @@ STATIC const mp_obj_namedtuple_type_t code_type_obj = {
     },
 };
 
-STATIC mp_obj_t code_make_new(qstr file, qstr block) {
+static mp_obj_t code_make_new(qstr file, qstr block) {
     mp_obj_t elems[15] = {
         mp_obj_new_int(0),             // co_argcount
         mp_obj_new_int(0),             // co_kwonlyargcount
@@ -772,7 +772,7 @@ STATIC mp_obj_t code_make_new(qstr file, qstr block) {
     return namedtuple_make_new((const mp_obj_type_t *)&code_type_obj, 15, 0, elems);
 }
 
-STATIC const mp_obj_namedtuple_type_t frame_type_obj = {
+static const mp_obj_namedtuple_type_t frame_type_obj = {
     NAMEDTUPLE_TYPE_BASE_AND_SLOTS(MP_QSTR_frame),
     .n_fields = 8,
     .fields = {
@@ -787,7 +787,7 @@ STATIC const mp_obj_namedtuple_type_t frame_type_obj = {
     },
 };
 
-STATIC mp_obj_t frame_make_new(mp_obj_t f_code, int f_lineno) {
+static mp_obj_t frame_make_new(mp_obj_t f_code, int f_lineno) {
     mp_obj_t elems[8] = {
         mp_const_none,             // f_back
         mp_obj_new_dict(0),        // f_builtins
@@ -802,7 +802,7 @@ STATIC mp_obj_t frame_make_new(mp_obj_t f_code, int f_lineno) {
     return namedtuple_make_new((const mp_obj_type_t *)&frame_type_obj, 8, 0, elems);
 }
 
-STATIC const mp_obj_namedtuple_type_t traceback_type_obj = {
+static const mp_obj_namedtuple_type_t traceback_type_obj = {
     NAMEDTUPLE_TYPE_BASE_AND_SLOTS(MP_QSTR_traceback),
     .n_fields = 4,
     .fields = {
@@ -813,7 +813,7 @@ STATIC const mp_obj_namedtuple_type_t traceback_type_obj = {
     },
 };
 
-STATIC mp_obj_t traceback_from_values(size_t *values, mp_obj_t tb_next) {
+static mp_obj_t traceback_from_values(size_t *values, mp_obj_t tb_next) {
     int lineno = values[1];
 
     mp_obj_t elems[4] = {

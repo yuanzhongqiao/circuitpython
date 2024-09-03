@@ -66,7 +66,7 @@ static char *str_dup_maybe(const char *str) {
 }
 
 // CIRCUITPY-CHANGE
-STATIC size_t count_cont_bytes(char *start, char *end) {
+static size_t count_cont_bytes(char *start, char *end) {
     int count = 0;
     for (char *pos = start; pos < end; pos++) {
         if(UTF8_IS_CONT(*pos)) {

@@ -196,7 +196,7 @@
 #endif // MICROPY_PY_SYS_SETTRACE
 
 // CIRCUITPY-CHANGE
-STATIC mp_obj_t get_active_exception(mp_exc_stack_t *exc_sp, mp_exc_stack_t *exc_stack) {
+static mp_obj_t get_active_exception(mp_exc_stack_t *exc_sp, mp_exc_stack_t *exc_stack) {
     for (mp_exc_stack_t *e = exc_sp; e >= exc_stack; --e) {
         if (e->prev_exc != NULL) {
             return MP_OBJ_FROM_PTR(e->prev_exc);

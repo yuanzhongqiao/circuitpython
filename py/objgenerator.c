@@ -197,7 +197,7 @@ static void gen_instance_print(const mp_print_t *print, mp_obj_t self_in, mp_pri
 
 // CIRCUITPY-CHANGE
 #if MICROPY_PY_ASYNC_AWAIT
-STATIC void coro_instance_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind) {
+static void coro_instance_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind) {
     (void)kind;
     mp_obj_gen_instance_t *self = MP_OBJ_TO_PTR(self_in);
     mp_printf(print, "<coroutine object '%q' at %p>", mp_obj_fun_get_name(MP_OBJ_FROM_PTR(self->code_state.fun_bc)), self);
@@ -449,7 +449,7 @@ MP_DEFINE_CONST_OBJ_TYPE(
 #if MICROPY_PY_ASYNC_AWAIT
 // coroutine instance locals dict and type
 // same as generator, but with addition of __await()__.
-STATIC const mp_rom_map_elem_t coro_instance_locals_dict_table[] = {
+static const mp_rom_map_elem_t coro_instance_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_close), MP_ROM_PTR(&gen_instance_close_obj) },
     { MP_ROM_QSTR(MP_QSTR_send), MP_ROM_PTR(&gen_instance_send_obj) },
     { MP_ROM_QSTR(MP_QSTR_throw), MP_ROM_PTR(&gen_instance_throw_obj) },
@@ -459,7 +459,7 @@ STATIC const mp_rom_map_elem_t coro_instance_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___await__), MP_ROM_PTR(&coro_instance_await_obj) },
 };
 
-STATIC MP_DEFINE_CONST_DICT(coro_instance_locals_dict, coro_instance_locals_dict_table);
+static MP_DEFINE_CONST_DICT(coro_instance_locals_dict, coro_instance_locals_dict_table);
 
 MP_DEFINE_CONST_OBJ_TYPE(
     mp_type_coro_instance,

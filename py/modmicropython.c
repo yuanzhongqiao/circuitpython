@@ -39,7 +39,7 @@
 
 // CIRCUITPY-CHANGE: avoid warning
 #if CIRCUITPY_MICROPYTHON_ADVANCED && MICROPY_ENABLE_COMPILER
-STATIC mp_obj_t mp_micropython_opt_level(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t mp_micropython_opt_level(size_t n_args, const mp_obj_t *args) {
     if (n_args == 0) {
         return MP_OBJ_NEW_SMALL_INT(MP_STATE_VM(mp_optimise_value));
     } else {
@@ -112,10 +112,10 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mp_micropython_qstr_info_obj, 0, 1, m
 #endif // MICROPY_PY_MICROPYTHON_MEM_INFO
 
 #if MICROPY_PY_MICROPYTHON_STACK_USE
-STATIC mp_obj_t mp_micropython_stack_use(void) {
+static mp_obj_t mp_micropython_stack_use(void) {
     return MP_OBJ_NEW_SMALL_INT(mp_stack_usage());
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_0(mp_micropython_stack_use_obj, mp_micropython_stack_use);
+static MP_DEFINE_CONST_FUN_OBJ_0(mp_micropython_stack_use_obj, mp_micropython_stack_use);
 #endif
 
 // CIRCUITPY-CHANGE: avoid warning
@@ -128,7 +128,7 @@ static MP_DEFINE_CONST_FUN_OBJ_0(mp_micropython_pystack_use_obj, mp_micropython_
 
 // CIRCUITPY-CHANGE: avoid warning
 #if CIRCUITPY_MICROPYTHON_ADVANCED && MICROPY_ENABLE_GC
-STATIC mp_obj_t mp_micropython_heap_lock(void) {
+static mp_obj_t mp_micropython_heap_lock(void) {
     gc_lock();
     return mp_const_none;
 }
@@ -150,7 +150,7 @@ static MP_DEFINE_CONST_FUN_OBJ_0(mp_micropython_heap_locked_obj, mp_micropython_
 
 // CIRCUITPY-CHANGE: avoid warning
 #if CIRCUITPY_MICROPYTHON_ADVANCED && MICROPY_ENABLE_EMERGENCY_EXCEPTION_BUF && (MICROPY_EMERGENCY_EXCEPTION_BUF_SIZE == 0)
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(mp_alloc_emergency_exception_buf_obj, mp_alloc_emergency_exception_buf);
+static MP_DEFINE_CONST_FUN_OBJ_1(mp_alloc_emergency_exception_buf_obj, mp_alloc_emergency_exception_buf);
 #endif
 
 // CIRCUITPY-CHANGE: avoid warning
@@ -159,7 +159,7 @@ static mp_obj_t mp_micropython_kbd_intr(mp_obj_t int_chr_in) {
     mp_hal_set_interrupt_char(mp_obj_get_int(int_chr_in));
     return mp_const_none;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(mp_micropython_kbd_intr_obj, mp_micropython_kbd_intr);
+static MP_DEFINE_CONST_FUN_OBJ_1(mp_micropython_kbd_intr_obj, mp_micropython_kbd_intr);
 #endif
 
 #if MICROPY_ENABLE_SCHEDULER

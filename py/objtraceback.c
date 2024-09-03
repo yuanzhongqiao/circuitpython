@@ -29,7 +29,7 @@
 
 const mp_obj_traceback_t mp_const_empty_traceback_obj = {{&mp_type_traceback}, 0, 0, NULL};
 
-STATIC void mp_obj_traceback_print(const mp_print_t *print, mp_obj_t o_in, mp_print_kind_t kind) {
+static void mp_obj_traceback_print(const mp_print_t *print, mp_obj_t o_in, mp_print_kind_t kind) {
     (void)kind;
     mp_obj_traceback_t *o = MP_OBJ_TO_PTR(o_in);
     mp_printf(print, "<%q object at %p>", MP_QSTR_traceback, o);

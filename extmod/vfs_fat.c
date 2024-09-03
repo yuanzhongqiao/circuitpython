@@ -57,7 +57,7 @@
 
 // CIRCUITPY-CHANGE
 // Factoring this common call saves about 90 bytes.
-STATIC NORETURN void mp_raise_OSError_fresult(FRESULT res) {
+static NORETURN void mp_raise_OSError_fresult(FRESULT res) {
     mp_raise_OSError(fresult_to_errno_table[res]);
 }
 
@@ -102,14 +102,14 @@ static mp_obj_t fat_vfs_make_new(const mp_obj_type_t *type, size_t n_args, size_
 }
 
 // CIRCUITPY-CHANGE
-STATIC void verify_fs_writable(fs_user_mount_t *vfs) {
+static void verify_fs_writable(fs_user_mount_t *vfs) {
     if (!filesystem_is_writable_by_python(vfs)) {
         mp_raise_OSError(MP_EROFS);
     }
 }
 
 #if _FS_REENTRANT
-STATIC mp_obj_t fat_vfs_del(mp_obj_t self_in) {
+static mp_obj_t fat_vfs_del(mp_obj_t self_in) {
     mp_obj_fat_vfs_t *self = MP_OBJ_TO_PTR(self_in);
     // f_umount only needs to be called to release the sync object
     f_umount(&self->fatfs);
@@ -447,7 +447,7 @@ static mp_obj_t vfs_fat_umount(mp_obj_t self_in) {
     // keep the FAT filesystem mounted internally so the VFS methods can still be used
     return mp_const_none;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(fat_vfs_umount_obj, vfs_fat_umount);
+static MP_DEFINE_CONST_FUN_OBJ_1(fat_vfs_umount_obj, vfs_fat_umount);
 
 // CIRCUITPY-CHANGE
 static mp_obj_t vfs_fat_utime(mp_obj_t vfs_in, mp_obj_t path_in, mp_obj_t times_in) {

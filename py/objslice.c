@@ -94,7 +94,7 @@ static void slice_attr(mp_obj_t self_in, qstr attr, mp_obj_t *dest) {
 
 // CIRCUITPY-CHANGE
 #if MICROPY_PY_BUILTINS_SLICE_ATTRS
-STATIC mp_obj_t slice_make_new(const mp_obj_type_t *type,
+static mp_obj_t slice_make_new(const mp_obj_type_t *type,
     size_t n_args, size_t n_kw, const mp_obj_t *args) {
     if (type != &mp_type_slice) {
         mp_raise_NotImplementedError(MP_ERROR_TEXT("Cannot subclass slice"));

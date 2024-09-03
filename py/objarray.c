@@ -67,7 +67,7 @@ static mp_obj_t array_extend(mp_obj_t self_in, mp_obj_t arg_in);
 static mp_int_t array_get_buffer(mp_obj_t o_in, mp_buffer_info_t *bufinfo, mp_uint_t flags);
 // CIRCUITPY-CHANGE
 #if MICROPY_CPYTHON_COMPAT
-STATIC mp_obj_t array_decode(size_t n_args, const mp_obj_t *args);
+static mp_obj_t array_decode(size_t n_args, const mp_obj_t *args);
 #endif
 
 
@@ -263,7 +263,7 @@ static mp_obj_t memoryview_make_new(const mp_obj_type_t *type_in, size_t n_args,
 
 // CIRCUITPY-CHANGE: adds cast
 #if MICROPY_CPYTHON_COMPAT
-STATIC mp_obj_t memoryview_cast(const mp_obj_t self_in, const mp_obj_t typecode_in) {
+static mp_obj_t memoryview_cast(const mp_obj_t self_in, const mp_obj_t typecode_in) {
     mp_obj_array_t *self = MP_OBJ_TO_PTR(self_in);
     const char *typecode = mp_obj_str_get_str(typecode_in);
     size_t new_element_size = mp_binary_get_size('@', typecode[0], NULL);
@@ -281,7 +281,7 @@ STATIC mp_obj_t memoryview_cast(const mp_obj_t self_in, const mp_obj_t typecode_
     }
     return MP_OBJ_FROM_PTR(result);
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_2(memoryview_cast_obj, memoryview_cast);
+static MP_DEFINE_CONST_FUN_OBJ_2(memoryview_cast_obj, memoryview_cast);
 #endif
 
 #if MICROPY_PY_BUILTINS_MEMORYVIEW_ITEMSIZE
@@ -560,28 +560,28 @@ static mp_obj_t buffer_finder(size_t n_args, const mp_obj_t *args, int direction
 }
 
 // CIRCUITPY-CHANGE: provides find, rfind, index
-STATIC mp_obj_t buffer_find(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t buffer_find(size_t n_args, const mp_obj_t *args) {
     return buffer_finder(n_args, args, 1, false);
 }
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(buffer_find_obj, 2, 4, buffer_find);
 
-STATIC mp_obj_t buffer_rfind(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t buffer_rfind(size_t n_args, const mp_obj_t *args) {
     return buffer_finder(n_args, args, -1, false);
 }
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(buffer_rfind_obj, 2, 4, buffer_rfind);
 
-STATIC mp_obj_t buffer_index(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t buffer_index(size_t n_args, const mp_obj_t *args) {
     return buffer_finder(n_args, args, 1, true);
 }
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(buffer_index_obj, 2, 4, buffer_index);
 
-STATIC mp_obj_t buffer_rindex(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t buffer_rindex(size_t n_args, const mp_obj_t *args) {
     return buffer_finder(n_args, args, -1, true);
 }
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(buffer_rindex_obj, 2, 4, buffer_rindex);
 #endif
 
-STATIC mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value) {
+static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value) {
     if (value == MP_OBJ_NULL) {
         // delete item
         // TODO implement
@@ -743,7 +743,7 @@ static mp_int_t array_get_buffer(mp_obj_t o_in, mp_buffer_info_t *bufinfo, mp_ui
 // CIRCUITPY-CHANGE
 #if MICROPY_CPYTHON_COMPAT && MICROPY_PY_BUILTINS_BYTEARRAY
 // Directly lifted from objstr.c
-STATIC mp_obj_t array_decode(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t array_decode(size_t n_args, const mp_obj_t *args) {
     mp_obj_t new_args[2];
     if (n_args == 1) {
         new_args[0] = args[0];
@@ -758,7 +758,7 @@ MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(array_decode_obj, 1, 3, array_decode);
 
 
 #if MICROPY_PY_BUILTINS_BYTEARRAY
-STATIC const mp_rom_map_elem_t bytearray_locals_dict_table[] = {
+static const mp_rom_map_elem_t bytearray_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_append), MP_ROM_PTR(&mp_obj_array_append_obj) },
     { MP_ROM_QSTR(MP_QSTR_extend), MP_ROM_PTR(&mp_obj_array_extend_obj) },
 
@@ -818,7 +818,7 @@ MP_DEFINE_CONST_OBJ_TYPE(
 // CIRCUITPY-CHANGE: provides cast
 #if MICROPY_CPYTHON_COMPAT
 // CIRCUITPY-CHANGE: provides cast
-STATIC const mp_rom_map_elem_t memoryview_locals_dict_table[] = {
+static const mp_rom_map_elem_t memoryview_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_cast), MP_ROM_PTR(&memoryview_cast_obj) },
     #if MICROPY_PY_BUILTINS_BYTES_HEX
     { MP_ROM_QSTR(MP_QSTR_hex), MP_ROM_PTR(&mp_obj_bytes_hex_as_str_obj) },

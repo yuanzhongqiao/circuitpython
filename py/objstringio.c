@@ -46,7 +46,7 @@ static void check_stringio_is_open(const mp_obj_stringio_t *o) {
 #endif
 
 // CIRCUITPY-CHANGE: handling subclassing
-STATIC mp_obj_stringio_t *native_obj(mp_obj_t o_in) {
+static mp_obj_stringio_t *native_obj(mp_obj_t o_in) {
     mp_obj_stringio_t *native = mp_obj_cast_to_native_base(o_in, &mp_type_stringio);
 
     #if MICROPY_PY_IO_BYTESIO
@@ -64,7 +64,7 @@ static void stringio_print(const mp_print_t *print, mp_obj_t self_in, mp_print_k
     mp_printf(print, self->base.type == &mp_type_stringio ? "<io.StringIO 0x%x>" : "<io.BytesIO 0x%x>", self);
 }
 
-STATIC mp_uint_t stringio_read(mp_obj_t o_in, void *buf, mp_uint_t size, int *errcode) {
+static mp_uint_t stringio_read(mp_obj_t o_in, void *buf, mp_uint_t size, int *errcode) {
     (void)errcode;
     // CIRCUITPY-CHANGE
     mp_obj_stringio_t *o = native_obj(o_in);

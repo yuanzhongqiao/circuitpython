@@ -131,7 +131,7 @@ static void mp_help_print_modules(void) {
 }
 #endif
 
-STATIC void mp_help_print_obj(const mp_obj_t obj) {
+static void mp_help_print_obj(const mp_obj_t obj) {
     #if MICROPY_PY_BUILTINS_HELP_MODULES
     if (obj == MP_OBJ_NEW_QSTR(MP_QSTR_modules)) {
         mp_help_print_modules();
@@ -170,7 +170,7 @@ STATIC void mp_help_print_obj(const mp_obj_t obj) {
     }
 }
 
-STATIC mp_obj_t mp_builtin_help(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t mp_builtin_help(size_t n_args, const mp_obj_t *args) {
     if (n_args == 0) {
         // CIRCUITPY-CHANGE: make translatable
         // print a general help message. Translate only works on single strings on one line.

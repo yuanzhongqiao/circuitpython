@@ -52,7 +52,7 @@ const mp_obj_dict_t mp_const_empty_dict_obj = {
 // CIRCUITPY-CHANGE: Native methods are passed the subclass instance so they can
 // refer to subclass members. Dict only cares about the native struct so this
 // function gets it.
-STATIC mp_obj_dict_t *native_dict(mp_obj_t self_in) {
+static mp_obj_dict_t *native_dict(mp_obj_t self_in) {
     // Check for OrderedDict first because it is marked as a subclass of dict. However, it doesn't
     // store its state in subobj like python types to native types do.
     mp_obj_t native_instance = MP_OBJ_NULL;
@@ -131,7 +131,7 @@ static void dict_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_
 // CIRCUITPY-CHANGE
 // This is a helper function to initialize an empty, but typed dictionary with
 // a given number of slots.
-STATIC mp_obj_t dict_new_typed(const mp_obj_type_t *type, const size_t n) {
+static mp_obj_t dict_new_typed(const mp_obj_type_t *type, const size_t n) {
     mp_obj_t dict_out = mp_obj_new_dict(n);
     mp_obj_dict_t *dict = MP_OBJ_TO_PTR(dict_out);
     dict->base.type = type;
@@ -475,7 +475,7 @@ static MP_DEFINE_CONST_FUN_OBJ_KW(dict_update_obj, 1, dict_update);
 
 // CIRCUITPY-CHANGE
 #if MICROPY_PY_COLLECTIONS_ORDEREDDICT
-STATIC mp_obj_t dict_move_to_end(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
+static mp_obj_t dict_move_to_end(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     mp_obj_dict_t *self = MP_OBJ_TO_PTR(pos_args[0]);
     mp_arg_validate_type(self, &mp_type_ordereddict, MP_QSTR_self);
 
@@ -518,7 +518,7 @@ STATIC mp_obj_t dict_move_to_end(size_t n_args, const mp_obj_t *pos_args, mp_map
 
     return mp_const_none;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_KW(dict_move_to_end_obj, 1, dict_move_to_end);
+static MP_DEFINE_CONST_FUN_OBJ_KW(dict_move_to_end_obj, 1, dict_move_to_end);
 #endif
 
 /******************************************************************************/

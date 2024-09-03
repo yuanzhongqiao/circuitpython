@@ -686,7 +686,7 @@ typedef struct {
     mp_int_t cur;
 } mp_obj_generic_subscript_it_t;
 
-STATIC mp_obj_t generic_subscript_it_iternext(mp_obj_t self_in) {
+static mp_obj_t generic_subscript_it_iternext(mp_obj_t self_in) {
     mp_obj_generic_subscript_it_t *self = MP_OBJ_TO_PTR(self_in);
     const mp_obj_type_t *type = mp_obj_get_type(self->obj);
     mp_obj_t current_length = MP_OBJ_TYPE_GET_SLOT(type, unary_op)(MP_UNARY_OP_LEN, self->obj);

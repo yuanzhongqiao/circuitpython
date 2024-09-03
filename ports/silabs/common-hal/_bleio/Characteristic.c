@@ -76,7 +76,7 @@ bool set_characteristic_value_on_ble_evt(uint8_t conn_handle,
 }
 
 // Get the characteristic data object
-STATIC bool get_characteristic_value(uint8_t conn_handle,
+static bool get_characteristic_value(uint8_t conn_handle,
     uint16_t char_handle,
     uint8_t *data,
     size_t *data_len) {

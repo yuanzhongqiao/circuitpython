@@ -462,7 +462,7 @@ mp_obj_t mp_obj_int_binary_op_extra_cases(mp_binary_op_t op, mp_obj_t lhs_in, mp
 
 // CIRCUITPY-CHANGE
 #if MICROPY_CPYTHON_COMPAT
-STATIC mp_obj_t int_bit_length(mp_obj_t self_in) {
+static mp_obj_t int_bit_length(mp_obj_t self_in) {
     #if MICROPY_LONGINT_IMPL != MICROPY_LONGINT_IMPL_NONE
     if (!mp_obj_is_small_int(self_in)) {
         return mp_obj_int_bit_length_impl(self_in);

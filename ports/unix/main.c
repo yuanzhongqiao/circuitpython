@@ -62,7 +62,7 @@ mp_obj_t common_hal_os_getenv(const char *key, mp_obj_t default_);
 os_getenv_err_t common_hal_os_getenv_str(const char *key, char *value, size_t value_len);
 os_getenv_err_t common_hal_os_getenv_int(const char *key, mp_int_t *value);
 
-STATIC mp_obj_t mod_os_getenv_int(mp_obj_t var_in) {
+static mp_obj_t mod_os_getenv_int(mp_obj_t var_in) {
     mp_int_t value;
     os_getenv_err_t result = common_hal_os_getenv_int(mp_obj_str_get_str(var_in), &value);
     if (result == 0) {
@@ -72,7 +72,7 @@ STATIC mp_obj_t mod_os_getenv_int(mp_obj_t var_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mod_os_getenv_int_obj, mod_os_getenv_int);
 
-STATIC mp_obj_t mod_os_getenv_str(mp_obj_t var_in) {
+static mp_obj_t mod_os_getenv_str(mp_obj_t var_in) {
     char buf[4096];
     os_getenv_err_t result = common_hal_os_getenv_str(mp_obj_str_get_str(var_in), buf, sizeof(buf));
     if (result == 0) {

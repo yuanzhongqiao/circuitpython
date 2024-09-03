@@ -457,18 +457,18 @@ static mp_obj_t list_reverse(mp_obj_t self_in) {
     return mp_const_none;
 }
 
-STATIC MP_DEFINE_CONST_FUN_OBJ_2(list_append_obj, mp_obj_list_append);
-STATIC MP_DEFINE_CONST_FUN_OBJ_2(list_extend_obj, list_extend);
+static MP_DEFINE_CONST_FUN_OBJ_2(list_append_obj, mp_obj_list_append);
+static MP_DEFINE_CONST_FUN_OBJ_2(list_extend_obj, list_extend);
 // CIRCUITPY-CHANGE: use renamed public function
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(list_clear_obj, mp_obj_list_clear);
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(list_copy_obj, list_copy);
-STATIC MP_DEFINE_CONST_FUN_OBJ_2(list_count_obj, list_count);
-STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(list_index_obj, 2, 4, list_index);
-STATIC MP_DEFINE_CONST_FUN_OBJ_3(list_insert_obj, list_insert);
-STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(list_pop_obj, 1, 2, list_pop);
-STATIC MP_DEFINE_CONST_FUN_OBJ_2(list_remove_obj, mp_obj_list_remove);
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(list_reverse_obj, list_reverse);
-STATIC MP_DEFINE_CONST_FUN_OBJ_KW(list_sort_obj, 1, mp_obj_list_sort);
+static MP_DEFINE_CONST_FUN_OBJ_1(list_clear_obj, mp_obj_list_clear);
+static MP_DEFINE_CONST_FUN_OBJ_1(list_copy_obj, list_copy);
+static MP_DEFINE_CONST_FUN_OBJ_2(list_count_obj, list_count);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(list_index_obj, 2, 4, list_index);
+static MP_DEFINE_CONST_FUN_OBJ_3(list_insert_obj, list_insert);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(list_pop_obj, 1, 2, list_pop);
+static MP_DEFINE_CONST_FUN_OBJ_2(list_remove_obj, mp_obj_list_remove);
+static MP_DEFINE_CONST_FUN_OBJ_1(list_reverse_obj, list_reverse);
+static MP_DEFINE_CONST_FUN_OBJ_KW(list_sort_obj, 1, mp_obj_list_sort);
 
 static const mp_rom_map_elem_t list_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_append), MP_ROM_PTR(&list_append_obj) },
