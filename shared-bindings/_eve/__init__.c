@@ -236,114 +236,125 @@ static mp_obj_t _bitmapswizzle(size_t n_args, const mp_obj_t *args) {
 }
 static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmapswizzle_obj, 5, 5, _bitmapswizzle);
 
-//|     def BitmapTransformA(self, p: int, v: int) -> None:
+//|     def BitmapTransformA(self, v: float) -> None:
 //|         """Set the :math:`a` component of the bitmap transform matrix
 //|
-//|         :param int p: precision control: 0 is 8.8, 1 is 1.15. Range 0-1. The initial value is 0
-//|         :param int v: The :math:`a` component of the bitmap transform matrix, in signed 8.8 or 1.15 bit fixed-point form. Range 0-131071. The initial value is 256
+//|         :param float v: The :math:`a` component of the bitmap transform matrix
 //|
-//|         The initial value is **p** = 0, **v** = 256. This represents the value 1.0.
+//|         The initial value 1.0.
 //|
 //|         These values are part of the graphics context and are saved and restored by :meth:`SaveContext` and :meth:`RestoreContext`.
 //|         """
 //|         ...
 
-static mp_obj_t _bitmaptransforma(mp_obj_t self, mp_obj_t a0, mp_obj_t a1) {
-    uint32_t p = mp_obj_get_int_truncated(a0);
-    uint32_t v = mp_obj_get_int_truncated(a1);
+static void _transform(uint32_t *p, uint32_t *v, mp_obj_t a0) {
+    mp_float_t a = mp_obj_get_float(a0);
+
+    if ((-2.0 <= a) && (a < 2.0)) {
+        *p = 1;
+        *v = (int)(32768.0 * a);
+    } else {
+        *p = 0;
+        *v = (int)(256.0 * a);
+    }
+}
+static mp_obj_t _bitmaptransforma(mp_obj_t self, mp_obj_t a0) {
+    uint32_t p, v;
+    _transform(&p, &v, a0);
     common_hal__eve_BitmapTransformA(EVEHAL(self), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_3(bitmaptransforma_obj, _bitmaptransforma);
+static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransforma_obj, _bitmaptransforma);
 
-//|     def BitmapTransformB(self, p: int, v: int) -> None:
+//|     def BitmapTransformB(self, v: float) -> None:
 //|         """Set the :math:`b` component of the bitmap transform matrix
 //|
-//|         :param int p: precision control: 0 is 8.8, 1 is 1.15. Range 0-1. The initial value is 0
-//|         :param int v: The :math:`b` component of the bitmap transform matrix, in signed 8.8 or 1.15 bit fixed-point form. Range 0-131071. The initial value is 0
+//|         :param float v: The :math:`b` component of the bitmap transform matrix
 //|
-//|         The initial value is **p** = 0, **v** = 0. This represents the value 0.0.
+//|         The initial value 0.0.
 //|
 //|         These values are part of the graphics context and are saved and restored by :meth:`SaveContext` and :meth:`RestoreContext`.
 //|         """
 //|         ...
 
-static mp_obj_t _bitmaptransformb(mp_obj_t self, mp_obj_t a0, mp_obj_t a1) {
-    uint32_t p = mp_obj_get_int_truncated(a0);
-    uint32_t v = mp_obj_get_int_truncated(a1);
+static mp_obj_t _bitmaptransformb(mp_obj_t self, mp_obj_t a0) {
+    uint32_t p, v;
+    _transform(&p, &v, a0);
     common_hal__eve_BitmapTransformB(EVEHAL(self), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_3(bitmaptransformb_obj, _bitmaptransformb);
+static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformb_obj, _bitmaptransformb);
 
-//|     def BitmapTransformC(self, v: int) -> None:
+//|     def BitmapTransformC(self, v: float) -> None:
 //|         """Set the :math:`c` component of the bitmap transform matrix
 //|
-//|         :param int v: The :math:`c` component of the bitmap transform matrix, in signed 15.8 bit fixed-point form. Range 0-16777215. The initial value is 0
+//|         :param int v: The :math:`c` component of the bitmap transform matrix
+//|
+//|         The initial value 0.0.
 //|
 //|         This value is part of the graphics context and is saved and restored by :meth:`SaveContext` and :meth:`RestoreContext`.
 //|         """
 //|         ...
 
 static mp_obj_t _bitmaptransformc(mp_obj_t self, mp_obj_t a0) {
-    uint32_t v = mp_obj_get_int_truncated(a0);
-    common_hal__eve_BitmapTransformC(EVEHAL(self), v);
+    mp_float_t v = mp_obj_get_float(a0);
+    common_hal__eve_BitmapTransformC(EVEHAL(self), (int)(256.0 * v));
     return mp_const_none;
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformc_obj, _bitmaptransformc);
 
-//|     def BitmapTransformD(self, p: int, v: int) -> None:
+//|     def BitmapTransformD(self, v: float) -> None:
 //|         """Set the :math:`d` component of the bitmap transform matrix
 //|
-//|         :param int p: precision control: 0 is 8.8, 1 is 1.15. Range 0-1. The initial value is 0
-//|         :param int v: The :math:`d` component of the bitmap transform matrix, in signed 8.8 or 1.15 bit fixed-point form. Range 0-131071. The initial value is 0
+//|         :param float v: The :math:`d` component of the bitmap transform matrix
 //|
-//|         The initial value is **p** = 0, **v** = 0. This represents the value 0.0.
+//|         The initial value 0.0.
 //|
 //|         These values are part of the graphics context and are saved and restored by :meth:`SaveContext` and :meth:`RestoreContext`.
 //|         """
 //|         ...
 
-static mp_obj_t _bitmaptransformd(mp_obj_t self, mp_obj_t a0, mp_obj_t a1) {
-    uint32_t p = mp_obj_get_int_truncated(a0);
-    uint32_t v = mp_obj_get_int_truncated(a1);
+static mp_obj_t _bitmaptransformd(mp_obj_t self, mp_obj_t a0) {
+    uint32_t p, v;
+    _transform(&p, &v, a0);
     common_hal__eve_BitmapTransformD(EVEHAL(self), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_3(bitmaptransformd_obj, _bitmaptransformd);
+static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformd_obj, _bitmaptransformd);
 
-//|     def BitmapTransformE(self, p: int, v: int) -> None:
+//|     def BitmapTransformE(self, v: float) -> None:
 //|         """Set the :math:`e` component of the bitmap transform matrix
 //|
-//|         :param int p: precision control: 0 is 8.8, 1 is 1.15. Range 0-1. The initial value is 0
-//|         :param int v: The :math:`e` component of the bitmap transform matrix, in signed 8.8 or 1.15 bit fixed-point form. Range 0-131071. The initial value is 256
+//|         :param float v: The :math:`e` component of the bitmap transform matrix
 //|
-//|         The initial value is **p** = 0, **v** = 256. This represents the value 1.0.
+//|         The initial value 1.0.
 //|
 //|         These values are part of the graphics context and are saved and restored by :meth:`SaveContext` and :meth:`RestoreContext`.
 //|         """
 //|         ...
 
-static mp_obj_t _bitmaptransforme(mp_obj_t self, mp_obj_t a0, mp_obj_t a1) {
-    uint32_t p = mp_obj_get_int_truncated(a0);
-    uint32_t v = mp_obj_get_int_truncated(a1);
+static mp_obj_t _bitmaptransforme(mp_obj_t self, mp_obj_t a0) {
+    uint32_t p, v;
+    _transform(&p, &v, a0);
     common_hal__eve_BitmapTransformE(EVEHAL(self), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_3(bitmaptransforme_obj, _bitmaptransforme);
+static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransforme_obj, _bitmaptransforme);
 
 //|     def BitmapTransformF(self, v: int) -> None:
 //|         """Set the :math:`f` component of the bitmap transform matrix
 //|
-//|         :param int v: The :math:`f` component of the bitmap transform matrix, in signed 15.8 bit fixed-point form. Range 0-16777215. The initial value is 0
+//|         :param int v: The :math:`f` component of the bitmap transform matrix
+//|
+//|         The initial value 0.0.
 //|
 //|         This value is part of the graphics context and is saved and restored by :meth:`SaveContext` and :meth:`RestoreContext`.
 //|         """
 //|         ...
 
 static mp_obj_t _bitmaptransformf(mp_obj_t self, mp_obj_t a0) {
-    uint32_t v = mp_obj_get_int_truncated(a0);
-    common_hal__eve_BitmapTransformF(EVEHAL(self), v);
+    mp_float_t v = mp_obj_get_float(a0);
+    common_hal__eve_BitmapTransformF(EVEHAL(self), (int)(256.0 * v));
     return mp_const_none;
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformf_obj, _bitmaptransformf);
