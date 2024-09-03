@@ -848,7 +848,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(vertex2ii_obj, 3, 5, _vertex2ii);
 // }
 
 static bool is_vector(mp_obj_t a) {
-    if(!mp_obj_is_type(a, &ulab_ndarray_type)) {
+    if (!mp_obj_is_type(a, &ulab_ndarray_type)) {
         return false;
     }
     ndarray_obj_t *ndarray = MP_OBJ_TO_PTR(a);
@@ -867,18 +867,18 @@ static bool is_vector(mp_obj_t a) {
 //|         :param float y: pixel y-coordinate"""
 //|         ...
 static mp_obj_t _vertex2f(mp_obj_t self, mp_obj_t a0, mp_obj_t a1) {
-    if(is_vector(a0) && is_vector(a1)) {
+    if (is_vector(a0) && is_vector(a1)) {
         ndarray_obj_t *v0 = MP_OBJ_TO_PTR(a0);
         ndarray_obj_t *v1 = MP_OBJ_TO_PTR(a1);
         mp_float_t *p0 = (mp_float_t *)v0->array;
         mp_float_t *p1 = (mp_float_t *)v1->array;
-        for(size_t i=0; i < v0->len; i++, p0++, p1++) {
+        for (size_t i = 0; i < v0->len; i++, p0++, p1++) {
             common_hal__eve_Vertex2f(EVEHAL(self), *p0, *p1);
         }
     } else {
-      mp_float_t x = mp_obj_get_float(a0);
-      mp_float_t y = mp_obj_get_float(a1);
-      common_hal__eve_Vertex2f(EVEHAL(self), x, y);
+        mp_float_t x = mp_obj_get_float(a0);
+        mp_float_t y = mp_obj_get_float(a1);
+        common_hal__eve_Vertex2f(EVEHAL(self), x, y);
     }
     return mp_const_none;
 }
