@@ -108,7 +108,7 @@ static void verify_fs_writable(fs_user_mount_t *vfs) {
     }
 }
 
-#if _FS_REENTRANT
+#if FF_FS_REENTRANT
 static mp_obj_t fat_vfs_del(mp_obj_t self_in) {
     mp_obj_fat_vfs_t *self = MP_OBJ_TO_PTR(self_in);
     // f_umount only needs to be called to release the sync object
