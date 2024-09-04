@@ -262,13 +262,13 @@ static void _transform1(uint32_t *p, uint32_t *v, size_t n_args, const mp_obj_t 
     if (eve->model == 0) {
         // Backwards-compatible case for legacy code
         if (n_args != 3) {
-            mp_raise_TypeError(MP_ERROR_TEXT("2 arguments expected"));
+            mp_raise_TypeError_varg(MP_ERROR_TEXT("function takes %d positional arguments but %d were given"), 2, n_args - 1);
         }
         *p = mp_obj_get_int_truncated(args[1]);
         *v = mp_obj_get_int_truncated(args[2]);
     } else {
         if (n_args != 2) {
-            mp_raise_TypeError(MP_ERROR_TEXT("1 argument expected"));
+            mp_raise_TypeError_varg(MP_ERROR_TEXT("function takes %d positional arguments but %d were given"), 1, n_args - 1);
         }
         a = mp_obj_get_float(args[1]);
         if ((eve->model > 810) && (-2.0 <= a) && (a < 2.0)) {
@@ -287,7 +287,7 @@ static mp_obj_t _bitmaptransforma(size_t n_args, const mp_obj_t *args) {
     common_hal__eve_BitmapTransformA(EVEHAL(args[0]), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransforma_obj, 1, 2, _bitmaptransforma);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransforma_obj, 2, 3, _bitmaptransforma);
 
 //|     def BitmapTransformB(self, v: float) -> None:
 //|         """Set the :math:`b` component of the bitmap transform matrix
@@ -306,7 +306,7 @@ static mp_obj_t _bitmaptransformb(size_t n_args, const mp_obj_t *args) {
     common_hal__eve_BitmapTransformB(EVEHAL(args[0]), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransformb_obj, 1, 2, _bitmaptransformb);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransformb_obj, 2, 3, _bitmaptransformb);
 
 //|     def BitmapTransformC(self, v: float) -> None:
 //|         """Set the :math:`c` component of the bitmap transform matrix
@@ -350,7 +350,7 @@ static mp_obj_t _bitmaptransformd(size_t n_args, const mp_obj_t *args) {
     common_hal__eve_BitmapTransformD(EVEHAL(args[0]), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransformd_obj, 1, 2, _bitmaptransformd);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransformd_obj, 2, 3, _bitmaptransformd);
 
 //|     def BitmapTransformE(self, v: float) -> None:
 //|         """Set the :math:`e` component of the bitmap transform matrix
@@ -369,7 +369,7 @@ static mp_obj_t _bitmaptransforme(size_t n_args, const mp_obj_t *args) {
     common_hal__eve_BitmapTransformE(EVEHAL(args[0]), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransforme_obj, 1, 2, _bitmaptransforme);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransforme_obj, 2, 3, _bitmaptransforme);
 
 //|     def BitmapTransformF(self, v: int) -> None:
 //|         """Set the :math:`f` component of the bitmap transform matrix
