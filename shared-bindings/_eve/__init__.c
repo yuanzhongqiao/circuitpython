@@ -46,6 +46,14 @@ static mp_obj_t _register(mp_obj_t self, mp_obj_t o) {
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(register_obj, _register);
 
+//|     def setmodel(self, m: int) -> None: ...
+static mp_obj_t _setmodel(mp_obj_t self, mp_obj_t m) {
+    common_hal__eve_t *eve = EVEHAL(self);
+    eve->model = mp_obj_get_int_truncated(m);
+    return mp_const_none;
+}
+static MP_DEFINE_CONST_FUN_OBJ_2(setmodel_obj, _setmodel);
+
 //|     def flush(self) -> None:
 //|         """Send any queued drawing commands directly to the hardware.
 //|
@@ -247,24 +255,39 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmapswizzle_obj, 5, 5, _bitmapswizz
 //|         """
 //|         ...
 
-static void _transform(uint32_t *p, uint32_t *v, mp_obj_t a0) {
-    mp_float_t a = mp_obj_get_float(a0);
+static void _transform1(uint32_t *p, uint32_t *v, size_t n_args, const mp_obj_t *args) {
+    common_hal__eve_t *eve = EVEHAL(args[0]);
+    mp_float_t a;
 
-    if ((-2.0 <= a) && (a < 2.0)) {
-        *p = 1;
-        *v = (int)(32768.0 * a);
+    if (eve->model == 0) {
+        // Backwards-compatible case for legacy code
+        if (n_args != 3) {
+            mp_raise_TypeError(MP_ERROR_TEXT("2 arguments expected"));
+        }
+        *p = mp_obj_get_int_truncated(args[1]);
+        *v = mp_obj_get_int_truncated(args[2]);
     } else {
-        *p = 0;
-        *v = (int)(256.0 * a);
+        if (n_args != 2) {
+            mp_raise_TypeError(MP_ERROR_TEXT("1 argument expected"));
+        }
+        a = mp_obj_get_float(args[1]);
+        if ((eve->model > 810) && (-2.0 <= a) && (a < 2.0)) {
+            *p = 1;
+            *v = (int)(32768.0 * a);
+        } else {
+            *p = 0;
+            *v = (int)(256.0 * a);
+        }
     }
 }
-static mp_obj_t _bitmaptransforma(mp_obj_t self, mp_obj_t a0) {
+
+static mp_obj_t _bitmaptransforma(size_t n_args, const mp_obj_t *args) {
     uint32_t p, v;
-    _transform(&p, &v, a0);
-    common_hal__eve_BitmapTransformA(EVEHAL(self), p, v);
+    _transform1(&p, &v, n_args, args);
+    common_hal__eve_BitmapTransformA(EVEHAL(args[0]), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransforma_obj, _bitmaptransforma);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransforma_obj, 1, 2, _bitmaptransforma);
 
 //|     def BitmapTransformB(self, v: float) -> None:
 //|         """Set the :math:`b` component of the bitmap transform matrix
@@ -277,13 +300,13 @@ static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransforma_obj, _bitmaptransforma);
 //|         """
 //|         ...
 
-static mp_obj_t _bitmaptransformb(mp_obj_t self, mp_obj_t a0) {
+static mp_obj_t _bitmaptransformb(size_t n_args, const mp_obj_t *args) {
     uint32_t p, v;
-    _transform(&p, &v, a0);
-    common_hal__eve_BitmapTransformB(EVEHAL(self), p, v);
+    _transform1(&p, &v, n_args, args);
+    common_hal__eve_BitmapTransformB(EVEHAL(args[0]), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformb_obj, _bitmaptransformb);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransformb_obj, 1, 2, _bitmaptransformb);
 
 //|     def BitmapTransformC(self, v: float) -> None:
 //|         """Set the :math:`c` component of the bitmap transform matrix
@@ -297,8 +320,15 @@ static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformb_obj, _bitmaptransformb);
 //|         ...
 
 static mp_obj_t _bitmaptransformc(mp_obj_t self, mp_obj_t a0) {
-    mp_float_t v = mp_obj_get_float(a0);
-    common_hal__eve_BitmapTransformC(EVEHAL(self), (int)(256.0 * v));
+    common_hal__eve_t *eve = EVEHAL(self);
+    int v;
+
+    if (eve->model == 0) {
+        v = mp_obj_get_int_truncated(a0);
+    } else {
+        v = (int)(256.0 * mp_obj_get_float(a0));
+    }
+    common_hal__eve_BitmapTransformC(EVEHAL(self), v);
     return mp_const_none;
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformc_obj, _bitmaptransformc);
@@ -314,13 +344,13 @@ static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformc_obj, _bitmaptransformc);
 //|         """
 //|         ...
 
-static mp_obj_t _bitmaptransformd(mp_obj_t self, mp_obj_t a0) {
+static mp_obj_t _bitmaptransformd(size_t n_args, const mp_obj_t *args) {
     uint32_t p, v;
-    _transform(&p, &v, a0);
-    common_hal__eve_BitmapTransformD(EVEHAL(self), p, v);
+    _transform1(&p, &v, n_args, args);
+    common_hal__eve_BitmapTransformD(EVEHAL(args[0]), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformd_obj, _bitmaptransformd);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransformd_obj, 1, 2, _bitmaptransformd);
 
 //|     def BitmapTransformE(self, v: float) -> None:
 //|         """Set the :math:`e` component of the bitmap transform matrix
@@ -333,13 +363,13 @@ static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformd_obj, _bitmaptransformd);
 //|         """
 //|         ...
 
-static mp_obj_t _bitmaptransforme(mp_obj_t self, mp_obj_t a0) {
+static mp_obj_t _bitmaptransforme(size_t n_args, const mp_obj_t *args) {
     uint32_t p, v;
-    _transform(&p, &v, a0);
-    common_hal__eve_BitmapTransformE(EVEHAL(self), p, v);
+    _transform1(&p, &v, n_args, args);
+    common_hal__eve_BitmapTransformE(EVEHAL(args[0]), p, v);
     return mp_const_none;
 }
-static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransforme_obj, _bitmaptransforme);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmaptransforme_obj, 1, 2, _bitmaptransforme);
 
 //|     def BitmapTransformF(self, v: int) -> None:
 //|         """Set the :math:`f` component of the bitmap transform matrix
@@ -353,8 +383,15 @@ static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransforme_obj, _bitmaptransforme);
 //|         ...
 
 static mp_obj_t _bitmaptransformf(mp_obj_t self, mp_obj_t a0) {
-    mp_float_t v = mp_obj_get_float(a0);
-    common_hal__eve_BitmapTransformF(EVEHAL(self), (int)(256.0 * v));
+    common_hal__eve_t *eve = EVEHAL(self);
+    int v;
+
+    if (eve->model == 0) {
+        v = mp_obj_get_int_truncated(a0);
+    } else {
+        v = (int)(256.0 * mp_obj_get_float(a0));
+    }
+    common_hal__eve_BitmapTransformF(EVEHAL(self), v);
     return mp_const_none;
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(bitmaptransformf_obj, _bitmaptransformf);
@@ -1068,6 +1105,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(cmd_obj, 4, 4, _cmd);
 
 static const mp_rom_map_elem_t _EVE_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_register), MP_ROM_PTR(&register_obj) },
+    { MP_ROM_QSTR(MP_QSTR_setmodel), MP_ROM_PTR(&setmodel_obj) },
     { MP_ROM_QSTR(MP_QSTR_cc), MP_ROM_PTR(&cc_obj) },
     { MP_ROM_QSTR(MP_QSTR_flush), MP_ROM_PTR(&flush_obj) },
     { MP_ROM_QSTR(MP_QSTR_Vertex2f), MP_ROM_PTR(&vertex2f_obj) },
@@ -1082,6 +1120,7 @@ static mp_obj_t _EVE_make_new(const mp_obj_type_t *type, size_t n_args, size_t n
     mp_obj__EVE_t *o = mp_obj_malloc(mp_obj__EVE_t, &_EVE_type);
     o->_eve.n = 0;
     o->_eve.vscale = 16;
+    o->_eve.model = 0;  // default is legacy behavior
     return MP_OBJ_FROM_PTR(o);
 }
 
