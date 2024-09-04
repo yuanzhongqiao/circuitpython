@@ -18,5 +18,4 @@ CIRCUITPY_ESP_PSRAM_FREQ = 80m
 # Include these Python libraries in firmware.
 FROZEN_MPY_DIRS += $(TOP)/frozen/Adafruit_CircuitPython_NeoPixel
 FROZEN_MPY_DIRS += $(TOP)/frozen/Adafruit_CircuitPython_ST7789
-FROZEN_MPY_DIRS += $(TOP)/frozen/Adafruit_CircuitPython_MAX1704x
 FROZEN_MPY_DIRS += $(TOP)/frozen/Adafruit_CircuitPython_AHTx0
