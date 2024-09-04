@@ -193,6 +193,8 @@ const qstr_pool_t mp_qstr_const_pool = {
     },
 };
 
+// If frozen code is enabled, then there is an additional, sorted, ROM pool
+// containing additional qstrs required by the frozen code.
 #ifdef MICROPY_QSTR_EXTRA_POOL
 extern const qstr_pool_t MICROPY_QSTR_EXTRA_POOL;
 #define CONST_POOL MICROPY_QSTR_EXTRA_POOL

@@ -1,6 +1,8 @@
-# CIRCUITPY-CHANGE: micropython does not have this test file
 """
-test that calling super() getter property in subclass will return the value
+categories: Core,Classes
+description: Calling super() getter property in subclass will return a property object, not the value
+cause: Unknown
+workaround: Unknown
 """
 
 

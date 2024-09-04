@@ -13,6 +13,7 @@ SRC_EXTMOD_C += \
 	extmod/modre.c \
 	extmod/modselect.c \
 	extmod/moductypes.c \
+	extmod/modzlib.c \
 	extmod/vfs.c \
 	extmod/vfs_blockdev.c \
 	extmod/vfs_fat.c \

@@ -1,3 +1,5 @@
+// CIRCUITPY-CHANGE: This module was removed from MicroPython but CircuitPython still uses it.
+
 /*
  * This file is part of the MicroPython project, http://micropython.org/
  *

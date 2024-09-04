@@ -2753,6 +2753,7 @@ static void compile_yield_expr(compiler_t *comp, mp_parse_node_struct_t *pns) {
         reserve_labels_for_native(comp, 1);
     } else if (MP_PARSE_NODE_IS_STRUCT_KIND(pns->nodes[0], PN_yield_arg_from)) {
         pns = (mp_parse_node_struct_t *)pns->nodes[0];
+        // CIRCUITPY-CHANGE: more error checking
         #if MICROPY_PY_ASYNC_AWAIT
         if (comp->scope_cur->scope_flags & MP_SCOPE_FLAG_ASYNC) {
             compile_syntax_error(comp, (mp_parse_node_t)pns, MP_ERROR_TEXT("'yield from' inside async function"));

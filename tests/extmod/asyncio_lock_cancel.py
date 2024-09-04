@@ -1,7 +1,7 @@
 # Test that locks work when cancelling multiple waiters on the lock
 
 try:
-    import uasyncio as asyncio
+    import asyncio
 except ImportError:
     print("SKIP")
     raise SystemExit

@@ -59,9 +59,9 @@ Classes
 
     .. method:: deque.extend(iterable)
 
-        Extend the right side of the deque by appending items from the *iterable* argument.
+        Extend the right side of the deque by appending items from the ``iterable`` argument.
         Raises IndexError if overflow checking is enabled and there is no more room left
-        for all of the items in *iterable*.
+        for all of the items in ``iterable``.
 
     In addition to the above, deques support iteration, ``bool``, ``len(d)``, ``reversed(d)``,
     membership testing with the ``in`` operator, and subscript references like ``d[0]``.
