@@ -78,7 +78,7 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     // Green LED
     { MP_ROM_QSTR(MP_QSTR_LED), MP_ROM_PTR(&pin_GPIO46) },
 
-    //NeoPixels x4
+    // NeoPixels x4
     { MP_ROM_QSTR(MP_QSTR_NEOPIXEL), MP_ROM_PTR(&pin_GPIO47) },
 
     // Camera LDO Enable
@@ -98,8 +98,8 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_CAMERA_DATA5), MP_ROM_PTR(&pin_GPIO9) },
     { MP_ROM_QSTR(MP_QSTR_CAMERA_DATA3), MP_ROM_PTR(&pin_GPIO7) },
     { MP_ROM_QSTR(MP_QSTR_CAMERA_DATA4), MP_ROM_PTR(&pin_GPIO8) },
-    //{ MP_ROM_QSTR(MP_QSTR_CAMERA_RESET), MP_ROM_PTR(&pin_GPIO47) },
-    //{ MP_ROM_QSTR(MP_QSTR_CAMERA_PWDN), MP_ROM_PTR(&pin_GPIO21) },
+    // { MP_ROM_QSTR(MP_QSTR_CAMERA_RESET), MP_ROM_PTR(&pin_GPIO47) },
+    // { MP_ROM_QSTR(MP_QSTR_CAMERA_PWDN), MP_ROM_PTR(&pin_GPIO21) },
 
     // I2C
     { MP_ROM_QSTR(MP_QSTR_I2C), MP_ROM_PTR(&board_i2c_obj) },
