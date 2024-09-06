@@ -677,7 +677,7 @@ static mp_obj_t _palettesource(mp_obj_t self, mp_obj_t a0) {
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(palettesource_obj, _palettesource);
 
-//|     def PaletteSource(self, addr: int) -> None:
+//|     def PaletteSourceH(self, addr: int) -> None:
 //|         """Set the base address of the palette
 //|
 //|         :param int addr: Address in graphics RAM, 2-byte aligned, high part.
