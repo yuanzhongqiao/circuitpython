@@ -75,6 +75,7 @@ typedef struct _mp_raw_code_t {
     uint8_t proto_fun_indicator[2];
     uint8_t kind; // of type mp_raw_code_kind_t; only 3 bits used
     bool is_generator;
+    bool is_async;
     const void *fun_data;
     struct _mp_raw_code_t **children;
     #if MICROPY_PERSISTENT_CODE_SAVE
@@ -105,6 +106,7 @@ typedef struct _mp_raw_code_truncated_t {
     uint8_t proto_fun_indicator[2];
     uint8_t kind;
     bool is_generator;
+    bool is_async;
     const void *fun_data;
     struct _mp_raw_code_t **children;
     #if MICROPY_PERSISTENT_CODE_SAVE

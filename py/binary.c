@@ -189,6 +189,8 @@ static inline uint16_t mp_encode_half_float(float x) {
 
 #elif MICROPY_PY_BUILTINS_FLOAT
 
+// CIRCUITPY-CHANGE: avoid warnings about unused functions
+#if defined(MICROPY_PY_FLOAT_USE_NATIVE_FLT16) && MICROPY_PY_FLOAT_USE_NATIVE_FLT16
 static float mp_decode_half_float(uint16_t hf) {
     union {
         uint32_t i;
@@ -259,6 +261,7 @@ static uint16_t mp_encode_half_float(float x) {
     uint16_t bits = ((fpu.i >> 16) & 0x8000) | (e << 10) | m;
     return bits;
 }
+#endif // defined(MICROPY_PY_FLOAT_USE_NATIVE_FLT16) && MICROPY_PY_FLOAT_USE_NATIVE_FLT16
 
 #endif
 

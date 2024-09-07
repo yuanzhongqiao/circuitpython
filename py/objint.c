@@ -484,7 +484,7 @@ MP_DEFINE_CONST_FUN_OBJ_1(int_bit_length_obj, int_bit_length);
 
 // CIRCUITPY-CHANGE: more functionality
 // this is a classmethod
-static mp_obj_t int_from_bytes(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t int_from_bytes(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     // TODO: Support signed param (assumes signed=False at the moment)
 
     enum { ARG_bytes, ARG_byteorder, ARG_signed };
@@ -527,7 +527,7 @@ static mp_obj_t int_from_bytes(size_t n_args, const mp_obj_t *args) {
     return mp_obj_new_int_from_uint(value);
 }
 
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(int_from_bytes_fun_obj, 3, 4, int_from_bytes);
+static MP_DEFINE_CONST_FUN_OBJ_KW(int_from_bytes_fun_obj, 3, int_from_bytes);
 static MP_DEFINE_CONST_CLASSMETHOD_OBJ(int_from_bytes_obj, MP_ROM_PTR(&int_from_bytes_fun_obj));
 
 // CIRCUITPY-CHANGE: supports signed

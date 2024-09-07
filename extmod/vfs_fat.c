@@ -526,7 +526,8 @@ static const mp_obj_property_t fat_vfs_label_obj = {
 #endif
 
 static const mp_rom_map_elem_t fat_vfs_locals_dict_table[] = {
-    #if _FS_REENTRANT
+    // CIRCUITPY-CHANGE: correct name
+    #if FF_FS_REENTRANT
     { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&fat_vfs_del_obj) },
     #endif
     { MP_ROM_QSTR(MP_QSTR_mkfs), MP_ROM_PTR(&fat_vfs_mkfs_obj) },

@@ -69,7 +69,7 @@ static mp_obj_t gen_wrap_call(mp_obj_t self_in, size_t n_args, size_t n_kw, cons
 
     // CIRCUITPY-CHANGE
     // allocate the generator or coroutine object, with room for local stack and exception stack
-    mp_obj_gen_instance_t *o = mp_obj_malloc_var(mp_obj_gen_instance_t, byte,
+    mp_obj_gen_instance_t *o = mp_obj_malloc_var(mp_obj_gen_instance_t, code_state.state, byte,
         n_state * sizeof(mp_obj_t) + n_exc_stack * sizeof(mp_exc_stack_t),
         // CIRCUITPY-CHANGE
         #if MICROPY_PY_ASYNC_AWAIT
@@ -135,7 +135,7 @@ static mp_obj_t native_gen_wrap_call(mp_obj_t self_in, size_t n_args, size_t n_k
     MP_BC_PRELUDE_SIG_DECODE(ip);
 
     // Allocate the generator object, with room for local stack (exception stack not needed).
-    mp_obj_gen_instance_native_t *o = mp_obj_malloc_var(mp_obj_gen_instance_native_t, byte, n_state * sizeof(mp_obj_t),
+    mp_obj_gen_instance_native_t *o = mp_obj_malloc_var(mp_obj_gen_instance_native_t, code_state.state, byte, n_state * sizeof(mp_obj_t),
         // CIRCUITPY-CHANGE
         #if MICROPY_PY_ASYNC_AWAIT
         (self_fun->base.type == &mp_type_native_gen_wrap) ? &mp_type_gen_instance : &mp_type_coro_instance

@@ -171,13 +171,12 @@ static mp_obj_t list_binary_op(mp_binary_op_t op, mp_obj_t lhs, mp_obj_t rhs) {
 }
 
 static mp_obj_t list_subscr(mp_obj_t self_in, mp_obj_t index, mp_obj_t value) {
-    // CIRCUITPY-CHANGE: define self here
+    // CIRCUITPY-CHANGE
     mp_obj_list_t *self = native_list(self_in);
     if (value == MP_OBJ_NULL) {
         // delete
         #if MICROPY_PY_BUILTINS_SLICE
         if (mp_obj_is_type(index, &mp_type_slice)) {
-            mp_obj_list_t *self = MP_OBJ_TO_PTR(self_in);
             mp_bound_slice_t slice;
             if (!mp_seq_get_fast_slice_indexes(self->len, index, &slice)) {
                 mp_raise_NotImplementedError(NULL);

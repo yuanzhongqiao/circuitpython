@@ -1,6 +1,8 @@
 # This makefile fragment adds the source code files for the core extmod modules
 # and provides rules to build 3rd-party components for extmod modules.
 
+# CIRCUITPY-CHANGE: many extmod modules removed
+# CIRCUITPY-CHANGE: modzlib.c still used
 SRC_EXTMOD_C += \
 	extmod/modasyncio.c \
 	extmod/modbinascii.c \
@@ -12,7 +14,6 @@ SRC_EXTMOD_C += \
 	extmod/modrandom.c \
 	extmod/modre.c \
 	extmod/modselect.c \
-	extmod/moductypes.c \
 	extmod/modzlib.c \
 	extmod/vfs.c \
 	extmod/vfs_blockdev.c \

@@ -103,7 +103,8 @@ void *memmove(void *dest, const void *src, size_t n) {
 }
 
 void *memset(void *s, int c, size_t n) {
-// CIRCUITPY-CHANGE: fancier copy only for full build#if CIRCUITPY_FULL_BUILD
+// CIRCUITPY-CHANGE: fancier copy only for full build
+#if CIRCUITPY_FULL_BUILD
     if (c == 0 && ((uintptr_t)s & 3) == 0) {
         // aligned store of 0
         uint32_t *s32 = s;

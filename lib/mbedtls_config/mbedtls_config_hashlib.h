@@ -45,7 +45,6 @@
 #define MBEDTLS_SHA512_C
 #undef MBEDTLS_HAVE_TIME_DATE
 
-<<<<<<<< HEAD:lib/mbedtls_config/mbedtls_config_hashlib.h
 // Memory allocation hooks
 #include <stdlib.h>
 #include <stdio.h>
@@ -54,13 +53,6 @@ void m_tracked_free(void *ptr);
 #define MBEDTLS_PLATFORM_STD_CALLOC m_tracked_calloc
 #define MBEDTLS_PLATFORM_STD_FREE m_tracked_free
 #define MBEDTLS_PLATFORM_SNPRINTF_MACRO snprintf
-========
-// Time hook
-#include <time.h>
-time_t rp2_rtctime_seconds(time_t *timer);
-#define MBEDTLS_PLATFORM_TIME_MACRO rp2_rtctime_seconds
-#define MBEDTLS_PLATFORM_MS_TIME_ALT mbedtls_ms_time
->>>>>>>> v1.23.0:lib/mbedtls_config/mbedtls_config_port.h
 
 #include "mbedtls/check_config.h"
 
