@@ -214,7 +214,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(bitmapsize_obj, 6, 6, _bitmapsize);
 //|     def BitmapSource(self, addr: int) -> None:
 //|         """Set the source address for bitmap graphics
 //|
-//|         :param int addr: Bitmap start address, pixel-aligned. May be in SRAM or flash. Range 0-16777215
+//|         :param int addr: Bitmap start address, pixel-aligned, low part.
 //|         """
 //|         ...
 
@@ -224,6 +224,20 @@ static mp_obj_t _bitmapsource(mp_obj_t self, mp_obj_t a0) {
     return mp_const_none;
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(bitmapsource_obj, _bitmapsource);
+
+//|     def BitmapSourceH(self, addr: int) -> None:
+//|         """Set the high source address for bitmap graphics
+//|
+//|         :param int addr: Bitmap start address, pixel-aligned, high part.
+//|         """
+//|         ...
+
+static mp_obj_t _bitmapsourceh(mp_obj_t self, mp_obj_t a0) {
+    uint32_t addr = mp_obj_get_int_truncated(a0);
+    common_hal__eve_BitmapSourceH(EVEHAL(self), addr);
+    return mp_const_none;
+}
+static MP_DEFINE_CONST_FUN_OBJ_2(bitmapsourceh_obj, _bitmapsourceh);
 
 //|     def BitmapSwizzle(self, r: int, g: int, b: int, a: int) -> None:
 //|         """Set the source for the r,g,b and a channels of a bitmap
@@ -650,7 +664,7 @@ static MP_DEFINE_CONST_FUN_OBJ_1(nop_obj, _nop);
 //|     def PaletteSource(self, addr: int) -> None:
 //|         """Set the base address of the palette
 //|
-//|         :param int addr: Address in graphics SRAM, 2-byte aligned. Range 0-4194303. The initial value is 0
+//|         :param int addr: Address in graphics RAM, 2-byte aligned, low part.
 //|
 //|         This value is part of the graphics context and is saved and restored by :meth:`SaveContext` and :meth:`RestoreContext`.
 //|         """
@@ -662,6 +676,22 @@ static mp_obj_t _palettesource(mp_obj_t self, mp_obj_t a0) {
     return mp_const_none;
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(palettesource_obj, _palettesource);
+
+//|     def PaletteSourceH(self, addr: int) -> None:
+//|         """Set the base address of the palette
+//|
+//|         :param int addr: Address in graphics RAM, 2-byte aligned, high part.
+//|
+//|         This value is part of the graphics context and is saved and restored by :meth:`SaveContext` and :meth:`RestoreContext`.
+//|         """
+//|         ...
+
+static mp_obj_t _palettesourceh(mp_obj_t self, mp_obj_t a0) {
+    uint32_t addr = mp_obj_get_int_truncated(a0);
+    common_hal__eve_PaletteSourceH(EVEHAL(self), addr);
+    return mp_const_none;
+}
+static MP_DEFINE_CONST_FUN_OBJ_2(palettesourceh_obj, _palettesourceh);
 
 //|     def RestoreContext(self) -> None:
 //|         """Restore the current graphics context from the context stack"""
@@ -854,6 +884,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(vertex2ii_obj, 3, 5, _vertex2ii);
     { MP_ROM_QSTR(MP_QSTR_BitmapSizeH), MP_ROM_PTR(&bitmapsizeh_obj) }, \
     { MP_ROM_QSTR(MP_QSTR_BitmapSize), MP_ROM_PTR(&bitmapsize_obj) }, \
     { MP_ROM_QSTR(MP_QSTR_BitmapSource), MP_ROM_PTR(&bitmapsource_obj) }, \
+    { MP_ROM_QSTR(MP_QSTR_BitmapSourceH), MP_ROM_PTR(&bitmapsourceh_obj) }, \
     { MP_ROM_QSTR(MP_QSTR_BitmapSwizzle), MP_ROM_PTR(&bitmapswizzle_obj) }, \
     { MP_ROM_QSTR(MP_QSTR_BitmapTransformA), MP_ROM_PTR(&bitmaptransforma_obj) }, \
     { MP_ROM_QSTR(MP_QSTR_BitmapTransformB), MP_ROM_PTR(&bitmaptransformb_obj) }, \
@@ -879,6 +910,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(vertex2ii_obj, 3, 5, _vertex2ii);
     { MP_ROM_QSTR(MP_QSTR_Macro), MP_ROM_PTR(&macro_obj) }, \
     { MP_ROM_QSTR(MP_QSTR_Nop), MP_ROM_PTR(&nop_obj) }, \
     { MP_ROM_QSTR(MP_QSTR_PaletteSource), MP_ROM_PTR(&palettesource_obj) }, \
+    { MP_ROM_QSTR(MP_QSTR_PaletteSourceH), MP_ROM_PTR(&palettesourceh_obj) }, \
     { MP_ROM_QSTR(MP_QSTR_PointSize), MP_ROM_PTR(&pointsize_obj) }, \
     { MP_ROM_QSTR(MP_QSTR_RestoreContext), MP_ROM_PTR(&restorecontext_obj) }, \
     { MP_ROM_QSTR(MP_QSTR_Return), MP_ROM_PTR(&return_obj) }, \
