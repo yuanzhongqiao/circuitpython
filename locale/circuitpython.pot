@@ -915,10 +915,6 @@ msgstr ""
 msgid "ESP-IDF memory allocation failed"
 msgstr ""
 
-#: extmod/modopenamp.c
-msgid "Endpoint not ready"
-msgstr ""
-
 #: extmod/modre.c
 msgid "Error in regex"
 msgstr ""
@@ -987,32 +983,8 @@ msgstr ""
 msgid "Failed to connect: timeout"
 msgstr ""
 
-#: extmod/modopenamp.c
-msgid "Failed to create RPMsg endpoint"
-msgstr ""
-
-#: extmod/modopenamp.c
-msgid "Failed to create virtio device"
-msgstr ""
-
-#: extmod/modopenamp.c
-msgid "Failed to initialize device io region"
-msgstr ""
-
-#: extmod/modopenamp.c
-msgid "Failed to initialize vrings"
-msgstr ""
-
-#: extmod/modopenamp.c
-msgid "Failed to open metal device"
-msgstr ""
-
 #: shared-module/audiomp3/MP3Decoder.c
 msgid "Failed to parse MP3 file"
-msgstr ""
-
-#: extmod/modopenamp.c
-msgid "Failed to register metal device"
 msgstr ""
 
 #: ports/nordic/sd_mutex.c
@@ -2434,6 +2406,10 @@ msgstr ""
 msgid "argsort is not implemented for flattened arrays"
 msgstr ""
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "argument must be None, an integer or a tuple of integers"
+msgstr ""
+
 #: py/compile.c
 msgid "argument name reused"
 msgstr ""
@@ -2734,10 +2710,6 @@ msgstr ""
 msgid "can't truncate-divide a complex number"
 msgstr ""
 
-#: extmod/moductypes.c
-msgid "can't unambiguously get sizeof scalar"
-msgstr ""
-
 #: extmod/modasyncio.c
 msgid "can't wait"
 msgstr ""
@@ -2893,18 +2865,6 @@ msgstr ""
 
 #: shared-bindings/msgpack/__init__.c
 msgid "default is not a function"
-msgstr ""
-
-#: extmod/machine_usb_device.c
-msgid "desc_cfg"
-msgstr ""
-
-#: extmod/machine_usb_device.c
-msgid "desc_dev"
-msgstr ""
-
-#: extmod/machine_usb_device.c
-msgid "desc_strs"
 msgstr ""
 
 #: shared-bindings/audiobusio/PDMIn.c
@@ -3332,10 +3292,6 @@ msgstr ""
 msgid "invalid bits_per_pixel %d, must be, 1, 2, 4, 8, 16, 24, or 32"
 msgstr ""
 
-#: extmod/modopenamp.c
-msgid "invalid callback"
-msgstr ""
-
 #: shared-module/ssl/SSLSocket.c
 msgid "invalid cert"
 msgstr ""
@@ -3431,10 +3387,6 @@ msgstr ""
 msgid "lhs and rhs should be compatible"
 msgstr ""
 
-#: extmod/modopenamp_remoteproc.c
-msgid "loading firmware is not supported."
-msgstr ""
-
 #: py/emitnative.c
 msgid "local '%q' has type '%q' but source is '%q'"
 msgstr ""
@@ -3484,7 +3436,7 @@ msgstr ""
 msgid "max_length must be 0-%d when fixed_length is %s"
 msgstr ""
 
-#: extmod/ulab/code/ndarray.c
+#: extmod/ulab/code/ndarray.c extmod/ulab/code/numpy/random/random.c
 msgid "maximum number of dimensions is "
 msgstr ""
 
@@ -3626,7 +3578,7 @@ msgstr ""
 msgid "no default packer"
 msgstr ""
 
-#: extmod/modrandom.c
+#: extmod/modrandom.c extmod/ulab/code/numpy/random/random.c
 msgid "no default seed"
 msgstr ""
 
@@ -3835,6 +3787,10 @@ msgstr ""
 msgid "out array is too small"
 msgstr ""
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "out has wrong type"
+msgstr ""
+
 #: extmod/ulab/code/numpy/vector.c
 msgid "out keyword is not supported for complex dtype"
 msgstr ""
@@ -3857,6 +3813,14 @@ msgstr ""
 
 #: shared-bindings/bitmaptools/__init__.c
 msgid "out of range of target"
+msgstr ""
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "output array has wrong type"
+msgstr ""
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "output array must be contiguous"
 msgstr ""
 
 #: py/objint_mpz.c
@@ -3985,6 +3949,10 @@ msgstr ""
 msgid "set unsupported"
 msgstr ""
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "shape must be None, and integer or a tuple of integers"
+msgstr ""
+
 #: extmod/ulab/code/ndarray.c
 msgid "shape must be integer or tuple of integers"
 msgstr ""
@@ -4003,6 +3971,10 @@ msgstr ""
 
 #: extmod/ulab/code/ulab_tools.c
 msgid "size is defined for ndarrays only"
+msgstr ""
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "size must match out.shape when used together"
 msgstr ""
 
 #: py/nativeglue.c
@@ -4078,18 +4050,6 @@ msgstr ""
 msgid "string indices must be integers, not %s"
 msgstr ""
 
-#: extmod/moductypes.c
-msgid "struct: can't index"
-msgstr ""
-
-#: extmod/moductypes.c
-msgid "struct: index out of range"
-msgstr ""
-
-#: extmod/moductypes.c
-msgid "struct: no fields"
-msgstr ""
-
 #: py/objarray.c py/objstr.c
 msgid "substring not found"
 msgstr ""
@@ -4102,10 +4062,6 @@ msgstr ""
 msgid "syntax error in JSON"
 msgstr ""
 
-#: extmod/moductypes.c
-msgid "syntax error in uctypes descriptor"
-msgstr ""
-
 #: extmod/modtime.c
 msgid "ticks interval overflow"
 msgstr ""
@@ -4116,10 +4072,6 @@ msgstr ""
 
 #: ports/nordic/common-hal/_bleio/Adapter.c
 msgid "timeout must be < 655.35 secs"
-msgstr ""
-
-#: extmod/modopenamp.c
-msgid "timeout waiting for a free buffer"
 msgstr ""
 
 #: ports/raspberrypi/common-hal/floppyio/__init__.c
