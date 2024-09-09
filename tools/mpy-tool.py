@@ -130,6 +130,8 @@ MP_SCOPE_FLAG_GENERATOR = 0x01
 MP_SCOPE_FLAG_VIPERRELOC = 0x10
 MP_SCOPE_FLAG_VIPERRODATA = 0x20
 MP_SCOPE_FLAG_VIPERBSS = 0x40
+# CIRCUITPY-CHANGE: async is distinct from generator
+MP_SCOPE_FLAG_ASYNC = 0x80
 
 MP_BC_MASK_EXTRA_BYTE = 0x9E
 
@@ -897,7 +899,8 @@ class RawCode(object):
                 print()
             print("static const mp_raw_code_t *const children_%s[] = {" % self.escaped_name)
             for rc in self.children:
-                print("    (const mp_raw_code_t *)&proto_fun_%s," % rc.escaped_name)
+                # CIRCUITPY-CHANGE: add (void *) to prevent cast-align compiler warning
+                print("    (const mp_raw_code_t *)(void *)&proto_fun_%s," % rc.escaped_name)
             if prelude_ptr:
                 print("    (void *)%s," % prelude_ptr)
             print("};")
@@ -921,6 +924,8 @@ class RawCode(object):
         print("    .proto_fun_indicator[1] = MP_PROTO_FUN_INDICATOR_RAW_CODE_1,")
         print("    .kind = %s," % RawCode.code_kind_str[self.code_kind])
         print("    .is_generator = %d," % bool(self.scope_flags & MP_SCOPE_FLAG_GENERATOR))
+        # CIRCUITPY-CHANGE: async is distinct from generator
+        print("    .is_async = %d," % bool(self.scope_flags & MP_SCOPE_FLAG_ASYNC))
         print("    .fun_data = fun_data_%s," % self.escaped_name)
         if len(self.children):
             print("    .children = (void *)&children_%s," % self.escaped_name)
