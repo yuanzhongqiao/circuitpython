@@ -72,6 +72,7 @@ void mp_emit_glue_assign_bytecode(mp_raw_code_t *rc, const byte *code,
 
     rc->kind = MP_CODE_BYTECODE;
     rc->is_generator = (scope_flags & MP_SCOPE_FLAG_GENERATOR) != 0;
+    // CIRCUITPY-CHANGE: async and generator are distinguished
     rc->is_async = (scope_flags & MP_SCOPE_FLAG_ASYNC) != 0;
     rc->fun_data = code;
     rc->children = children;
@@ -135,6 +136,7 @@ void mp_emit_glue_assign_native(mp_raw_code_t *rc, mp_raw_code_kind_t kind, cons
 
     rc->kind = kind;
     rc->is_generator = (scope_flags & MP_SCOPE_FLAG_GENERATOR) != 0;
+    // CIRCUITPY-CHANGE: async and generator are distinguished
     rc->is_async = (scope_flags & MP_SCOPE_FLAG_ASYNC) != 0;
     rc->fun_data = fun_data;
 
@@ -205,7 +207,6 @@ mp_obj_t mp_make_function_from_proto_fun(mp_proto_fun_t proto_fun, const mp_modu
     switch (rc->kind) {
         #if MICROPY_EMIT_NATIVE
         case MP_CODE_NATIVE_PY:
-        case MP_CODE_NATIVE_VIPER:
             fun = mp_obj_new_fun_native(def_args, rc->fun_data, context, rc->children);
             // Check for a generator function, and if so change the type of the object
             // CIRCUITPY-CHANGE: distinguish generators and async
