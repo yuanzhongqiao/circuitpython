@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: circuitpython-cn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2024-08-19 18:09+0000\n"
+"PO-Revision-Date: 2024-09-06 04:09+0000\n"
 "Last-Translator: hexthat <hexthat@gmail.com>\n"
 "Language-Team: Chinese Hanyu Pinyin\n"
 "Language: zh_Latn_pinyin\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: main.c
 msgid ""
@@ -3574,7 +3574,7 @@ msgstr "míngchēng wèi dìngyì"
 
 #: py/qstr.c
 msgid "name too long"
-msgstr ""
+msgstr "míngchēng tàicháng"
 
 #: py/persistentcode.c
 msgid "native code in .mpy unsupported"
