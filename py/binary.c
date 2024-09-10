@@ -79,12 +79,9 @@ size_t mp_binary_get_size(char struct_type, char val_type, size_t *palign) {
                     size = sizeof(void *);
                     break;
                 #endif
-                    // CIRCUITPY-CHANGE: half-float can be turned off
-                #if MICROPY_PY_BUILTINS_FLOAT && MICROPY_FLOAT_USE_NATIVE_FLT16
                 case 'e':
                     size = 2;
                     break;
-                #endif
                 case 'f':
                     // CIRCUITPY-CHANGE: compiler determines size
                     size = sizeof(float);
@@ -140,13 +137,10 @@ size_t mp_binary_get_size(char struct_type, char val_type, size_t *palign) {
                     size = sizeof(void *);
                     break;
                 #endif
-                    // CIRCUITPY-CHANGE: half-float can be turned off
-                #if MICROPY_PY_BUILTINS_FLOAT && MICROPY_FLOAT_USE_NATIVE_FLT16
                 case 'e':
                     align = 2;
                     size = 2;
                     break;
-                #endif
                 case 'f':
                     align = alignof(float);
                     size = sizeof(float);
@@ -189,8 +183,6 @@ static inline uint16_t mp_encode_half_float(float x) {
 
 #elif MICROPY_PY_BUILTINS_FLOAT
 
-// CIRCUITPY-CHANGE: avoid warnings about unused functions
-#if defined(MICROPY_PY_FLOAT_USE_NATIVE_FLT16) && MICROPY_PY_FLOAT_USE_NATIVE_FLT16
 static float mp_decode_half_float(uint16_t hf) {
     union {
         uint32_t i;
@@ -261,7 +253,6 @@ static uint16_t mp_encode_half_float(float x) {
     uint16_t bits = ((fpu.i >> 16) & 0x8000) | (e << 10) | m;
     return bits;
 }
-#endif // defined(MICROPY_PY_FLOAT_USE_NATIVE_FLT16) && MICROPY_PY_FLOAT_USE_NATIVE_FLT16
 
 #endif
 
@@ -367,12 +358,9 @@ mp_obj_t mp_binary_get_val(char struct_type, char val_type, byte *p_base, byte *
         const char *s_val = (const char *)(uintptr_t)(mp_uint_t)val;
         return mp_obj_new_str(s_val, strlen(s_val));
     #endif
-        #if MICROPY_PY_BUILTINS_FLOAT
-        // CIRCUITPY-CHANGE: half-float can be turned off
-    #if MICROPY_PY_BUILTINS_FLOAT && MICROPY_FLOAT_USE_NATIVE_FLT16
+    #if MICROPY_PY_BUILTINS_FLOAT
     } else if (val_type == 'e') {
         return mp_obj_new_float_from_f(mp_decode_half_float(val));
-    #endif
     } else if (val_type == 'f') {
         union {
             uint32_t i;
@@ -385,7 +373,7 @@ mp_obj_t mp_binary_get_val(char struct_type, char val_type, byte *p_base, byte *
             double f;
         } fpu = {val};
         return mp_obj_new_float_from_d(fpu.f);
-        #endif
+    #endif
     } else if (is_signed(val_type)) {
         if ((long long)MP_SMALL_INT_MIN <= val && val <= (long long)MP_SMALL_INT_MAX) {
             return mp_obj_new_int((mp_int_t)val);
@@ -445,12 +433,9 @@ void mp_binary_set_val(char struct_type, char val_type, mp_obj_t val_in, byte *p
             break;
         #endif
         #if MICROPY_PY_BUILTINS_FLOAT
-        // CIRCUITPY-CHANGE: half-float can be turned off
-        #if MICROPY_PY_BUILTINS_FLOAT && MICROPY_FLOAT_USE_NATIVE_FLT16
         case 'e':
             val = mp_encode_half_float(mp_obj_get_float_to_f(val_in));
             break;
-        #endif
         case 'f': {
             union {
                 uint32_t i;

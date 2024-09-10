@@ -143,6 +143,7 @@ extern void common_hal_mcu_enable_interrupts(void);
 #define MICROPY_PY_SYS                   (CIRCUITPY_SYS)
 #define MICROPY_PY_SYS_MAXSIZE           (1)
 #define MICROPY_PY_SYS_STDFILES          (1)
+#define MICROPY_PY_UCTYPES               (0)
 #define MICROPY_PY___FILE__              (1)
 
 #define MICROPY_QSTR_BYTES_IN_HASH       (1)
