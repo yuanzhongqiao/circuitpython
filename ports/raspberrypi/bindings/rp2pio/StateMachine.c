@@ -86,64 +86,69 @@
 //|     ) -> None:
 //|         """Construct a StateMachine object on the given pins with the given program.
 //|
+//|         The following parameters are usually supplied directly:
+//|
 //|         :param ReadableBuffer program: the program to run with the state machine
 //|         :param int frequency: the target clock frequency of the state machine. Actual may be less. Use 0 for system clock speed.
 //|         :param ReadableBuffer init: a program to run once at start up. This is run after program
 //|              is started so instructions may be intermingled
-//|         :param int pio_version: The version of the PIO peripheral required by the program. The constructor will raise an error if the actual hardware is not compatible with this program version.
 //|         :param ReadableBuffer may_exec: Instructions that may be executed via `StateMachine.run` calls.
 //|             Some elements of the `StateMachine`'s configuration are inferred from the instructions used;
 //|             for instance, if there is no ``in`` or ``push`` instruction, then the `StateMachine` is configured without a receive FIFO.
 //|             In this case, passing a ``may_exec`` program containing an ``in`` instruction such as ``in x``, a receive FIFO will be configured.
 //|         :param ~microcontroller.Pin first_out_pin: the first pin to use with the OUT instruction
-//|         :param int out_pin_count: the count of consecutive pins to use with OUT starting at first_out_pin
 //|         :param int initial_out_pin_state: the initial output value for out pins starting at first_out_pin
 //|         :param int initial_out_pin_direction: the initial output direction for out pins starting at first_out_pin
 //|         :param ~microcontroller.Pin first_in_pin: the first pin to use with the IN instruction
-//|         :param int in_pin_count: the count of consecutive pins to use with IN starting at first_in_pin
 //|         :param int pull_in_pin_up: a 1-bit in this mask sets pull up on the corresponding in pin
 //|         :param int pull_in_pin_down: a 1-bit in this mask sets pull down on the corresponding in pin. Setting both pulls enables a "bus keep" function, i.e. a weak pull to whatever is current high/low state of GPIO.
 //|         :param ~microcontroller.Pin first_set_pin: the first pin to use with the SET instruction
-//|         :param int set_pin_count: the count of consecutive pins to use with SET starting at first_set_pin
 //|         :param int initial_set_pin_state: the initial output value for set pins starting at first_set_pin
 //|         :param int initial_set_pin_direction: the initial output direction for set pins starting at first_set_pin
 //|         :param ~microcontroller.Pin first_sideset_pin: the first pin to use with a side set
-//|         :param int sideset_pin_count: the count of consecutive pins to use with a side set starting at first_sideset_pin. Does not include sideset enable
 //|         :param int initial_sideset_pin_state: the initial output value for sideset pins starting at first_sideset_pin
 //|         :param int initial_sideset_pin_direction: the initial output direction for sideset pins starting at first_sideset_pin
 //|         :param bool sideset_enable: True when the top sideset bit is to enable. This should be used with the ".side_set # opt" directive
 //|         :param ~microcontroller.Pin jmp_pin: the pin which determines the branch taken by JMP PIN instructions
 //|         :param ~digitalio.Pull jmp_pin_pull: The pull value for the jmp pin, default is no pull.
 //|         :param bool exclusive_pin_use: When True, do not share any pins with other state machines. Pins are never shared with other peripherals
-//|         :param bool auto_pull: When True, automatically load data from the tx FIFO into the
-//|             output shift register (OSR) when an OUT instruction shifts more than pull_threshold bits
-//|         :param int pull_threshold: Number of bits to shift before loading a new value into the OSR from the tx FIFO
-//|         :param bool out_shift_right: When True, data is shifted out the right side (LSB) of the
-//|             OSR. It is shifted out the left (MSB) otherwise. NOTE! This impacts data alignment
-//|             when the number of bytes is not a power of two (1, 2 or 4 bytes).
 //|         :param bool wait_for_txstall: When True, writing data out will block until the TX FIFO and OSR are empty
 //|             and an instruction is stalled waiting for more data. When False, data writes won't
 //|             wait for the OSR to empty (only the TX FIFO) so make sure you give enough time before
 //|             deiniting or stopping the state machine.
-//|         :param bool auto_push: When True, automatically save data from input shift register
-//|              (ISR) into the rx FIFO when an IN instruction shifts more than push_threshold bits
-//|         :param int push_threshold: Number of bits to shift before saving the ISR value to the RX FIFO
-//|         :param bool in_shift_right: When True, data is shifted into the right side (LSB) of the
-//|             ISR. It is shifted into the left (MSB) otherwise. NOTE! This impacts data alignment
-//|             when the number of bytes is not a power of two (1, 2 or 4 bytes).
 //|         :param bool user_interruptible: When True (the default),
 //|             `write()`, `readinto()`, and `write_readinto()` can be interrupted by a ctrl-C.
 //|             This is useful when developing a PIO program: if there is an error in the program
 //|             that causes an infinite loop, you will be able to interrupt the loop.
 //|             However, if you are writing to a device that can get into a bad state if a read or write
 //|             is interrupted, you may want to set this to False after your program has been vetted.
+//|         :param int offset: A specific offset in the state machine's program memory where the program must be loaded.
+//|             The default value, -1, allows the program to be loaded at any offset.
+//|             This is appropriate for most programs.
+//|
+//|         The following parameters are usually set via assembler directives and passed using a ``**program.pio_kwargs`` argument but may also be specified directly:
+//|
+//|         :param int out_pin_count: the count of consecutive pins to use with OUT starting at first_out_pin
+//|         :param int in_pin_count: the count of consecutive pins to use with IN starting at first_in_pin
+//|         :param int set_pin_count: the count of consecutive pins to use with SET starting at first_set_pin
+//|         :param int sideset_pin_count: the count of consecutive pins to use with a side set starting at first_sideset_pin. Does not include sideset enable
+//|         :param int pio_version: The version of the PIO peripheral required by the program. The constructor will raise an error if the actual hardware is not compatible with this program version.
+//|         :param bool auto_push: When True, automatically save data from input shift register
+//|              (ISR) into the rx FIFO when an IN instruction shifts more than push_threshold bits
+//|         :param int push_threshold: Number of bits to shift before saving the ISR value to the RX FIFO
+//|         :param bool in_shift_right: When True, data is shifted into the right side (LSB) of the
+//|             ISR. It is shifted into the left (MSB) otherwise. NOTE! This impacts data alignment
+//|             when the number of bytes is not a power of two (1, 2 or 4 bytes).
+//|         :param bool auto_pull: When True, automatically load data from the tx FIFO into the
+//|             output shift register (OSR) when an OUT instruction shifts more than pull_threshold bits
+//|         :param int pull_threshold: Number of bits to shift before loading a new value into the OSR from the tx FIFO
+//|         :param bool out_shift_right: When True, data is shifted out the right side (LSB) of the
+//|             OSR. It is shifted out the left (MSB) otherwise. NOTE! This impacts data alignment
+//|             when the number of bytes is not a power of two (1, 2 or 4 bytes).
 //|         :param int wrap_target: The target instruction number of automatic wrap. Defaults to the first instruction of the program.
 //|         :param int wrap: The instruction after which to wrap to the ``wrap``
 //|             instruction. As a special case, -1 (the default) indicates the
 //|             last instruction of the program.
-//|         :param int offset: A specific offset in the state machine's program memory where the program must be loaded.
-//|             The default value, -1, allows the program to be loaded at any offset.
-//|             This is appropriate for most programs.
 //|         :param FifoType fifo_type: How the program accessess the FIFOs. PIO version 0 only supports a subset of values.
 //|         :param MovStatusType mov_status_type: What condition the ``mov status`` instruction checks. PIO version 0 only supports a subset of values.
 //|         :param MovStatusType mov_status_n: The FIFO depth or IRQ the ``mov status`` instruction checks for. For ``mov_status irq`` this includes the encoding of the ``next``/``prev`` selection bits.
