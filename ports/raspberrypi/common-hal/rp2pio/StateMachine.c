@@ -199,7 +199,9 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     bool user_interruptible,
     bool sideset_enable,
     int wrap_target, int wrap,
-    int offset
+    int offset,
+    int fifo_type,
+    int mov_status_type, int mov_status_n
     ) {
     // Create a program id that isn't the pointer so we can store it without storing the original object.
     uint32_t program_id = ~((uint32_t)program);
@@ -343,15 +345,25 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
 
     sm_config_set_wrap(&c, wrap_target, wrap);
     sm_config_set_in_shift(&c, in_shift_right, auto_push, push_threshold);
-    sm_config_set_out_shift(&c, out_shift_right, auto_pull, pull_threshold);
+    #if PICO_PIO_VERSION > 0
+    sm_config_set_in_pin_count(&c, in_pin_count);
+    #endif
 
-    enum pio_fifo_join join = PIO_FIFO_JOIN_NONE;
-    if (!rx_fifo) {
-        join = PIO_FIFO_JOIN_TX;
-    } else if (!tx_fifo) {
-        join = PIO_FIFO_JOIN_RX;
-    }
-    self->fifo_depth = (join == PIO_FIFO_JOIN_NONE) ? 4 : 8;
+    sm_config_set_out_shift(&c, out_shift_right, auto_pull, pull_threshold);
+    sm_config_set_out_pin_count(&c, out_pin_count);
+
+    sm_config_set_set_pin_count(&c, set_pin_count);
+
+    enum pio_fifo_join join =
+        fifo_type != PIO_FIFO_JOIN_AUTO ? fifo_type
+        : !rx_fifo ? PIO_FIFO_JOIN_TX
+        : !tx_fifo ? PIO_FIFO_JOIN_RX
+        : PIO_FIFO_JOIN_NONE;
+    self->fifo_depth = (join == PIO_FIFO_JOIN_TX || join == PIO_FIFO_JOIN_RX) ? 8
+        #if PICO_PIO_VERSION > 0
+        : (join == PIO_FIFO_JOIN_PUTGET) ? 0
+        #endif
+        : 4;
 
     if (rx_fifo) {
         self->rx_dreq = pio_get_dreq(self->pio, self->state_machine, false);
@@ -370,6 +382,11 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     self->init_len = init_len;
 
     sm_config_set_fifo_join(&c, join);
+
+    // TODO: these arguments
+    // int mov_status_type, int mov_status_n,
+    // int set_count, int out_count
+
     self->sm_config = c;
 
     // no DMA allocated
@@ -519,7 +536,10 @@ void common_hal_rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     bool auto_push, uint8_t push_threshold, bool in_shift_right,
     bool user_interruptible,
     int wrap_target, int wrap,
-    int offset) {
+    int offset,
+    int fifo_type,
+    int mov_status_type,
+    int mov_status_n) {
 
     // First, check that all pins are free OR already in use by any PIO if exclusive_pin_use is false.
     uint32_t pins_we_use = wait_gpio_mask;
@@ -610,7 +630,9 @@ void common_hal_rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
         true /* claim pins */,
         user_interruptible,
         sideset_enable,
-        wrap_target, wrap, offset);
+        wrap_target, wrap, offset,
+        PIO_FIFO_TYPE_DEFAULT,
+        PIO_MOV_STATUS_DEFAULT, PIO_MOV_N_DEFAULT);
     if (!ok) {
         mp_raise_RuntimeError(MP_ERROR_TEXT("All state machines in use"));
     }

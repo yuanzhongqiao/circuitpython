@@ -12,6 +12,9 @@
 #include "src/rp2_common/hardware_pio/include/hardware/pio.h"
 
 enum { PIO_ANY_OFFSET = -1 };
+enum { PIO_FIFO_JOIN_AUTO = -1, PIO_FIFO_TYPE_DEFAULT = PIO_FIFO_JOIN_AUTO };
+enum { PIO_MOV_STATUS_DEFAULT = STATUS_TX_LESSTHAN };
+enum { PIO_MOV_N_DEFAULT = 0 };
 
 typedef struct sm_buf_info {
     mp_obj_t obj;
@@ -70,7 +73,10 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     bool claim_pins,
     bool interruptible,
     bool sideset_enable,
-    int wrap_target, int wrap, int offset);
+    int wrap_target, int wrap, int offset,
+    int fifo_type,
+    int mov_status_type, int mov_status_n
+    );
 
 uint8_t rp2pio_statemachine_program_offset(rp2pio_statemachine_obj_t *self);
 

@@ -22,6 +22,11 @@
 #include "py/runtime.h"
 
 
+//| FifoType = Literal["auto", "txrx", "tx", "rx", "txput", "txget", "putget"]
+//| FifoType_piov0 = Literal["auto", "txrx", "tx", "rx"]
+//| MovStatusType = Literal["txfifo", "rxfifo", "irq"]
+//| MovStatusType_piov0 = Literal["txfifo"]
+//|
 //| class StateMachine:
 //|     """A single PIO StateMachine
 //|
@@ -41,6 +46,7 @@
 //|         program: ReadableBuffer,
 //|         frequency: int,
 //|         *,
+//|         pio_version: int = 0,
 //|         may_exec: Optional[ReadableBuffer] = None,
 //|         init: Optional[ReadableBuffer] = None,
 //|         first_out_pin: Optional[microcontroller.Pin] = None,
@@ -74,6 +80,9 @@
 //|         wrap_target: int = 0,
 //|         wrap: int = -1,
 //|         offset: int = -1,
+//|         fifo_type: FifoType = "auto",
+//|         mov_status_type: MovStatusType = "txfifo",
+//|         mov_status_n: int = 0,
 //|     ) -> None:
 //|         """Construct a StateMachine object on the given pins with the given program.
 //|
@@ -81,6 +90,7 @@
 //|         :param int frequency: the target clock frequency of the state machine. Actual may be less. Use 0 for system clock speed.
 //|         :param ReadableBuffer init: a program to run once at start up. This is run after program
 //|              is started so instructions may be intermingled
+//|         :param int pio_version: The version of the PIO peripheral required by the program. The constructor will raise an error if the actual hardware is not compatible with this program version.
 //|         :param ReadableBuffer may_exec: Instructions that may be executed via `StateMachine.run` calls.
 //|             Some elements of the `StateMachine`'s configuration are inferred from the instructions used;
 //|             for instance, if there is no ``in`` or ``push`` instruction, then the `StateMachine` is configured without a receive FIFO.
@@ -134,12 +144,25 @@
 //|         :param int offset: A specific offset in the state machine's program memory where the program must be loaded.
 //|             The default value, -1, allows the program to be loaded at any offset.
 //|             This is appropriate for most programs.
+//|         :param FifoType fifo_type: How the program accessess the FIFOs. PIO version 0 only supports a subset of values.
+//|         :param MovStatusType mov_status_type: What condition the ``mov status`` instruction checks. PIO version 0 only supports a subset of values.
+//|         :param MovStatusType mov_status_n: The FIFO depth or IRQ the ``mov status`` instruction checks for. For ``mov_status irq`` this includes the encoding of the ``next``/``prev`` selection bits.
 //|         """
 //|         ...
 
+static int one_of(qstr_short_t what, mp_obj_t arg, size_t n_options, const qstr_short_t options[], const int values[]) {
+    for (size_t i = 0; i < n_options; i++) {
+        mp_obj_t option_str = MP_OBJ_NEW_QSTR(options[i]);
+        if (mp_obj_equal(arg, option_str)) {
+            return values[i];
+        }
+    }
+    mp_raise_ValueError_varg(MP_ERROR_TEXT("Invalid %q"), what);
+}
+
 static mp_obj_t rp2pio_statemachine_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
     rp2pio_statemachine_obj_t *self = mp_obj_malloc(rp2pio_statemachine_obj_t, &rp2pio_statemachine_type);
-    enum { ARG_program, ARG_frequency, ARG_init, ARG_may_exec,
+    enum { ARG_program, ARG_frequency, ARG_init, ARG_pio_version, ARG_may_exec,
            ARG_first_out_pin, ARG_out_pin_count, ARG_initial_out_pin_state, ARG_initial_out_pin_direction,
            ARG_first_in_pin, ARG_in_pin_count,
            ARG_pull_in_pin_up, ARG_pull_in_pin_down,
@@ -154,11 +177,15 @@ static mp_obj_t rp2pio_statemachine_make_new(const mp_obj_type_t *type, size_t n
            ARG_user_interruptible,
            ARG_wrap_target,
            ARG_wrap,
-           ARG_offset, };
+           ARG_offset,
+           ARG_fifo_type,
+           ARG_mov_status_type,
+           ARG_mov_status_n, };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_program, MP_ARG_REQUIRED | MP_ARG_OBJ },
         { MP_QSTR_frequency, MP_ARG_REQUIRED | MP_ARG_INT },
         { MP_QSTR_init, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = mp_const_none} },
+        { MP_QSTR_pio_version, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },
         { MP_QSTR_may_exec, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = mp_const_none} },
 
         { MP_QSTR_first_out_pin, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = mp_const_none} },
@@ -198,10 +225,17 @@ static mp_obj_t rp2pio_statemachine_make_new(const mp_obj_type_t *type, size_t n
 
         { MP_QSTR_wrap_target, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },
         { MP_QSTR_wrap, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = -1} },
-        { MP_QSTR_offset, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = -1} },
+
+        { MP_QSTR_offset, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = PIO_ANY_OFFSET} },
+
+        { MP_QSTR_fifo_type, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_obj = MP_ROM_QSTR(MP_QSTR_rxtx) } },
+        { MP_QSTR_mov_status_type, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_obj = MP_ROM_QSTR(MP_QSTR_txfifo) } },
+        { MP_QSTR_mov_status_n, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },
     };
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all_kw_array(n_args, n_kw, all_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
+
+    (void)mp_arg_validate_int_max(args[ARG_pio_version].u_int, PICO_PIO_VERSION, MP_QSTR_out_pin_count);
 
     mp_buffer_info_t bufinfo;
     mp_get_buffer_raise(args[ARG_program].u_obj, &bufinfo, MP_BUFFER_READ);
@@ -254,6 +288,30 @@ static mp_obj_t rp2pio_statemachine_make_new(const mp_obj_type_t *type, size_t n
     int wrap = args[ARG_wrap].u_int;
     int wrap_target = args[ARG_wrap_target].u_int;
 
+    const qstr_short_t fifo_alternatives[] = { MP_QSTR_auto, MP_QSTR_txrx, MP_QSTR_tx, MP_QSTR_rx,
+                                               #if PICO_PIO_VERSION > 0
+                                               MP_QSTR_txput, MP_QSTR_txget, MP_QSTR_putget
+                                               #endif
+    };
+    const int fifo_values[] = { PIO_FIFO_JOIN_AUTO, PIO_FIFO_JOIN_NONE, PIO_FIFO_JOIN_TX, PIO_FIFO_JOIN_RX,
+                                #if PICO_PIO_VERSION > 0
+                                PIO_FIFO_JOIN_TXPUT, PIO_FIFO_JOIN_PUTGET
+                                #endif
+    };
+    int fifo_type = one_of(MP_QSTR_fifo_type, args[ARG_fifo_type].u_obj, MP_ARRAY_SIZE(fifo_alternatives), fifo_alternatives, fifo_values);
+
+    const qstr_short_t mov_status_alternatives[] = { MP_QSTR_txfifo, MP_QSTR_rxfifo,
+                                                     #if PICO_PIO_VERSION > 0
+                                                     MP_QSTR_IRQ
+                                                     #endif
+    };
+    const int mov_status_values[] = { STATUS_TX_LESSTHAN, STATUS_RX_LESSTHAN,
+                                      #if PICO_PIO_VERSION > 0
+                                      STATUS_IRQ_SET
+                                      #endif
+    };
+    int mov_status_type = one_of(MP_QSTR_mov_status_type, args[ARG_mov_status_type].u_obj, MP_ARRAY_SIZE(mov_status_alternatives), mov_status_alternatives, mov_status_values);
+
     common_hal_rp2pio_statemachine_construct(self,
         bufinfo.buf, bufinfo.len / 2,
         args[ARG_frequency].u_int,
@@ -271,7 +329,10 @@ static mp_obj_t rp2pio_statemachine_make_new(const mp_obj_type_t *type, size_t n
         args[ARG_wait_for_txstall].u_bool,
         args[ARG_auto_push].u_bool, push_threshold, args[ARG_in_shift_right].u_bool,
         args[ARG_user_interruptible].u_bool,
-        wrap_target, wrap, args[ARG_offset].u_int);
+        wrap_target, wrap, args[ARG_offset].u_int,
+        fifo_type,
+        mov_status_type, args[ARG_mov_status_n].u_int
+        );
     return MP_OBJ_FROM_PTR(self);
 }
 
