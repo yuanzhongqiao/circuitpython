@@ -179,6 +179,7 @@ CIRCUITPY_TOUCHIO_USE_NATIVE = 0
 # TinyUSB doesn't have it upstreamed
 # https://github.com/hathach/tinyusb/issues/2791
 CIRCUITPY_USB_DEVICE = 0
+CIRCUITPY_MAX3421E = 0
 
 # Update this for the 40mhz processor.
 CIRCUITPY_ESPULP = 0

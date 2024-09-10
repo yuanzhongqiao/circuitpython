@@ -323,5 +323,23 @@ static const mp_rom_map_elem_t mcu_pin_global_dict_table[] = {
     #ifdef GPIO48_EXISTS
     { MP_ROM_QSTR(MP_QSTR_GPIO48), MP_ROM_PTR(&pin_GPIO48) },
     #endif
+    #ifdef GPIO49_EXISTS
+    { MP_ROM_QSTR(MP_QSTR_GPIO49), MP_ROM_PTR(&pin_GPIO49) },
+    #endif
+    #ifdef GPIO50_EXISTS
+    { MP_ROM_QSTR(MP_QSTR_GPIO50), MP_ROM_PTR(&pin_GPIO50) },
+    #endif
+    #ifdef GPIO51_EXISTS
+    { MP_ROM_QSTR(MP_QSTR_GPIO51), MP_ROM_PTR(&pin_GPIO51) },
+    #endif
+    #ifdef GPIO52_EXISTS
+    { MP_ROM_QSTR(MP_QSTR_GPIO52), MP_ROM_PTR(&pin_GPIO52) },
+    #endif
+    #ifdef GPIO53_EXISTS
+    { MP_ROM_QSTR(MP_QSTR_GPIO53), MP_ROM_PTR(&pin_GPIO53) },
+    #endif
+    #ifdef GPIO54_EXISTS
+    { MP_ROM_QSTR(MP_QSTR_GPIO54), MP_ROM_PTR(&pin_GPIO54) },
+    #endif
 };
 MP_DEFINE_CONST_DICT(mcu_pin_globals, mcu_pin_global_dict_table);

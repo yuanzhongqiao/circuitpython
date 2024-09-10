@@ -100,3 +100,15 @@ extern const mcu_pin_obj_t pin_GPIO46;
 extern const mcu_pin_obj_t pin_GPIO47;
 #define GPIO48_EXISTS 1
 extern const mcu_pin_obj_t pin_GPIO48;
+#define GPIO49_EXISTS 1
+extern const mcu_pin_obj_t pin_GPIO49;
+#define GPIO50_EXISTS 1
+extern const mcu_pin_obj_t pin_GPIO50;
+#define GPIO51_EXISTS 1
+extern const mcu_pin_obj_t pin_GPIO51;
+#define GPIO52_EXISTS 1
+extern const mcu_pin_obj_t pin_GPIO52;
+#define GPIO53_EXISTS 1
+extern const mcu_pin_obj_t pin_GPIO53;
+#define GPIO54_EXISTS 1
+extern const mcu_pin_obj_t pin_GPIO54;
