@@ -155,7 +155,6 @@ CFLAGS += -DSTACK_CANARY_VALUE=0xa5a5a5a5
 # one must provide `-u` arguments to state the symbols are missing. This would
 # normally happen implicitly by another function calling to these.
 REGISTRATION_FUNCTIONS = \
-	-u newlib_include_pthread_impl \
 	-u ld_include_highint_hdl \
 	-u __cxx_fatal_exception \
 	-u esp_app_desc \
@@ -169,8 +168,10 @@ REGISTRATION_FUNCTIONS = \
 	-u newlib_include_syscalls_impl \
 	-u newlib_include_pthread_impl \
 	-u newlib_include_assert_impl \
-	-u newlib_include_getentropy_impl \
-	-u newlib_include_init_funcs
+	-u newlib_include_init_funcs \
+	-u include_esp_phy_override \
+	-u vfs_include_syscalls_impl
+
 
 #Debugging/Optimization
 ifeq ($(DEBUG), 1)
@@ -311,7 +312,6 @@ CHIP_COMPONENTS = \
 else ifeq ($(IDF_TARGET),esp32s3)
 LDFLAGS += \
 	-Tesp32s3.rom.newlib.ld \
-	-Tesp32s3.rom.newlib-time.ld \
 	-Tesp32s3.rom.version.ld \
 	-Tesp32s3.rom.systimer.ld \
 	-Tesp32s3.rom.wdt.ld
