@@ -192,6 +192,14 @@ mp_obj_t mp_make_function_from_proto_fun(mp_proto_fun_t proto_fun, const mp_modu
         const uint8_t *bc = proto_fun;
         mp_obj_t fun = mp_obj_new_fun_bc(def_args, bc, context, NULL);
         MP_BC_PRELUDE_SIG_DECODE(bc);
+        // CIRCUITPY-CHANGE: distinguish generators and async
+        // A coroutine is MP_SCOPE_FLAG_ASYNC | MP_SCOPE_FLAG_GENERATOR,
+        // so check for ASYNC first.
+        #if MICROPY_PY_ASYNC_AWAIT
+        if (scope_flags & MP_SCOPE_FLAG_ASYNC) {
+            ((mp_obj_base_t *)MP_OBJ_TO_PTR(fun))->type = &mp_type_coro_wrap;
+        } else
+        #endif
         if (scope_flags & MP_SCOPE_FLAG_GENERATOR) {
             ((mp_obj_base_t *)MP_OBJ_TO_PTR(fun))->type = &mp_type_gen_wrap;
         }
@@ -234,7 +242,7 @@ mp_obj_t mp_make_function_from_proto_fun(mp_proto_fun_t proto_fun, const mp_modu
             fun = mp_obj_new_fun_bc(def_args, rc->fun_data, context, rc->children);
             // check for generator functions and if so change the type of the object
             // CIRCUITPY-CHANGE: distinguish generators and async
-            // A generator is MP_SCOPE_FLAG_ASYNC | MP_SCOPE_FLAG_GENERATOR,
+            // A coroutine is MP_SCOPE_FLAG_ASYNC | MP_SCOPE_FLAG_GENERATOR,
             // so check for ASYNC first.
             #if MICROPY_PY_ASYNC_AWAIT
             if ((rc->is_async) != 0) {

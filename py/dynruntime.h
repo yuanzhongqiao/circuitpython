@@ -222,6 +222,7 @@ static inline void *mp_obj_malloc_helper_dyn(size_t num_bytes, const mp_obj_type
 #define mp_arg_parse_all_kw_array(n_pos, n_kw, args, n_allowed, allowed, out_vals) \
     (mp_fun_table.arg_parse_all_kw_array((n_pos), (n_kw), (args), (n_allowed), (allowed), (out_vals)))
 
+// CIRCUITPY-CHANGE: .is_async
 #define MP_DYNRUNTIME_INIT_ENTRY \
     mp_obj_t old_globals = mp_fun_table.swap_globals(self->context->module.globals); \
     mp_raw_code_truncated_t rc; \
@@ -229,6 +230,7 @@ static inline void *mp_obj_malloc_helper_dyn(size_t num_bytes, const mp_obj_type
     rc.proto_fun_indicator[1] = MP_PROTO_FUN_INDICATOR_RAW_CODE_1; \
     rc.kind = MP_CODE_NATIVE_VIPER; \
     rc.is_generator = 0; \
+    rc.is_async = 0; \
     (void)rc;
 
 #define MP_DYNRUNTIME_INIT_EXIT \
