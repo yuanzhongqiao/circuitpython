@@ -5,7 +5,6 @@ CIRCUITPY_OPTIMIZE_PROPERTY_FLASH_SIZE ?= 1
 # CYW43 support does not provide settable MAC addresses for station or AP.
 CIRCUITPY_WIFI_RADIO_SETTABLE_MAC_ADDRESS = 0
 
-CIRCUITPY_ALARM ?= 1
 CIRCUITPY_RP2PIO ?= 1
 CIRCUITPY_NEOPIXEL_WRITE ?= $(CIRCUITPY_RP2PIO)
 CIRCUITPY_FLOPPYIO ?= 1
@@ -46,6 +45,20 @@ CIRCUITPY_AUDIOCORE ?= 1
 CIRCUITPY_AUDIOPWMIO ?= 1
 
 CIRCUITPY_AUDIOMIXER ?= 1
+
+ifeq ($(CHIP_VARIANT),RP2040)
+CIRCUITPY_ALARM ?= 1
+
+# Default PICODVI off because it uses RAM to store code run on the second CPU for RP2040.
+CIRCUITPY_PICODVI ?= 0
+endif
+
+ifeq ($(CHIP_VARIANT),RP2350)
+# This needs to be implemented.
+CIRCUITPY_ALARM ?= 0
+# Default PICODVI on because it doesn't require much code in RAM to talk to HSTX.
+CIRCUITPY_PICODVI ?= 1
+endif
 
 INTERNAL_LIBM = 1
 
