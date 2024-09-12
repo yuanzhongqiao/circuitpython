@@ -16,6 +16,7 @@
 #include "shared-bindings/_bleio/PacketBuffer.h"
 #include "shared-bindings/_bleio/Service.h"
 #include "shared-bindings/time/__init__.h"
+#include "supervisor/shared/safe_mode.h"
 
 #include "common-hal/_bleio/Adapter.h"
 #include "common-hal/_bleio/Service.h"
@@ -100,26 +101,19 @@ void common_hal_bleio_characteristic_construct(bleio_characteristic_obj_t *self,
         self->flags |= BLE_GATT_CHR_F_WRITE_AUTHEN;
     }
 
-    if (initial_value_bufinfo != NULL) {
-        // Copy the initial value if it's on the heap. Otherwise it's internal and we may not be able
-        // to allocate.
-        self->current_value_len = initial_value_bufinfo->len;
-        if (gc_alloc_possible()) {
-            self->current_value = m_malloc(max_length);
-            self->current_value_alloc = max_length;
-            if (gc_nbytes(initial_value_bufinfo->buf) > 0) {
-                memcpy(self->current_value, initial_value_bufinfo->buf, self->current_value_len);
-            }
-        } else {
-            self->current_value = initial_value_bufinfo->buf;
-            assert(self->current_value_len == max_length);
-        }
+    if (gc_alloc_possible()) {
+        self->current_value = m_malloc(max_length);
     } else {
         self->current_value = port_malloc(max_length, false);
-        if (self->current_value != NULL) {
-            self->current_value_alloc = max_length;
-            self->current_value_len = 0;
+        if (self->current_value == NULL) {
+            reset_into_safe_mode(SAFE_MODE_NO_HEAP);
         }
+    }
+    self->current_value_alloc = max_length;
+    self->current_value_len = 0;
+
+    if (initial_value_bufinfo != NULL) {
+        common_hal_bleio_characteristic_set_value(self, initial_value_bufinfo);
     }
 
     if (gc_alloc_possible()) {
@@ -138,6 +132,26 @@ void common_hal_bleio_characteristic_construct(bleio_characteristic_obj_t *self,
     } else {
         common_hal_bleio_service_add_characteristic(self->service, self, initial_value_bufinfo, user_description);
     }
+}
+
+bool common_hal_bleio_characteristic_deinited(bleio_characteristic_obj_t *self) {
+    return self->current_value == NULL;
+}
+
+void common_hal_bleio_characteristic_deinit(bleio_characteristic_obj_t *self) {
+    if (common_hal_bleio_characteristic_deinited(self)) {
+        return;
+    }
+    if (self->current_value == NULL) {
+        return;
+    }
+
+    if (gc_nbytes(self->current_value) > 0) {
+        m_free(self->current_value);
+    } else {
+        port_free(self->current_value);
+    }
+    self->current_value = NULL;
 }
 
 mp_obj_tuple_t *common_hal_bleio_characteristic_get_descriptors(bleio_characteristic_obj_t *self) {
@@ -245,21 +259,7 @@ void common_hal_bleio_characteristic_set_value(bleio_characteristic_obj_t *self,
         }
 
         self->current_value_len = bufinfo->len;
-        // If we've already allocated an internal buffer or the provided buffer
-        // is on the heap, then copy into the internal buffer.
-        if (self->current_value_alloc > 0 || gc_nbytes(bufinfo->buf) > 0) {
-            if (self->current_value_alloc < bufinfo->len) {
-                self->current_value = m_realloc(self->current_value, bufinfo->len);
-                // Get the number of bytes from the heap because it may be more
-                // than the len due to gc block size.
-                self->current_value_alloc = gc_nbytes(self->current_value);
-            }
-            memcpy(self->current_value, bufinfo->buf, bufinfo->len);
-        } else {
-            // Otherwise, use the provided buffer to delay any heap allocation.
-            self->current_value = bufinfo->buf;
-            self->current_value_alloc = 0;
-        }
+        memcpy(self->current_value, bufinfo->buf, self->current_value_len);
 
         ble_gatts_chr_updated(self->handle);
     }
