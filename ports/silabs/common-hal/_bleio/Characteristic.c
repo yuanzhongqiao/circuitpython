@@ -155,6 +155,13 @@ void common_hal_bleio_characteristic_construct(
     }
 }
 
+bool common_hal_bleio_characteristic_deinited(bleio_characteristic_obj_t *self) {
+    return false;
+}
+
+void common_hal_bleio_characteristic_deinit(bleio_characteristic_obj_t *self) {
+}
+
 // A tuple of Descriptor that describe this characteristic
 mp_obj_tuple_t *common_hal_bleio_characteristic_get_descriptors(
     bleio_characteristic_obj_t *self) {
