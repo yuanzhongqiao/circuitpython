@@ -912,7 +912,7 @@ MP_PROPERTY_GETTER(rp2pio_statemachine_pc_obj,
     (mp_obj_t)&rp2pio_statemachine_get_pc_obj);
 
 //|     rxfifo: memorymap.AddressRange
-//|     """Accecss the state machine's rxfifo directly
+//|     """Access the state machine's rxfifo directly
 //|
 //|     If the state machine's fifo mode is ``txput`` then accessing this object
 //|     reads values stored by the ``mov rxfifo[], isr`` PIO instruction, and the
@@ -920,7 +920,7 @@ MP_PROPERTY_GETTER(rp2pio_statemachine_pc_obj,
 //|
 //|     If the state machine's fifo mode is ``txget`` then modifying this object
 //|     writes values accessed by the ``mov osr, rxfifo[]`` PIO instruction, and
-//|     the result of accessing it is undefined..
+//|     the result of accessing it is undefined.
 //|
 //|     If this state machine's mode is something else, then the property's value is `None`.
 //|
