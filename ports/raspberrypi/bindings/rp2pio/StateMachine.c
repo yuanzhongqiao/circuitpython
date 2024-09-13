@@ -21,7 +21,6 @@
 #include "py/objproperty.h"
 #include "py/runtime.h"
 
-
 //| FifoType = Literal["auto", "txrx", "tx", "rx", "txput", "txget", "putget"]
 //| FifoType_piov0 = Literal["auto", "txrx", "tx", "rx"]
 //| MovStatusType = Literal["txfifo", "rxfifo", "irq"]
@@ -233,8 +232,8 @@ static mp_obj_t rp2pio_statemachine_make_new(const mp_obj_type_t *type, size_t n
 
         { MP_QSTR_offset, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = PIO_ANY_OFFSET} },
 
-        { MP_QSTR_fifo_type, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_obj = MP_ROM_QSTR(MP_QSTR_rxtx) } },
-        { MP_QSTR_mov_status_type, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_obj = MP_ROM_QSTR(MP_QSTR_txfifo) } },
+        { MP_QSTR_fifo_type, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_ROM_QSTR(MP_QSTR_rxtx) } },
+        { MP_QSTR_mov_status_type, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_ROM_QSTR(MP_QSTR_txfifo) } },
         { MP_QSTR_mov_status_n, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },
     };
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
@@ -300,9 +299,11 @@ static mp_obj_t rp2pio_statemachine_make_new(const mp_obj_type_t *type, size_t n
     };
     const int fifo_values[] = { PIO_FIFO_JOIN_AUTO, PIO_FIFO_JOIN_NONE, PIO_FIFO_JOIN_TX, PIO_FIFO_JOIN_RX,
                                 #if PICO_PIO_VERSION > 0
-                                PIO_FIFO_JOIN_TXPUT, PIO_FIFO_JOIN_PUTGET
+                                PIO_FIFO_JOIN_TXPUT, PIO_FIFO_JOIN_TXGET, PIO_FIFO_JOIN_PUTGET
                                 #endif
     };
+    MP_STATIC_ASSERT(MP_ARRAY_SIZE(fifo_alternatives) == MP_ARRAY_SIZE(fifo_values));
+
     int fifo_type = one_of(MP_QSTR_fifo_type, args[ARG_fifo_type].u_obj, MP_ARRAY_SIZE(fifo_alternatives), fifo_alternatives, fifo_values);
 
     const qstr_short_t mov_status_alternatives[] = { MP_QSTR_txfifo, MP_QSTR_rxfifo,
@@ -315,6 +316,7 @@ static mp_obj_t rp2pio_statemachine_make_new(const mp_obj_type_t *type, size_t n
                                       STATUS_IRQ_SET
                                       #endif
     };
+    MP_STATIC_ASSERT(MP_ARRAY_SIZE(mov_status_alternatives) == MP_ARRAY_SIZE(mov_status_values));
     int mov_status_type = one_of(MP_QSTR_mov_status_type, args[ARG_mov_status_type].u_obj, MP_ARRAY_SIZE(mov_status_alternatives), mov_status_alternatives, mov_status_values);
 
     common_hal_rp2pio_statemachine_construct(self,
@@ -907,6 +909,32 @@ MP_DEFINE_CONST_FUN_OBJ_1(rp2pio_statemachine_get_pc_obj, rp2pio_statemachine_ob
 MP_PROPERTY_GETTER(rp2pio_statemachine_pc_obj,
     (mp_obj_t)&rp2pio_statemachine_get_pc_obj);
 
+//|     rxfifo: AddressRange
+//|     """Accecss the state machine's rxfifo directly
+//|
+//|     If the state machine's fifo mode is ``txput`` then accessing this object
+//|     reads values stored by the ``mov rxfifo[], isr`` PIO instruction, and the
+//|     result of modifying it is undefined.
+//|
+//|     If the state machine's fifo mode is ``txget`` then modifying this object
+//|     writes values accessed by the ``mov osr, rxfifo[]`` PIO instruction, and
+//|     the result of accessing it is undefined..
+//|
+//|     If this state machine's mode is something else, then the property's value is `None`.
+//|
+//|     Note: Since the ``txput`` and ``txget`` fifo mode does not exist on RP2040, this property will always be `None`."""
+//|
+
+static mp_obj_t rp2pio_statemachine_obj_get_rxfifo(mp_obj_t self_in) {
+    rp2pio_statemachine_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    check_for_deinit(self);
+    return common_hal_rp2pio_statemachine_get_rxfifo(self);
+}
+MP_DEFINE_CONST_FUN_OBJ_1(rp2pio_statemachine_get_rxfifo_obj, rp2pio_statemachine_obj_get_rxfifo);
+
+MP_PROPERTY_GETTER(rp2pio_statemachine_rxfifo_obj,
+    (mp_obj_t)&rp2pio_statemachine_get_rxfifo_obj);
+
 
 static const mp_rom_map_elem_t rp2pio_statemachine_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&rp2pio_statemachine_deinit_obj) },
@@ -934,6 +962,8 @@ static const mp_rom_map_elem_t rp2pio_statemachine_locals_dict_table[] = {
 
     { MP_ROM_QSTR(MP_QSTR_offset), MP_ROM_PTR(&rp2pio_statemachine_offset_obj) },
     { MP_ROM_QSTR(MP_QSTR_pc), MP_ROM_PTR(&rp2pio_statemachine_pc_obj) },
+
+    { MP_ROM_QSTR(MP_QSTR_rxfifo), MP_ROM_PTR(&rp2pio_statemachine_rxfifo_obj) },
 };
 static MP_DEFINE_CONST_DICT(rp2pio_statemachine_locals_dict, rp2pio_statemachine_locals_dict_table);
 

@@ -73,3 +73,5 @@ int common_hal_rp2pio_statemachine_get_offset(rp2pio_statemachine_obj_t *self);
 int common_hal_rp2pio_statemachine_get_pc(rp2pio_statemachine_obj_t *self);
 
 void common_hal_rp2pio_statemachine_set_interrupt_handler(rp2pio_statemachine_obj_t *self, void (*handler)(void *), void *arg, int mask);
+
+mp_obj_t common_hal_rp2pio_statemachine_get_rxfifo(rp2pio_statemachine_obj_t *self);

@@ -9,6 +9,7 @@
 #include "py/obj.h"
 
 #include "common-hal/microcontroller/Pin.h"
+#include "common-hal/memorymap/AddressRange.h"
 #include "src/rp2_common/hardware_pio/include/hardware/pio.h"
 
 enum { PIO_ANY_OFFSET = -1 };
@@ -50,6 +51,7 @@ typedef struct {
     sm_buf_info current, once, loop;
     int background_stride_in_bytes;
     bool dma_completed, byteswap;
+    memorymap_addressrange_obj_t rxfifo_obj;
 } rp2pio_statemachine_obj_t;
 
 void reset_rp2pio_statemachine(void);

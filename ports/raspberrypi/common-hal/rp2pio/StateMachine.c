@@ -12,6 +12,7 @@
 #include "shared-bindings/digitalio/Pull.h"
 #include "shared-bindings/microcontroller/__init__.h"
 #include "shared-bindings/microcontroller/Pin.h"
+#include "shared-bindings/memorymap/AddressRange.h"
 
 #include "src/rp2040/hardware_regs/include/hardware/platform_defs.h"
 #include "src/rp2_common/hardware_clocks/include/hardware/clocks.h"
@@ -365,6 +366,15 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
         #endif
         : 4;
 
+    #if PICO_PIO_VERSION > 0
+    if (fifo_type == PIO_FIFO_JOIN_TXPUT || fifo_type == PIO_FIFO_JOIN_TXGET) {
+        self->rxfifo_obj.base.type = &memorymap_addressrange_type;
+        common_hal_memorymap_addressrange_construct(&self->rxfifo_obj, (uint8_t *)self->pio->rxf_putget[self->state_machine], 4 * sizeof(uint32_t));
+    } else {
+        self->rxfifo_obj.base.type = NULL;
+    }
+    #endif
+
     if (rx_fifo) {
         self->rx_dreq = pio_get_dreq(self->pio, self->state_machine, false);
     }
@@ -631,8 +641,8 @@ void common_hal_rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
         user_interruptible,
         sideset_enable,
         wrap_target, wrap, offset,
-        PIO_FIFO_TYPE_DEFAULT,
-        PIO_MOV_STATUS_DEFAULT, PIO_MOV_N_DEFAULT);
+        fifo_type,
+        mov_status_type, mov_status_n);
     if (!ok) {
         mp_raise_RuntimeError(MP_ERROR_TEXT("All state machines in use"));
     }
@@ -1123,6 +1133,16 @@ int common_hal_rp2pio_statemachine_get_pc(rp2pio_statemachine_obj_t *self) {
     uint8_t sm = self->state_machine;
     return pio_sm_get_pc(pio, sm);
 }
+
+mp_obj_t common_hal_rp2pio_statemachine_get_rxfifo(rp2pio_statemachine_obj_t *self) {
+    #if PICO_PIO_VERSION > 0
+    if (self->rxfifo_obj.base.type) {
+        return MP_OBJ_FROM_PTR(&self->rxfifo_obj);
+    }
+    #endif
+    return mp_const_none;
+}
+
 
 // Use a compile-time constant for MP_REGISTER_POINTER so the preprocessor will
 // not split the expansion across multiple lines.
