@@ -360,6 +360,11 @@ extern const struct _mp_obj_module_t nvm_module;
 #define ULAB_SUPPORTS_COMPLEX (0)
 #endif
 
+// The random module is fairly large.
+#ifndef ULAB_NUMPY_HAS_RANDOM_MODULE
+#define ULAB_NUMPY_HAS_RANDOM_MODULE (0)
+#endif
+
 #if CIRCUITPY_ULAB
 // ulab requires reverse special methods
 #if defined(MICROPY_PY_REVERSE_SPECIAL_METHODS) && !MICROPY_PY_REVERSE_SPECIAL_METHODS
