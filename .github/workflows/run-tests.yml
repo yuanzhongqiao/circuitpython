@@ -63,5 +63,5 @@ jobs:
         make -C examples/natmod/re
     - name: Test native modules
       if: matrix.test == 'all'
-      run: ./run-natmodtests.py extmod/{heapq*,re*,zlib*}.py
+      run: ./run-natmodtests.py extmod/{heapq*,random*,re*}.py
       working-directory: tests
