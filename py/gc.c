@@ -773,13 +773,10 @@ void gc_info(gc_info_t *info) {
     GC_EXIT();
 }
 
-// CIRCUITPY-CHANGE
+// CIRCUITPY-CHANGE: C code may be used when the VM heap isn't active. This
+// allows that code to test if it is. It can use the outer pool if needed.
 bool gc_alloc_possible(void) {
-    #if MICROPY_GC_SPLIT_HEAP
-    return MP_STATE_MEM(gc_last_free_area) != 0;
-    #else
     return MP_STATE_MEM(area).gc_pool_start != 0;
-    #endif
 }
 
 void *gc_alloc(size_t n_bytes, unsigned int alloc_flags) {
