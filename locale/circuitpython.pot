@@ -2500,7 +2500,7 @@ msgstr ""
 msgid "bits must be 32 or less"
 msgstr ""
 
-#: shared-bindings/audiomixer/Mixer.c
+#: shared-bindings/audioeffects/Echo.c shared-bindings/audiomixer/Mixer.c
 msgid "bits_per_sample must be 8 or 16"
 msgstr ""
 
@@ -2845,6 +2845,10 @@ msgstr ""
 
 #: extmod/ulab/code/ndarray.c
 msgid "data type not understood"
+msgstr ""
+
+#: shared-bindings/audioeffects/Echo.c
+msgid "decay must be between 0 and 1"
 msgstr ""
 
 #: py/parsenum.c
@@ -3242,7 +3246,7 @@ msgstr ""
 msgid "input must be a dense ndarray"
 msgstr ""
 
-#: extmod/ulab/code/user/user.c
+#: extmod/ulab/code/user/user.c shared-bindings/_eve/__init__.c
 msgid "input must be an ndarray"
 msgstr ""
 
