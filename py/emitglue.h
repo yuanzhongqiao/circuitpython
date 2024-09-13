@@ -74,8 +74,10 @@ static inline bool mp_proto_fun_is_bytecode(mp_proto_fun_t proto_fun) {
 typedef struct _mp_raw_code_t {
     uint8_t proto_fun_indicator[2];
     uint8_t kind; // of type mp_raw_code_kind_t; only 3 bits used
-    bool is_generator;
-    bool is_async;
+    // CIRCUITPY-CHANGE: distinguish generator and async
+    // For async, BOTH is_generator and is_async will be set.
+    bool is_generator : 1;
+    bool is_async : 1;
     const void *fun_data;
     struct _mp_raw_code_t **children;
     #if MICROPY_PERSISTENT_CODE_SAVE
@@ -105,8 +107,10 @@ typedef struct _mp_raw_code_t {
 typedef struct _mp_raw_code_truncated_t {
     uint8_t proto_fun_indicator[2];
     uint8_t kind;
-    bool is_generator;
-    bool is_async;
+    // CIRCUITPY-CHANGE: distinguish generator and async
+    // For async, BOTH is_generator and is_async will be set.
+    bool is_generator : 1;
+    bool is_async : 1;
     const void *fun_data;
     struct _mp_raw_code_t **children;
     #if MICROPY_PERSISTENT_CODE_SAVE

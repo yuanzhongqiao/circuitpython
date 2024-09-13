@@ -73,6 +73,7 @@ void mp_emit_glue_assign_bytecode(mp_raw_code_t *rc, const byte *code,
     rc->kind = MP_CODE_BYTECODE;
     rc->is_generator = (scope_flags & MP_SCOPE_FLAG_GENERATOR) != 0;
     // CIRCUITPY-CHANGE: async and generator are distinguished
+    // For async, BOTH is_generator and is_async will be set.
     rc->is_async = (scope_flags & MP_SCOPE_FLAG_ASYNC) != 0;
     rc->fun_data = code;
     rc->children = children;
@@ -137,6 +138,7 @@ void mp_emit_glue_assign_native(mp_raw_code_t *rc, mp_raw_code_kind_t kind, cons
     rc->kind = kind;
     rc->is_generator = (scope_flags & MP_SCOPE_FLAG_GENERATOR) != 0;
     // CIRCUITPY-CHANGE: async and generator are distinguished
+    // For async, BOTH is_generator and is_async will be set.
     rc->is_async = (scope_flags & MP_SCOPE_FLAG_ASYNC) != 0;
     rc->fun_data = fun_data;
 
@@ -219,6 +221,8 @@ mp_obj_t mp_make_function_from_proto_fun(mp_proto_fun_t proto_fun, const mp_modu
             // Check for a generator function, and if so change the type of the object
             // CIRCUITPY-CHANGE: distinguish generators and async
             #if MICROPY_PY_ASYNC_AWAIT
+            // For async, BOTH is_async and is_generator will be set,
+            // so check is_async first.
             if ((rc->is_async) != 0) {
                 ((mp_obj_base_t *)MP_OBJ_TO_PTR(fun))->type = &mp_type_native_coro_wrap;
             } else
@@ -242,8 +246,8 @@ mp_obj_t mp_make_function_from_proto_fun(mp_proto_fun_t proto_fun, const mp_modu
             fun = mp_obj_new_fun_bc(def_args, rc->fun_data, context, rc->children);
             // check for generator functions and if so change the type of the object
             // CIRCUITPY-CHANGE: distinguish generators and async
-            // A coroutine is MP_SCOPE_FLAG_ASYNC | MP_SCOPE_FLAG_GENERATOR,
-            // so check for ASYNC first.
+            // For async, BOTH is_async and is_generator will be set,
+            // so check is_async first.
             #if MICROPY_PY_ASYNC_AWAIT
             if ((rc->is_async) != 0) {
                 ((mp_obj_base_t *)MP_OBJ_TO_PTR(fun))->type = &mp_type_coro_wrap;
