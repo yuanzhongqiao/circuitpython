@@ -51,7 +51,9 @@ typedef struct {
     sm_buf_info current, once, loop;
     int background_stride_in_bytes;
     bool dma_completed, byteswap;
+    #if PICO_PIO_VERSION > 0
     memorymap_addressrange_obj_t rxfifo_obj;
+    #endif
 } rp2pio_statemachine_obj_t;
 
 void reset_rp2pio_statemachine(void);
