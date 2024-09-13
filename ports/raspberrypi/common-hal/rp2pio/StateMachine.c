@@ -181,6 +181,33 @@ static uint add_program(PIO pio, const pio_program_t *program, int offset) {
     }
 }
 
+static pio_fifo_join compute_fifo_type(int fifo_type_in, bool rx_fifo, bool tx_fifo) {
+    if (fifo_type_in != PIO_FIFO_JOIN_AUTO) {
+        return fifo_type_in;
+    }
+    if (!rx_fifo) {
+        return PIO_FIFO_JOIN_TX;
+    }
+    if (!tx_fifo) {
+        return PIO_FIFO_JOIN_RX;
+    }
+    return PIO_FIFO_JOIN_NONE;
+}
+
+static int compute_fifo_depth(pio_fifo_join join) {
+    if (join == PIO_FIFO_JOIN_TX || join == PIO_FIFO_JOIN_RX) {
+        return 8;
+    }
+
+    #if PICO_PIO_VERSION > 0
+    if (join == PIO_FIFO_JOIN_PUTGET) {
+        return 0;
+    }
+    #endif
+
+    return 4;
+}
+
 bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     const uint16_t *program, size_t program_len,
     size_t frequency,
@@ -355,16 +382,9 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
 
     sm_config_set_set_pin_count(&c, set_pin_count);
 
-    enum pio_fifo_join join =
-        fifo_type != PIO_FIFO_JOIN_AUTO ? fifo_type
-        : !rx_fifo ? PIO_FIFO_JOIN_TX
-        : !tx_fifo ? PIO_FIFO_JOIN_RX
-        : PIO_FIFO_JOIN_NONE;
-    self->fifo_depth = (join == PIO_FIFO_JOIN_TX || join == PIO_FIFO_JOIN_RX) ? 8
-        #if PICO_PIO_VERSION > 0
-        : (join == PIO_FIFO_JOIN_PUTGET) ? 0
-        #endif
-        : 4;
+    enum pio_fifo_join join = compute_fifo_type(fifo_type, rx_fifo, tx_fifo);
+
+    self->fifo_depth = compute_fifo_depth(join);
 
     #if PICO_PIO_VERSION > 0
     if (fifo_type == PIO_FIFO_JOIN_TXPUT || fifo_type == PIO_FIFO_JOIN_TXGET) {
