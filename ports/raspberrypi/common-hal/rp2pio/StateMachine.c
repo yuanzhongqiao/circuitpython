@@ -181,7 +181,7 @@ static uint add_program(PIO pio, const pio_program_t *program, int offset) {
     }
 }
 
-static pio_fifo_join compute_fifo_type(int fifo_type_in, bool rx_fifo, bool tx_fifo) {
+static enum pio_fifo_join compute_fifo_type(int fifo_type_in, bool rx_fifo, bool tx_fifo) {
     if (fifo_type_in != PIO_FIFO_JOIN_AUTO) {
         return fifo_type_in;
     }
@@ -194,7 +194,7 @@ static pio_fifo_join compute_fifo_type(int fifo_type_in, bool rx_fifo, bool tx_f
     return PIO_FIFO_JOIN_NONE;
 }
 
-static int compute_fifo_depth(pio_fifo_join join) {
+static int compute_fifo_depth(enum pio_fifo_join join) {
     if (join == PIO_FIFO_JOIN_TX || join == PIO_FIFO_JOIN_RX) {
         return 8;
     }
