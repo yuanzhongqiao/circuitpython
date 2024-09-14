@@ -57,9 +57,18 @@
 #include "soc/lp_aon_reg.h"
 #define CP_SAVED_WORD_REGISTER LP_AON_STORE0_REG
 #else
+#ifdef CONFIG_IDF_TARGET_ESP32P4
+#include "soc/lp_system_reg.h"
+#define CP_SAVED_WORD_REGISTER LP_SYSTEM_REG_LP_STORE15_REG
+
+#else
+// To-do idf v5.0: remove following include
 #include "soc/rtc_cntl_reg.h"
 #define CP_SAVED_WORD_REGISTER RTC_CNTL_STORE0_REG
 #endif
+
+#endif
+
 #include "soc/spi_pins.h"
 
 #include "bootloader_flash_config.h"
@@ -238,20 +247,6 @@ safe_mode_t port_init(void) {
     common_hal_never_reset_pin(&pin_GPIOn_EXPAND(CONFIG_CONSOLE_UART_RX_GPIO));
     #endif
 
-    #if DEBUG
-    // debug UART
-    #if defined(CONFIG_IDF_TARGET_ESP32C3)
-    common_hal_never_reset_pin(&pin_GPIO20);
-    common_hal_never_reset_pin(&pin_GPIO21);
-    #elif defined(CONFIG_IDF_TARGET_ESP32C6)
-    common_hal_never_reset_pin(&pin_GPIO16);
-    common_hal_never_reset_pin(&pin_GPIO17);
-    #elif defined(CONFIG_IDF_TARGET_ESP32S2) || defined(CONFIG_IDF_TARGET_ESP32S3)
-    common_hal_never_reset_pin(&pin_GPIO43);
-    common_hal_never_reset_pin(&pin_GPIO44);
-    #endif
-    #endif
-
     #ifndef ENABLE_JTAG
     #define ENABLE_JTAG (0)
     #endif
@@ -269,6 +264,11 @@ safe_mode_t port_init(void) {
     common_hal_never_reset_pin(&pin_GPIO40);
     common_hal_never_reset_pin(&pin_GPIO41);
     common_hal_never_reset_pin(&pin_GPIO42);
+    #elif defined(CONFIG_IDF_TARGET_ESP32P4)
+    common_hal_never_reset_pin(&pin_GPIO3);
+    common_hal_never_reset_pin(&pin_GPIO4);
+    common_hal_never_reset_pin(&pin_GPIO5);
+    common_hal_never_reset_pin(&pin_GPIO6);
     #endif
     #endif
 
