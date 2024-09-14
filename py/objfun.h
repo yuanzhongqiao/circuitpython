@@ -71,7 +71,11 @@ static inline mp_obj_t mp_obj_new_fun_viper(const void *fun_data, const mp_modul
 
 static inline const uint8_t *mp_obj_fun_native_get_prelude_ptr(const mp_obj_fun_bc_t *fun_native) {
     // Obtain a pointer to the start of the function prelude, based on prelude_ptr_index.
+    // CIRCUITPY-CHANGE: prevent warning
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wcast-align"
     uintptr_t prelude_ptr_index = ((uintptr_t *)fun_native->bytecode)[0];
+    #pragma GCC diagnostic pop
     const uint8_t *prelude_ptr;
     if (prelude_ptr_index == 0) {
         prelude_ptr = (const uint8_t *)fun_native->child_table;
@@ -88,13 +92,21 @@ static inline void *mp_obj_fun_native_get_function_start(const mp_obj_fun_bc_t *
 
 static inline void *mp_obj_fun_native_get_generator_start(const mp_obj_fun_bc_t *fun_native) {
     // Obtain a pointer to the start of the generator executable machine code.
+    // CIRCUITPY-CHANGE: prevent warning
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wcast-align"
     uintptr_t start_offset = ((uintptr_t *)fun_native->bytecode)[1];
+    #pragma GCC diagnostic pop
     return MICROPY_MAKE_POINTER_CALLABLE((void *)(fun_native->bytecode + start_offset));
 }
 
 static inline void *mp_obj_fun_native_get_generator_resume(const mp_obj_fun_bc_t *fun_native) {
     // Obtain a pointer to the resume location of the generator executable machine code.
+    // CIRCUITPY-CHANGE: prevent warning
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wcast-align"
     return MICROPY_MAKE_POINTER_CALLABLE((void *)&((uintptr_t *)fun_native->bytecode)[2]);
+    #pragma GCC diagnostic pop
 }
 
 #endif
