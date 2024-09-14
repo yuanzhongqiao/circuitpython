@@ -635,7 +635,7 @@ void common_hal_rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
             pull_up |= jmp_mask;
         }
         if (jmp_pull == PULL_DOWN) {
-            pull_up |= jmp_mask;
+            pull_down |= jmp_mask;
         }
     }
     if (initial_pin_direction & (pull_up | pull_down)) {
