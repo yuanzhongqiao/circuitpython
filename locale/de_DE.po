@@ -429,6 +429,10 @@ msgstr "'data' erfordert Integer-Argumente"
 msgid "'label' requires 1 argument"
 msgstr "'label' erfordert genau ein Argument"
 
+#: py/emitnative.c
+msgid "'not' not implemented"
+msgstr ""
+
 #: py/compile.c
 msgid "'return' outside function"
 msgstr "'return' außerhalb einer Funktion"
@@ -2466,6 +2470,10 @@ msgstr "Das Argument argsort muss ein ndarray sein"
 msgid "argsort is not implemented for flattened arrays"
 msgstr "argsort ist für flattened Arrays nicht implementiert"
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "argument must be None, an integer or a tuple of integers"
+msgstr ""
+
 #: py/compile.c
 msgid "argument name reused"
 msgstr "Name des Arguments wiederverwendet"
@@ -2703,6 +2711,10 @@ msgid "can't do binary op between '%q' and '%q'"
 msgstr "Eine binäre Operation zwischen '%q' und '%q' ist nicht möglich"
 
 #: py/emitnative.c
+msgid "can't do unary op of '%q'"
+msgstr ""
+
+#: py/emitnative.c
 msgid "can't implicitly convert '%q' to 'bool'"
 msgstr "Kann '%q' nicht implizit nach 'bool' konvertieren"
 
@@ -2768,10 +2780,6 @@ msgstr ""
 
 #: py/objcomplex.c
 msgid "can't truncate-divide a complex number"
-msgstr ""
-
-#: extmod/moductypes.c
-msgid "can't unambiguously get sizeof scalar"
 msgstr ""
 
 #: extmod/modasyncio.c
@@ -3510,7 +3518,7 @@ msgstr "Matrix ist nicht positiv definitiv"
 msgid "max_length must be 0-%d when fixed_length is %s"
 msgstr "max_length muss 0-%d sein, wenn fixed_length %s ist"
 
-#: extmod/ulab/code/ndarray.c
+#: extmod/ulab/code/ndarray.c extmod/ulab/code/numpy/random/random.c
 msgid "maximum number of dimensions is "
 msgstr "Maximale Anzahl an Dimensionen ist "
 
@@ -3652,7 +3660,7 @@ msgstr "Keine Bindung für nichtlokale Variable gefunden"
 msgid "no default packer"
 msgstr "kein Standard-Packer"
 
-#: extmod/modrandom.c
+#: extmod/modrandom.c extmod/ulab/code/numpy/random/random.c
 msgid "no default seed"
 msgstr "kein Standard-Seed"
 
@@ -3867,6 +3875,10 @@ msgstr ""
 msgid "out array is too small"
 msgstr "Ausgabe-Array ist zu klein"
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "out has wrong type"
+msgstr ""
+
 #: extmod/ulab/code/numpy/vector.c
 msgid "out keyword is not supported for complex dtype"
 msgstr "out-Schlüsselwort wird nicht unterstützt für komplexen dtype"
@@ -3890,6 +3902,14 @@ msgstr "out muss vom Typ dtype sein"
 #: shared-bindings/bitmaptools/__init__.c
 msgid "out of range of target"
 msgstr "Außerhalb des Bereichs des Ziels"
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "output array has wrong type"
+msgstr ""
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "output array must be contiguous"
+msgstr ""
 
 #: py/objint_mpz.c
 msgid "overflow converting long int to machine word"
@@ -4017,6 +4037,10 @@ msgstr "kompilieren von Skripten nicht unterstützt"
 msgid "set unsupported"
 msgstr "nicht unterstützt"
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "shape must be None, and integer or a tuple of integers"
+msgstr ""
+
 #: extmod/ulab/code/ndarray.c
 msgid "shape must be integer or tuple of integers"
 msgstr "Form muss eine Ganzzahl oder ein Tupel von Ganzzahlen sein"
@@ -4036,6 +4060,10 @@ msgstr "Vorzeichen mit ganzzahligem Formatbezeichner 'c' nicht erlaubt"
 #: extmod/ulab/code/ulab_tools.c
 msgid "size is defined for ndarrays only"
 msgstr "Größe ist nur für ndarrays definiert"
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "size must match out.shape when used together"
+msgstr ""
 
 #: py/nativeglue.c
 msgid "slice unsupported"
@@ -4110,18 +4138,6 @@ msgstr "String index außerhalb des Bereiches"
 msgid "string indices must be integers, not %s"
 msgstr "String indizes müssen Integer sein, nicht %s"
 
-#: extmod/moductypes.c
-msgid "struct: can't index"
-msgstr "struct: kann nicht indiziert werden"
-
-#: extmod/moductypes.c
-msgid "struct: index out of range"
-msgstr "struct: index außerhalb gültigen Bereichs"
-
-#: extmod/moductypes.c
-msgid "struct: no fields"
-msgstr "struct: keine Felder"
-
 #: py/objarray.c py/objstr.c
 msgid "substring not found"
 msgstr "substring nicht gefunden"
@@ -4133,10 +4149,6 @@ msgstr "super() kann self nicht finden"
 #: extmod/modjson.c
 msgid "syntax error in JSON"
 msgstr "Syntaxfehler in JSON"
-
-#: extmod/moductypes.c
-msgid "syntax error in uctypes descriptor"
-msgstr "Syntaxfehler in uctypes Deskriptor"
 
 #: extmod/modtime.c
 msgid "ticks interval overflow"
@@ -4245,10 +4257,6 @@ msgstr "Typ akzeptiert 1 oder 3 Argumente"
 #: py/objint_longlong.c
 msgid "ulonglong too large"
 msgstr "ulonglong zu groß"
-
-#: py/emitnative.c
-msgid "unary op %q not implemented"
-msgstr "Der unäre Operator %q ist nicht implementiert"
 
 #: py/parse.c
 msgid "unexpected indent"
@@ -4445,6 +4453,21 @@ msgstr "zi muss eine Gleitkommazahl sein"
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr "zi muss die Form (n_section, 2) haben"
+
+#~ msgid "struct: can't index"
+#~ msgstr "struct: kann nicht indiziert werden"
+
+#~ msgid "struct: index out of range"
+#~ msgstr "struct: index außerhalb gültigen Bereichs"
+
+#~ msgid "struct: no fields"
+#~ msgstr "struct: keine Felder"
+
+#~ msgid "syntax error in uctypes descriptor"
+#~ msgstr "Syntaxfehler in uctypes Deskriptor"
+
+#~ msgid "unary op %q not implemented"
+#~ msgstr "Der unäre Operator %q ist nicht implementiert"
 
 #~ msgid "Name too long"
 #~ msgstr "Name zu lang"
