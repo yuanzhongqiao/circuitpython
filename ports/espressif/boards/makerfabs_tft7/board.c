@@ -52,26 +52,13 @@ static void display_init(void) {
         width = 800;
         height = 480;
         frequency = 6500000;
-    } else if (result == GETENV_OK) {
+    } else if (result == GETENV_OK && width == 1024) {
         width = 1024;
         height = 600;
         frequency = 10000000;
     }
 
     if (height == 0) {
-        result = common_hal_os_getenv_int("CIRCUITPY_DISPLAY_HEIGHT", &height);
-        if (result == GETENV_OK && height == 480) {
-            width = 800;
-            height = 480;
-            frequency = 6500000;
-        } else if (result == GETENV_OK) {
-            width = 1024;
-            height = 600;
-            frequency = 10000000;
-        }
-    }
-
-    if (width == 0) {
         width = 800;
         height = 480;
         frequency = 6500000;
