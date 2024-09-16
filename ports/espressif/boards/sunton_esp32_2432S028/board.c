@@ -59,7 +59,7 @@ static void display_init(void) {
 
     busdisplay_busdisplay_obj_t *display = &allocate_display()->display;
     display->base.type = &busdisplay_busdisplay_type;
-    os_getenv_err_t result = common_hal_os_getenv_int("CIRCUITPY_DISP_ROTATION", &rotation);
+    os_getenv_err_t result = common_hal_os_getenv_int("CIRCUITPY_DISPLAY_ROTATION", &rotation);
     if (result != GETENV_OK) {
         rotation = 0;
     }
