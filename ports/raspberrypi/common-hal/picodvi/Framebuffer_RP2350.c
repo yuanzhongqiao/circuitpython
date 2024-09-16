@@ -430,7 +430,7 @@ void common_hal_picodvi_framebuffer_construct(picodvi_framebuffer_obj_t *self,
     dma_irq_handler();
 }
 
-STATIC void _turn_off_dma(uint8_t channel) {
+static void _turn_off_dma(uint8_t channel) {
     dma_channel_config c = dma_channel_get_default_config(channel);
     channel_config_set_enable(&c, false);
     dma_channel_set_config(channel, &c, false /* trigger */);
