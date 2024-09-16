@@ -418,6 +418,10 @@ msgstr "'data' richiede argomenti interi"
 msgid "'label' requires 1 argument"
 msgstr "'label' richiede 1 argomento"
 
+#: py/emitnative.c
+msgid "'not' not implemented"
+msgstr ""
+
 #: py/compile.c
 msgid "'return' outside function"
 msgstr "'return' al di fuori della funzione"
@@ -2419,6 +2423,10 @@ msgstr ""
 msgid "argsort is not implemented for flattened arrays"
 msgstr ""
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "argument must be None, an integer or a tuple of integers"
+msgstr ""
+
 #: py/compile.c
 msgid "argument name reused"
 msgstr ""
@@ -2658,6 +2666,10 @@ msgid "can't do binary op between '%q' and '%q'"
 msgstr "impossibile eseguire operazione binaria tra '%q' e '%q'"
 
 #: py/emitnative.c
+msgid "can't do unary op of '%q'"
+msgstr ""
+
+#: py/emitnative.c
 msgid "can't implicitly convert '%q' to 'bool'"
 msgstr "non è possibile convertire implicitamente '%q' in 'bool'"
 
@@ -2717,10 +2729,6 @@ msgstr ""
 
 #: py/objcomplex.c
 msgid "can't truncate-divide a complex number"
-msgstr ""
-
-#: extmod/moductypes.c
-msgid "can't unambiguously get sizeof scalar"
 msgstr ""
 
 #: extmod/modasyncio.c
@@ -3458,7 +3466,7 @@ msgstr ""
 msgid "max_length must be 0-%d when fixed_length is %s"
 msgstr ""
 
-#: extmod/ulab/code/ndarray.c
+#: extmod/ulab/code/ndarray.c extmod/ulab/code/numpy/random/random.c
 msgid "maximum number of dimensions is "
 msgstr ""
 
@@ -3600,7 +3608,7 @@ msgstr "nessun binding per nonlocal trovato"
 msgid "no default packer"
 msgstr ""
 
-#: extmod/modrandom.c
+#: extmod/modrandom.c extmod/ulab/code/numpy/random/random.c
 msgid "no default seed"
 msgstr ""
 
@@ -3812,6 +3820,10 @@ msgstr ""
 msgid "out array is too small"
 msgstr ""
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "out has wrong type"
+msgstr ""
+
 #: extmod/ulab/code/numpy/vector.c
 msgid "out keyword is not supported for complex dtype"
 msgstr ""
@@ -3834,6 +3846,14 @@ msgstr ""
 
 #: shared-bindings/bitmaptools/__init__.c
 msgid "out of range of target"
+msgstr ""
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "output array has wrong type"
+msgstr ""
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "output array must be contiguous"
 msgstr ""
 
 #: py/objint_mpz.c
@@ -3963,6 +3983,10 @@ msgstr "compilazione dello scrip non suportata"
 msgid "set unsupported"
 msgstr ""
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "shape must be None, and integer or a tuple of integers"
+msgstr ""
+
 #: extmod/ulab/code/ndarray.c
 msgid "shape must be integer or tuple of integers"
 msgstr ""
@@ -3981,6 +4005,10 @@ msgstr "segno non permesso nello spcificatore di formato 'c' della stringa"
 
 #: extmod/ulab/code/ulab_tools.c
 msgid "size is defined for ndarrays only"
+msgstr ""
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "size must match out.shape when used together"
 msgstr ""
 
 #: py/nativeglue.c
@@ -4056,18 +4084,6 @@ msgstr "indice della stringa fuori intervallo"
 msgid "string indices must be integers, not %s"
 msgstr "indici della stringa devono essere interi, non %s"
 
-#: extmod/moductypes.c
-msgid "struct: can't index"
-msgstr ""
-
-#: extmod/moductypes.c
-msgid "struct: index out of range"
-msgstr "struct: indice fuori intervallo"
-
-#: extmod/moductypes.c
-msgid "struct: no fields"
-msgstr "struct: nessun campo"
-
 #: py/objarray.c py/objstr.c
 msgid "substring not found"
 msgstr "sottostringa non trovata"
@@ -4079,10 +4095,6 @@ msgstr ""
 #: extmod/modjson.c
 msgid "syntax error in JSON"
 msgstr "errore di sintassi nel JSON"
-
-#: extmod/moductypes.c
-msgid "syntax error in uctypes descriptor"
-msgstr "errore di sintassi nel descrittore uctypes"
 
 #: extmod/modtime.c
 msgid "ticks interval overflow"
@@ -4191,10 +4203,6 @@ msgstr "tipo prende 1 o 3 argomenti"
 #: py/objint_longlong.c
 msgid "ulonglong too large"
 msgstr "ulonglong troppo grande"
-
-#: py/emitnative.c
-msgid "unary op %q not implemented"
-msgstr "operazione unaria %q non implementata"
 
 #: py/parse.c
 msgid "unexpected indent"
@@ -4387,6 +4395,18 @@ msgstr ""
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr ""
+
+#~ msgid "struct: index out of range"
+#~ msgstr "struct: indice fuori intervallo"
+
+#~ msgid "struct: no fields"
+#~ msgstr "struct: nessun campo"
+
+#~ msgid "syntax error in uctypes descriptor"
+#~ msgstr "errore di sintassi nel descrittore uctypes"
+
+#~ msgid "unary op %q not implemented"
+#~ msgstr "operazione unaria %q non implementata"
 
 #~ msgid "All PCNT units in use"
 #~ msgstr "Tutte le unità PCNT sono in uso"

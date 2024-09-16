@@ -416,6 +416,10 @@ msgstr "'data' kailangan ng integer arguments"
 msgid "'label' requires 1 argument"
 msgstr "'label' kailangan ng 1 argument"
 
+#: py/emitnative.c
+msgid "'not' not implemented"
+msgstr ""
+
 #: py/compile.c
 msgid "'return' outside function"
 msgstr "'return' sa labas ng function"
@@ -2417,6 +2421,10 @@ msgstr ""
 msgid "argsort is not implemented for flattened arrays"
 msgstr ""
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "argument must be None, an integer or a tuple of integers"
+msgstr ""
+
 #: py/compile.c
 msgid "argument name reused"
 msgstr ""
@@ -2654,6 +2662,10 @@ msgid "can't do binary op between '%q' and '%q'"
 msgstr "hindi magawa ang binary op sa gitna ng '%q' at '%q'"
 
 #: py/emitnative.c
+msgid "can't do unary op of '%q'"
+msgstr ""
+
+#: py/emitnative.c
 msgid "can't implicitly convert '%q' to 'bool'"
 msgstr "hindi maaaring ma-convert ang ' %q' sa 'bool'"
 
@@ -2717,10 +2729,6 @@ msgstr ""
 
 #: py/objcomplex.c
 msgid "can't truncate-divide a complex number"
-msgstr ""
-
-#: extmod/moductypes.c
-msgid "can't unambiguously get sizeof scalar"
 msgstr ""
 
 #: extmod/modasyncio.c
@@ -3456,7 +3464,7 @@ msgstr ""
 msgid "max_length must be 0-%d when fixed_length is %s"
 msgstr ""
 
-#: extmod/ulab/code/ndarray.c
+#: extmod/ulab/code/ndarray.c extmod/ulab/code/numpy/random/random.c
 msgid "maximum number of dimensions is "
 msgstr ""
 
@@ -3598,7 +3606,7 @@ msgstr "no binding para sa nonlocal, nahanap"
 msgid "no default packer"
 msgstr ""
 
-#: extmod/modrandom.c
+#: extmod/modrandom.c extmod/ulab/code/numpy/random/random.c
 msgid "no default seed"
 msgstr ""
 
@@ -3807,6 +3815,10 @@ msgstr "ord() umaasa ng character pero string ng %d haba ang nakita"
 msgid "out array is too small"
 msgstr ""
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "out has wrong type"
+msgstr ""
+
 #: extmod/ulab/code/numpy/vector.c
 msgid "out keyword is not supported for complex dtype"
 msgstr ""
@@ -3829,6 +3841,14 @@ msgstr ""
 
 #: shared-bindings/bitmaptools/__init__.c
 msgid "out of range of target"
+msgstr ""
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "output array has wrong type"
+msgstr ""
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "output array must be contiguous"
 msgstr ""
 
 #: py/objint_mpz.c
@@ -3957,6 +3977,10 @@ msgstr "script kompilasyon hindi supportado"
 msgid "set unsupported"
 msgstr ""
 
+#: extmod/ulab/code/numpy/random/random.c
+msgid "shape must be None, and integer or a tuple of integers"
+msgstr ""
+
 #: extmod/ulab/code/ndarray.c
 msgid "shape must be integer or tuple of integers"
 msgstr ""
@@ -3975,6 +3999,10 @@ msgstr "sign hindi maari sa integer format specifier 'c'"
 
 #: extmod/ulab/code/ulab_tools.c
 msgid "size is defined for ndarrays only"
+msgstr ""
+
+#: extmod/ulab/code/numpy/random/random.c
+msgid "size must match out.shape when used together"
 msgstr ""
 
 #: py/nativeglue.c
@@ -4050,18 +4078,6 @@ msgstr "indeks ng string wala sa sakop"
 msgid "string indices must be integers, not %s"
 msgstr "ang indeks ng string ay dapat na integer, hindi %s"
 
-#: extmod/moductypes.c
-msgid "struct: can't index"
-msgstr ""
-
-#: extmod/moductypes.c
-msgid "struct: index out of range"
-msgstr "struct: index hindi maabot"
-
-#: extmod/moductypes.c
-msgid "struct: no fields"
-msgstr "struct: walang fields"
-
 #: py/objarray.c py/objstr.c
 msgid "substring not found"
 msgstr "substring hindi nahanap"
@@ -4073,10 +4089,6 @@ msgstr "super() hindi mahanap ang sarili"
 #: extmod/modjson.c
 msgid "syntax error in JSON"
 msgstr "sintaks error sa JSON"
-
-#: extmod/moductypes.c
-msgid "syntax error in uctypes descriptor"
-msgstr "may pagkakamali sa sintaks sa uctypes descriptor"
 
 #: extmod/modtime.c
 msgid "ticks interval overflow"
@@ -4185,10 +4197,6 @@ msgstr "type kumuhuha ng 1 o 3 arguments"
 #: py/objint_longlong.c
 msgid "ulonglong too large"
 msgstr "ulonglong masyadong malaki"
-
-#: py/emitnative.c
-msgid "unary op %q not implemented"
-msgstr "unary op %q hindi implemented"
 
 #: py/parse.c
 msgid "unexpected indent"
@@ -4381,6 +4389,18 @@ msgstr ""
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr ""
+
+#~ msgid "struct: index out of range"
+#~ msgstr "struct: index hindi maabot"
+
+#~ msgid "struct: no fields"
+#~ msgstr "struct: walang fields"
+
+#~ msgid "syntax error in uctypes descriptor"
+#~ msgstr "may pagkakamali sa sintaks sa uctypes descriptor"
+
+#~ msgid "unary op %q not implemented"
+#~ msgstr "unary op %q hindi implemented"
 
 #~ msgid "EXTINT channel already in use"
 #~ msgstr "Ginagamit na ang EXTINT channel"
