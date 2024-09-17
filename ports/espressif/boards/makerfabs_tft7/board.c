@@ -39,7 +39,7 @@ static const mcu_pin_obj_t *red_pins[] = {
 
 static void display_init(void) {
 
-    mp_int_t height=0, width=0, frequency=0;
+    mp_int_t height = 0, width = 0, frequency = 0;
     os_getenv_err_t result;
 
     // Turn on backlight
