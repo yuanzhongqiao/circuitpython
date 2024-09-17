@@ -7,7 +7,7 @@
 #
 # LWIP
 #
-CONFIG_LWIP_LOCAL_HOSTNAME="circuitpy"
+CONFIG_LWIP_LOCAL_HOSTNAME="espressif-esp32s3-lcd-ev"
 # end of LWIP
 
 # end of Component config
