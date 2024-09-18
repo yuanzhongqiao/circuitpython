@@ -7,7 +7,6 @@
 #include <stdbool.h>
 #include "esp_err.h"
 
-//#include "ports/espressif/esp-idf/components/esp_driver_sdmmc/include/driver/sdmmc_host.h"
 #include "driver/sdmmc_host.h"
 #include "ports/espressif/esp-idf/components/sdmmc/include/sdmmc_cmd.h"
 
