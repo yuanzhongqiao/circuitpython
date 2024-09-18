@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-08-28 18:09+0000\n"
+"PO-Revision-Date: 2024-09-19 14:40+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: main.c
 msgid ""
@@ -429,7 +429,7 @@ msgstr "'label' requires 1 argument"
 
 #: py/emitnative.c
 msgid "'not' not implemented"
-msgstr ""
+msgstr "'not' not implemented"
 
 #: py/compile.c
 msgid "'return' outside function"
@@ -2443,7 +2443,7 @@ msgstr "argsort is not implemented for flattened arrays"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "argument must be None, an integer or a tuple of integers"
-msgstr ""
+msgstr "argument must be None, an integer or a tuple of integers"
 
 #: py/compile.c
 msgid "argument name reused"
@@ -2681,7 +2681,7 @@ msgstr "Can't do binary op between '%q' and '%q'"
 
 #: py/emitnative.c
 msgid "can't do unary op of '%q'"
-msgstr ""
+msgstr "can't do unary op of '%q'"
 
 #: py/emitnative.c
 msgid "can't implicitly convert '%q' to 'bool'"
@@ -3827,7 +3827,7 @@ msgstr "out array is too small"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "out has wrong type"
-msgstr ""
+msgstr "out has wrong type"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "out keyword is not supported for complex dtype"
@@ -3855,11 +3855,11 @@ msgstr "out of range of target"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "output array has wrong type"
-msgstr ""
+msgstr "output array has wrong type"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "output array must be contiguous"
-msgstr ""
+msgstr "output array must be contiguous"
 
 #: py/objint_mpz.c
 msgid "overflow converting long int to machine word"
@@ -3989,7 +3989,7 @@ msgstr "set unsupported"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "shape must be None, and integer or a tuple of integers"
-msgstr ""
+msgstr "shape must be None, and integer or a tuple of integers"
 
 #: extmod/ulab/code/ndarray.c
 msgid "shape must be integer or tuple of integers"
@@ -4013,7 +4013,7 @@ msgstr "size is defined for ndarrays only"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "size must match out.shape when used together"
-msgstr ""
+msgstr "size must match out.shape when used together"
 
 #: py/nativeglue.c
 msgid "slice unsupported"
