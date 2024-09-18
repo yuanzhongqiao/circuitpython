@@ -42,11 +42,6 @@ static void display_init(void) {
     mp_int_t height = 0, width = 0, frequency = 0;
     os_getenv_err_t result;
 
-    // Turn on backlight
-    // gpio_set_direction(2, GPIO_MODE_DEF_OUTPUT);
-    // gpio_set_level(2, true);
-    common_hal_never_reset_pin(&pin_GPIO39);
-
     result = common_hal_os_getenv_int("CIRCUITPY_DISPLAY_WIDTH", &width);
     if (result == GETENV_OK && width == 800) {
         width = 800;
