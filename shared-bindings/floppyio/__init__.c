@@ -135,7 +135,7 @@ static mp_obj_t floppyio_mfm_readinto(size_t n_args, const mp_obj_t *pos_args, m
     mp_buffer_info_t bufinfo;
     mp_get_buffer_raise(args[ARG_buffer].u_obj, &bufinfo, MP_BUFFER_WRITE);
     if (bufinfo.len % 512 != 0) {
-        mp_raise_ValueError(MP_ERROR_TEXT("Buffer must be a multiple of 512 bytes"));
+        mp_raise_ValueError_varg(MP_ERROR_TEXT("Buffer must be a multiple of %d bytes"), 512);
     }
     size_t n_sectors = bufinfo.len / 512;
 
