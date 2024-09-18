@@ -123,7 +123,7 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
     }
 
     common_hal_sdioio_sdcard_check_for_deinit(self);
-    
+
     ESP_LOGI(TAG, "Initialized SD card with ID %d:%d-%s",
         self->card.cid.mfg_id, self->card.cid.oem_id, self->card.cid.name);
 
