@@ -63,7 +63,7 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
     }
 
     // max 40Mhz frequency
-    mp_arg_validate_int_max(frequency,40000000,MP_QSTR_frequency);
+    mp_arg_validate_int_max(frequency, 40000000, MP_QSTR_frequency);
     ESP_LOGI(TAG, "Using slot %d", sd_slot);
     self->slot = (uint8_t)sd_slot;
     esp_err_t err = ESP_OK;
@@ -123,7 +123,7 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
         claim_pin(data[2]);
         claim_pin(data[3]);
     }
-    
+
     ESP_LOGI(TAG, "Initialized SD card with ID %d:%d-%s",
         self->card.cid.mfg_id, self->card.cid.oem_id, self->card.cid.name);
 
