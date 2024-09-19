@@ -52,7 +52,7 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
     const mcu_pin_obj_t *clock, const mcu_pin_obj_t *command,
     uint8_t num_data, const mcu_pin_obj_t **data, uint32_t frequency) {
     if (num_data != 4 && num_data != 1) {
-        mp_raise_ValueError(MP_ERROR_TEXT("SDIO: cards have either 1 or 4 data lines"));
+        mp_raise_ValueError_varg(MP_ERROR_TEXT("Number of data_pins must be %d or %d, not %d"), 1, 4, num_data);
     }
 
     self->num_data = num_data;

@@ -1542,8 +1542,9 @@ msgid "Not supported JPEG standard"
 msgstr ""
 
 #: ports/espressif/common-hal/paralleldisplaybus/ParallelBus.c
+#: ports/espressif/common-hal/sdioio/SDCard.c
 #, c-format
-msgid "Number of data_pins must be 8 or 16, not %d"
+msgid "Number of data_pins must be %d or %d, not %d"
 msgstr ""
 
 #: shared-bindings/util.c
@@ -1875,14 +1876,6 @@ msgstr ""
 #: ports/espressif/common-hal/sdioio/SDCard.c
 #, c-format
 msgid "SDIO Init Error %x"
-msgstr ""
-
-#: ports/espressif/common-hal/sdioio/SDCard.c
-msgid "SDIO: cards have either 1 or 4 data lines"
-msgstr ""
-
-#: ports/espressif/common-hal/sdioio/SDCard.c
-msgid "SDIO: requested frequency out of range"
 msgstr ""
 
 #: ports/espressif/common-hal/busio/SPI.c
