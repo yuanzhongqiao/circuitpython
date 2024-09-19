@@ -28,12 +28,12 @@ static void common_hal_sdioio_sdcard_check_for_deinit(sdioio_sdcard_obj_t *self)
 }
 
 static int check_pins(const mcu_pin_obj_t *clock, const mcu_pin_obj_t *command, const uint8_t num_data, const mcu_pin_obj_t **data) {
-    if (CONFIG_SOC_SDMMC_USE_GPIO_MATRIX) {
-        // ESP32-S3 and P4 can use any pin for any SDMMC func in either slot
-        // Default to SLOT_1 for SD cards
-        ESP_LOGI(TAG, "Using chip with CONFIG_SOC_SDMMC_USE_GPIO_MATRIX");
-        return SDMMC_HOST_SLOT_1;
-    }
+    #ifdef CONFIG_SOC_SDMMC_USE_GPIO_MATRIX
+    // ESP32-S3 and P4 can use any pin for any SDMMC func in either slot
+    // Default to SLOT_1 for SD cards
+    ESP_LOGI(TAG, "Using chip with CONFIG_SOC_SDMMC_USE_GPIO_MATRIX");
+    return SDMMC_HOST_SLOT_1;
+    #endif
     if (command->number == GPIO_NUM_11 && clock->number == GPIO_NUM_6 && data[0]->number == GPIO_NUM_7) {
         // Might be slot 0
         if (num_data == 1 || (num_data == 4 && data[1]->number == GPIO_NUM_8 && data[2]->number == GPIO_NUM_9 && data[3]->number == GPIO_NUM_10)) {
@@ -62,11 +62,8 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
         raise_ValueError_invalid_pins();
     }
 
-    if (frequency > 40000000) {
-        // Higher than max 40Mhz frequency
-        mp_raise_ValueError(MP_ERROR_TEXT("SDIO: requested frequency out of range"));
-    }
-
+    // max 40Mhz frequency
+    mp_arg_validate_int_max(frequency,40000000,MP_QSTR_frequency);
     ESP_LOGI(TAG, "Using slot %d", sd_slot);
     self->slot = (uint8_t)sd_slot;
     esp_err_t err = ESP_OK;
@@ -77,24 +74,18 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
     sdmmc_slot_config_t slot_config = SDMMC_SLOT_CONFIG_DEFAULT();
     slot_config.width = 1;
     slot_config.clk = clock->number;
-    claim_pin(clock);
     self->clock = clock->number;
     slot_config.cmd = command->number;
-    claim_pin(command);
     self->command = command->number;
     slot_config.d0 = data[0]->number;
     self->data[0] = data[0]->number;
-    claim_pin(data[0]);
     if (num_data == 4) {
         slot_config.width = 4;
         slot_config.d1 = data[1]->number;
-        claim_pin(data[1]);
         self->data[1] = data[1]->number;
         slot_config.d2 = data[2]->number;
-        claim_pin(data[2]);
         self->data[2] = data[2]->number;
         slot_config.d3 = data[3]->number;
-        claim_pin(data[3]);
         self->data[3] = data[3]->number;
     }
 
@@ -124,6 +115,15 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
 
     common_hal_sdioio_sdcard_check_for_deinit(self);
 
+    claim_pin(clock);
+    claim_pin(command);
+    claim_pin(data[0]);
+    if (num_data == 4) {
+        claim_pin(data[1]);
+        claim_pin(data[2]);
+        claim_pin(data[3]);
+    }
+    
     ESP_LOGI(TAG, "Initialized SD card with ID %d:%d-%s",
         self->card.cid.mfg_id, self->card.cid.oem_id, self->card.cid.name);
 
