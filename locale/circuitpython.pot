@@ -1868,12 +1868,8 @@ msgstr ""
 msgid "SDIO GetCardInfo Error %d"
 msgstr ""
 
-#: ports/stm/common-hal/sdioio/SDCard.c
-#, c-format
-msgid "SDIO Init Error %d"
-msgstr ""
-
 #: ports/espressif/common-hal/sdioio/SDCard.c
+#: ports/stm/common-hal/sdioio/SDCard.c
 #, c-format
 msgid "SDIO Init Error %x"
 msgstr ""

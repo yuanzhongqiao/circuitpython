@@ -140,7 +140,7 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
 
     HAL_StatusTypeDef r = HAL_SD_Init(&self->handle);
     if (r != HAL_OK) {
-        mp_raise_ValueError_varg(MP_ERROR_TEXT("SDIO Init Error %d"), (int)r);
+        mp_raise_ValueError_varg(MP_ERROR_TEXT("SDIO Init Error %x"), (unsigned int)r);
     }
 
     HAL_SD_CardInfoTypeDef info;
