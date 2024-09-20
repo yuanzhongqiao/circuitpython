@@ -33,10 +33,10 @@ static int check_pins(const mcu_pin_obj_t *clock, const mcu_pin_obj_t *command, 
     // ESP32-S3 and P4 can use any pin for any SDMMC func in either slot
     // Default to SLOT_1 for SD cards
     ESP_LOGI(TAG, "Using chip with CONFIG_SOC_SDMMC_USE_GPIO_MATRIX");
-    if (!slot_in_use[0]) {
-        return SDMMC_HOST_SLOT_0;
-    } else if (!slot_in_use[1]) {
+    if (!slot_in_use[1]) {
         return SDMMC_HOST_SLOT_1;
+    } else if (!slot_in_use[0]) {
+        return SDMMC_HOST_SLOT_0;
     }
     #else
     if (command->number == GPIO_NUM_11 && clock->number == GPIO_NUM_6 && data[0]->number == GPIO_NUM_7) {
