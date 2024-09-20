@@ -19,7 +19,8 @@
 #include "esp_log.h"
 static const char *TAG = "SDCard.c";
 
-static bool sdio_host_init = false;
+static bool slot_in_use[2];
+static bool never_reset_sdio[2] = { false, false };
 
 static void common_hal_sdioio_sdcard_check_for_deinit(sdioio_sdcard_obj_t *self) {
     if (common_hal_sdioio_sdcard_deinited(self)) {
@@ -32,8 +33,12 @@ static int check_pins(const mcu_pin_obj_t *clock, const mcu_pin_obj_t *command, 
     // ESP32-S3 and P4 can use any pin for any SDMMC func in either slot
     // Default to SLOT_1 for SD cards
     ESP_LOGI(TAG, "Using chip with CONFIG_SOC_SDMMC_USE_GPIO_MATRIX");
-    return SDMMC_HOST_SLOT_1;
-    #endif
+    if (!slot_in_use[1]) {
+        return SDMMC_HOST_SLOT_1;
+    } else {
+        return SDMMC_HOST_SLOT_0;
+    }
+    #else
     if (command->number == GPIO_NUM_11 && clock->number == GPIO_NUM_6 && data[0]->number == GPIO_NUM_7) {
         // Might be slot 0
         if (num_data == 1 || (num_data == 4 && data[1]->number == GPIO_NUM_8 && data[2]->number == GPIO_NUM_9 && data[3]->number == GPIO_NUM_10)) {
@@ -46,6 +51,15 @@ static int check_pins(const mcu_pin_obj_t *clock, const mcu_pin_obj_t *command, 
         }
     }
     return -1;
+    #endif
+}
+
+uint8_t get_slot_index(sdioio_sdcard_obj_t *self) {
+    if (self->slot == SDMMC_HOST_SLOT_0) {
+        return 0;
+    } else {
+        return 1;
+    }
 }
 
 void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
@@ -72,7 +86,7 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
     host.max_freq_khz = frequency / 1000;
 
     sdmmc_slot_config_t slot_config = SDMMC_SLOT_CONFIG_DEFAULT();
-    slot_config.width = 1;
+    slot_config.width = num_data;
     slot_config.clk = clock->number;
     self->clock = clock->number;
     slot_config.cmd = command->number;
@@ -80,7 +94,6 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
     slot_config.d0 = data[0]->number;
     self->data[0] = data[0]->number;
     if (num_data == 4) {
-        slot_config.width = 4;
         slot_config.d1 = data[1]->number;
         self->data[1] = data[1]->number;
         slot_config.d2 = data[2]->number;
@@ -93,13 +106,11 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
         slot_config.width, slot_config.clk, slot_config.cmd,
         slot_config.d0, slot_config.d1, slot_config.d2, slot_config.d3);
 
-    if (!sdio_host_init) {
-        err = sdmmc_host_init();
-        if (err != ESP_OK) {
-            mp_raise_OSError_msg_varg(MP_ERROR_TEXT("SDIO Init Error %x"), err);
-        }
-        // sdio_host_init = true;
+    err = sdmmc_host_init();
+    if (err != ESP_OK) {
+        mp_raise_OSError_msg_varg(MP_ERROR_TEXT("SDIO Init Error %x"), err);
     }
+
     err = sdmmc_host_init_slot(sd_slot, &slot_config);
     if (err != ESP_OK) {
         ESP_LOGW(TAG, "Failed to initialize SDMMC slot: %x", err);
@@ -115,13 +126,12 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
 
     common_hal_sdioio_sdcard_check_for_deinit(self);
 
+    slot_in_use[get_slot_index(self)] = true;
+
     claim_pin(clock);
     claim_pin(command);
-    claim_pin(data[0]);
-    if (num_data == 4) {
-        claim_pin(data[1]);
-        claim_pin(data[2]);
-        claim_pin(data[3]);
+    for (size_t i = 0; i < num_data; i++) {
+        claim_pin(data[i]);
     }
 
     ESP_LOGI(TAG, "Initialized SD card with ID %d:%d-%s",
@@ -194,21 +204,20 @@ void common_hal_sdioio_sdcard_deinit(sdioio_sdcard_obj_t *self) {
     if (common_hal_sdioio_sdcard_deinited(self)) {
         return;
     }
+
+    never_reset_sdio[get_slot_index(self)] = false;
+    slot_in_use[get_slot_index(self)] = false;
+
     sdmmc_host_deinit();
     reset_pin_number(self->command);
     self->command = COMMON_HAL_MCU_NO_PIN;
     reset_pin_number(self->clock);
     self->clock = COMMON_HAL_MCU_NO_PIN;
-    reset_pin_number(self->data[0]);
-    self->data[0] = COMMON_HAL_MCU_NO_PIN;
-    if (self->num_data == 4) {
-        reset_pin_number(self->data[1]);
-        self->data[1] = COMMON_HAL_MCU_NO_PIN;
-        reset_pin_number(self->data[2]);
-        self->data[2] = COMMON_HAL_MCU_NO_PIN;
-        reset_pin_number(self->data[3]);
-        self->data[3] = COMMON_HAL_MCU_NO_PIN;
+    for (size_t i = 0; i < self->num_data; i++) {
+        reset_pin_number(self->data[i]);
+        self->data[i] = COMMON_HAL_MCU_NO_PIN;
     }
+
     return;
 }
 
@@ -216,8 +225,26 @@ void common_hal_sdioio_sdcard_never_reset(sdioio_sdcard_obj_t *self) {
     if (common_hal_sdioio_sdcard_deinited(self)) {
         return;
     }
+
+    if (never_reset_sdio[get_slot_index(self)]) {
+        return;
+    }
+
+    never_reset_sdio[get_slot_index(self)] = true;
+
+    never_reset_pin_number(self->command);
+    never_reset_pin_number(self->clock);
+
+    for (size_t i = 0; i < self->num_data; i++) {
+        never_reset_pin_number(self->data[i]);
+    }
 }
 
 void sdioio_reset() {
+    for (size_t i = 0; i < MP_ARRAY_SIZE(slot_in_use); i++) {
+        if (!never_reset_sdio[i]) {
+            slot_in_use[i] = false;
+        }
+    }
     return;
 }
