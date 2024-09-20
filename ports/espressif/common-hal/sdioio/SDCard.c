@@ -33,10 +33,10 @@ static int check_pins(const mcu_pin_obj_t *clock, const mcu_pin_obj_t *command, 
     // ESP32-S3 and P4 can use any pin for any SDMMC func in either slot
     // Default to SLOT_1 for SD cards
     ESP_LOGI(TAG, "Using chip with CONFIG_SOC_SDMMC_USE_GPIO_MATRIX");
-    if (!slot_in_use[1]) {
-        return SDMMC_HOST_SLOT_1;
-    } else {
+    if (!slot_in_use[0]) {
         return SDMMC_HOST_SLOT_0;
+    } else if (!slot_in_use[1]) {
+        return SDMMC_HOST_SLOT_1;
     }
     #else
     if (command->number == GPIO_NUM_11 && clock->number == GPIO_NUM_6 && data[0]->number == GPIO_NUM_7) {
@@ -50,8 +50,8 @@ static int check_pins(const mcu_pin_obj_t *clock, const mcu_pin_obj_t *command, 
             return SDMMC_HOST_SLOT_1;
         }
     }
-    return -1;
     #endif
+    return -1;
 }
 
 uint8_t get_slot_index(sdioio_sdcard_obj_t *self) {
@@ -106,9 +106,11 @@ void common_hal_sdioio_sdcard_construct(sdioio_sdcard_obj_t *self,
         slot_config.width, slot_config.clk, slot_config.cmd,
         slot_config.d0, slot_config.d1, slot_config.d2, slot_config.d3);
 
-    err = sdmmc_host_init();
-    if (err != ESP_OK) {
-        mp_raise_OSError_msg_varg(MP_ERROR_TEXT("SDIO Init Error %x"), err);
+    if (!slot_in_use[0] && !slot_in_use[1]) {
+        err = sdmmc_host_init();
+        if (err != ESP_OK) {
+            mp_raise_OSError_msg_varg(MP_ERROR_TEXT("SDIO Init Error %x"), err);
+        }
     }
 
     err = sdmmc_host_init_slot(sd_slot, &slot_config);
@@ -208,7 +210,10 @@ void common_hal_sdioio_sdcard_deinit(sdioio_sdcard_obj_t *self) {
     never_reset_sdio[get_slot_index(self)] = false;
     slot_in_use[get_slot_index(self)] = false;
 
-    sdmmc_host_deinit();
+    if (!slot_in_use[0] && !slot_in_use[1]) {
+        sdmmc_host_deinit();
+    }
+
     reset_pin_number(self->command);
     self->command = COMMON_HAL_MCU_NO_PIN;
     reset_pin_number(self->clock);
@@ -246,5 +251,8 @@ void sdioio_reset() {
             slot_in_use[i] = false;
         }
     }
+
+    // don't we have to deinit any currently used slots here?
+
     return;
 }
