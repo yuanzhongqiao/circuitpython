@@ -251,8 +251,9 @@ void sdioio_reset() {
             slot_in_use[i] = false;
         }
     }
-
-    // don't we have to deinit any currently used slots here?
+    if (!slot_in_use[0] && !slot_in_use[1]) {
+        sdmmc_host_deinit();
+    }
 
     return;
 }
