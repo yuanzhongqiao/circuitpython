@@ -87,6 +87,8 @@ INC += \
 	-isystem esp-idf/components/esp_driver_ledc/include \
 	-isystem esp-idf/components/esp_driver_pcnt/include \
 	-isystem esp-idf/components/esp_driver_rmt/include \
+	-isystem esp-idf/components/esp_driver_sdio/include \
+	-isystem esp-idf/components/esp_driver_sdmmc/include \
 	-isystem esp-idf/components/esp_driver_spi/include \
 	-isystem esp-idf/components/esp_driver_tsens/include \
 	-isystem esp-idf/components/esp_driver_uart/include \
@@ -128,6 +130,8 @@ INC += \
 	-isystem esp-idf/components/mbedtls/port/include \
 	-isystem esp-idf/components/newlib/platform_include \
 	-isystem esp-idf/components/nvs_flash/include \
+	-isystem esp-idf/components/sdio/include \
+	-isystem esp-idf/components/sdmmc/include \
 	-isystem esp-idf/components/soc/include \
 	-isystem esp-idf/components/soc/$(IDF_TARGET)/include \
 	-isystem esp-idf/components/spi_flash/include \
@@ -659,6 +663,9 @@ ifneq ($(CIRCUITPY_PARALLELDISPLAYBUS),0)
 endif
 ifneq ($(CIRCUITPY_USB_DEVICE),0)
 	ESP_IDF_COMPONENTS_LINK += usb
+endif
+ifneq ($(CIRCUITPY_SDIOIO),0)
+	ESP_IDF_COMPONENTS_LINK += sdmmc esp_driver_sdmmc
 endif
 
 ESP_IDF_COMPONENTS_EXPANDED = $(foreach component, $(ESP_IDF_COMPONENTS_LINK), $(BUILD)/esp-idf/esp-idf/$(component)/lib$(component).a)
