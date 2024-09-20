@@ -30,8 +30,8 @@
 #include "shared-bindings/microcontroller/__init__.h"
 #include "shared-bindings/microcontroller/Pin.h"
 
-STATIC I2CSPM_Init_TypeDef i2cspm_init;
-STATIC bool in_used = false;
+static I2CSPM_Init_TypeDef i2cspm_init;
+static bool in_used = false;
 
 // Construct I2C protocol, this function init i2c peripheral
 void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,

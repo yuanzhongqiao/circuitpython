@@ -40,7 +40,7 @@
 // Arrays use 0 based numbering: I2C1 is stored at index 0
 #define MAX_I2C 4
 
-STATIC bool reserved_i2c[MAX_I2C];
+static bool reserved_i2c[MAX_I2C];
 
 #define ALL_CLOCKS 0xFF
 static void i2c_clock_enable(uint8_t mask);

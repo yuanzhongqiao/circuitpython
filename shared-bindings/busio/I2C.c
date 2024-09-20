@@ -48,7 +48,6 @@
 //|         ...
 static mp_obj_t busio_i2c_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
     #if CIRCUITPY_BUSIO_I2C
-    busio_i2c_obj_t *self = mp_obj_malloc(busio_i2c_obj_t, &busio_i2c_type);
     enum { ARG_scl, ARG_sda, ARG_frequency, ARG_timeout };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_scl, MP_ARG_REQUIRED | MP_ARG_OBJ },
@@ -62,8 +61,7 @@ static mp_obj_t busio_i2c_make_new(const mp_obj_type_t *type, size_t n_args, siz
     const mcu_pin_obj_t *scl = validate_obj_is_free_pin(args[ARG_scl].u_obj, MP_QSTR_scl);
     const mcu_pin_obj_t *sda = validate_obj_is_free_pin(args[ARG_sda].u_obj, MP_QSTR_sda);
 
-    busio_i2c_obj_t *self = m_new_obj_with_finaliser(busio_i2c_obj_t);
-    self->base.type = &busio_i2c_type;
+    busio_i2c_obj_t *self = mp_obj_malloc_with_finaliser(busio_i2c_obj_t, &busio_i2c_type);
     common_hal_busio_i2c_construct(self, scl, sda, args[ARG_frequency].u_int, args[ARG_timeout].u_int);
     return (mp_obj_t)self;
     #else
@@ -98,12 +96,12 @@ static void check_for_deinit(busio_i2c_obj_t *self) {
 //|         """Automatically deinitializes the hardware on context exit. See
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
-STATIC mp_obj_t busio_i2c_obj___exit__(size_t n_args, const mp_obj_t *args) {
+static mp_obj_t busio_i2c_obj___exit__(size_t n_args, const mp_obj_t *args) {
     (void)n_args;
     common_hal_busio_i2c_deinit(MP_OBJ_TO_PTR(args[0]));
     return mp_const_none;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(busio_i2c___exit___obj, 4, 4, busio_i2c_obj___exit__);
+static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(busio_i2c___exit___obj, 4, 4, busio_i2c_obj___exit__);
 
 static void check_lock(busio_i2c_obj_t *self) {
     asm ("");
@@ -111,6 +109,23 @@ static void check_lock(busio_i2c_obj_t *self) {
         mp_raise_RuntimeError(MP_ERROR_TEXT("Function requires lock"));
     }
 }
+
+//|     def probe(self, address: int) -> List[int]:
+//|         """Check if a device at the specified address responds.
+//|
+//|         :param int address: 7-bit device address
+//|         :return: ``True`` if a device at ``address`` responds; ``False`` otherwise
+//|         :rtype: bool"""
+//|         ...
+static mp_obj_t busio_i2c_probe(mp_obj_t self_in, mp_obj_t address_obj) {
+    busio_i2c_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    check_for_deinit(self);
+    check_lock(self);
+
+    const uint16_t addr = mp_obj_get_int(address_obj);
+    return mp_obj_new_bool(common_hal_busio_i2c_probe(self, addr));
+}
+MP_DEFINE_CONST_FUN_OBJ_2(busio_i2c_probe_obj, busio_i2c_probe);
 
 //|     def scan(self) -> List[int]:
 //|         """Scan all I2C addresses between 0x08 and 0x77 inclusive and return a
@@ -366,6 +381,7 @@ static const mp_rom_map_elem_t busio_i2c_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&busio_i2c_deinit_obj) },
     { MP_ROM_QSTR(MP_QSTR___enter__), MP_ROM_PTR(&default___enter___obj) },
     { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&busio_i2c___exit___obj) },
+    { MP_ROM_QSTR(MP_QSTR_probe), MP_ROM_PTR(&busio_i2c_probe_obj) },
     { MP_ROM_QSTR(MP_QSTR_scan), MP_ROM_PTR(&busio_i2c_scan_obj) },
 
     { MP_ROM_QSTR(MP_QSTR_try_lock), MP_ROM_PTR(&busio_i2c_try_lock_obj) },

@@ -93,11 +93,15 @@ void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
     self->scl_pin = scl;
     self->has_lock = false;
     self->frequency = frequency;
-    self->timeout_ms = timeout_us / 1000;
-    // Round up timeout to nearest ms.
-    if (timeout_us % 1000 != 0) {
-        self->timeout_ms += 1;
-    }
+
+    // Ignore the passed-in clock-stretching timeout. It is not used, as documented in shared-bindings.
+    // Instead use 1000 ms, which is standard across ports.
+    // self->timeout_ms = timeout_us / 1000;
+    // // Round up timeout to nearest ms.
+    // if (timeout_us % 1000 != 0) {
+    //     self->timeout_ms += 1;
+    // }
+    self->timeout_ms = 1000;
 
     claim_pin(sda);
     claim_pin(scl);
@@ -164,11 +168,11 @@ static uint8_t convert_esp_err(esp_err_t result) {
     }
 }
 
-static size_t _transaction_duration(size_t frequency, size_t len) {
+static size_t _transaction_duration_ms(size_t frequency, size_t len) {
     size_t khz = frequency / 1000;
     size_t bytes_per_ms = khz / 8;
     // + 1 for the address byte
-    return (len + 1) / bytes_per_ms;
+    return (len + 1) / bytes_per_ms + 1000;
 }
 
 uint8_t common_hal_busio_i2c_write(busio_i2c_obj_t *self, uint16_t addr, const uint8_t *data, size_t len) {
@@ -179,7 +183,7 @@ uint8_t common_hal_busio_i2c_write(busio_i2c_obj_t *self, uint16_t addr, const u
     };
     i2c_master_dev_handle_t dev_handle;
     CHECK_ESP_RESULT(i2c_master_bus_add_device(self->handle, &dev_config, &dev_handle));
-    esp_err_t result = i2c_master_transmit(dev_handle, data, len, _transaction_duration(self->frequency, len) + self->timeout_ms);
+    esp_err_t result = i2c_master_transmit(dev_handle, data, len, _transaction_duration_ms(self->frequency, len) + self->timeout_ms);
     CHECK_ESP_RESULT(i2c_master_bus_rm_device(dev_handle));
     return convert_esp_err(result);
 }
@@ -192,7 +196,7 @@ uint8_t common_hal_busio_i2c_read(busio_i2c_obj_t *self, uint16_t addr, uint8_t 
     };
     i2c_master_dev_handle_t dev_handle;
     CHECK_ESP_RESULT(i2c_master_bus_add_device(self->handle, &dev_config, &dev_handle));
-    esp_err_t result = i2c_master_receive(dev_handle, data, len, _transaction_duration(self->frequency, len) + self->timeout_ms);
+    esp_err_t result = i2c_master_receive(dev_handle, data, len, _transaction_duration_ms(self->frequency, len) + self->timeout_ms);
     CHECK_ESP_RESULT(i2c_master_bus_rm_device(dev_handle));
     return convert_esp_err(result);
 }
@@ -206,7 +210,7 @@ uint8_t common_hal_busio_i2c_write_read(busio_i2c_obj_t *self, uint16_t addr,
     };
     i2c_master_dev_handle_t dev_handle;
     CHECK_ESP_RESULT(i2c_master_bus_add_device(self->handle, &dev_config, &dev_handle));
-    esp_err_t result = i2c_master_transmit_receive(dev_handle, out_data, out_len, in_data, in_len, _transaction_duration(self->frequency, out_len) + _transaction_duration(self->frequency, in_len) + self->timeout_ms);
+    esp_err_t result = i2c_master_transmit_receive(dev_handle, out_data, out_len, in_data, in_len, _transaction_duration_ms(self->frequency, out_len) + _transaction_duration_ms(self->frequency, in_len) + self->timeout_ms);
     CHECK_ESP_RESULT(i2c_master_bus_rm_device(dev_handle));
     return convert_esp_err(result);
 }
