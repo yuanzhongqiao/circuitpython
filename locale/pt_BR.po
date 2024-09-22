@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2024-08-23 07:09+0000\n"
+"PO-Revision-Date: 2024-09-23 03:16+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: main.c
 msgid ""
@@ -431,7 +431,7 @@ msgstr "'label' exige 1 argumento"
 
 #: py/emitnative.c
 msgid "'not' not implemented"
-msgstr ""
+msgstr "'not' não implementado"
 
 #: py/compile.c
 msgid "'return' outside function"
@@ -684,7 +684,7 @@ msgstr "O tamanho do buffer %d é muito grande. Deve ser menor que %d"
 #: shared-module/sdcardio/SDCard.c
 #, c-format
 msgid "Buffer must be a multiple of %d bytes"
-msgstr ""
+msgstr "O buffer deve ser um múltiplo de %d bytes"
 
 #: shared-bindings/_bleio/PacketBuffer.c
 #, c-format
@@ -1583,7 +1583,7 @@ msgstr "Não é compatível com o padrão JPEG"
 #: ports/espressif/common-hal/sdioio/SDCard.c
 #, c-format
 msgid "Number of data_pins must be %d or %d, not %d"
-msgstr ""
+msgstr "A quantidade de data_pins deve ser %d ou %d, e não %d"
 
 #: shared-bindings/util.c
 msgid ""
@@ -1925,7 +1925,7 @@ msgstr "Erro SDIO GetCardInfo %d"
 #: ports/stm/common-hal/sdioio/SDCard.c
 #, c-format
 msgid "SDIO Init Error %x"
-msgstr ""
+msgstr "Erro de inicialização %x do SDIO"
 
 #: ports/espressif/common-hal/busio/SPI.c
 msgid "SPI configuration failed"
@@ -2482,6 +2482,7 @@ msgstr "argsort não é implementado para matrizes achatadas"
 #: extmod/ulab/code/numpy/random/random.c
 msgid "argument must be None, an integer or a tuple of integers"
 msgstr ""
+"O argumento deve ser None, um número inteiro ou uma tupla de números inteiros"
 
 #: py/compile.c
 msgid "argument name reused"
@@ -2719,7 +2720,7 @@ msgstr "não é possível executar uma operação binária entre '%q' e '%q'"
 
 #: py/emitnative.c
 msgid "can't do unary op of '%q'"
-msgstr ""
+msgstr "não é possível fazer uma operação unária de '%q'"
 
 #: py/emitnative.c
 msgid "can't implicitly convert '%q' to 'bool'"
@@ -3881,7 +3882,7 @@ msgstr "a matriz externa é muito pequena"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "out has wrong type"
-msgstr ""
+msgstr "o out tem o tipo errado"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "out keyword is not supported for complex dtype"
@@ -3909,11 +3910,11 @@ msgstr "fora do alcance do alvo"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "output array has wrong type"
-msgstr ""
+msgstr "a matriz de saída tem o tipo errado"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "output array must be contiguous"
-msgstr ""
+msgstr "a matriz de saída deve ser contígua"
 
 #: py/objint_mpz.c
 msgid "overflow converting long int to machine word"
@@ -4045,7 +4046,7 @@ msgstr "conjunto não suportado"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "shape must be None, and integer or a tuple of integers"
-msgstr ""
+msgstr "shape deve ser None, um número inteiro ou uma tupla de números inteiros"
 
 #: extmod/ulab/code/ndarray.c
 msgid "shape must be integer or tuple of integers"
@@ -4069,7 +4070,7 @@ msgstr "o tamanho é definido apenas para os ndarrays"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "size must match out.shape when used together"
-msgstr ""
+msgstr "O tamanho deve corresponder ao out.shape quando usado em conjunto"
 
 #: py/nativeglue.c
 msgid "slice unsupported"
