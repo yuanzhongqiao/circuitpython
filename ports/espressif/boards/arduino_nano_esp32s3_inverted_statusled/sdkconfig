@@ -7,7 +7,7 @@
 #
 # LWIP
 #
-CONFIG_LWIP_LOCAL_HOSTNAME="nano-esp32"
+# CONFIG_LWIP_LOCAL_HOSTNAME="nano-esp32"
 # end of LWIP
 
 # end of Component config
