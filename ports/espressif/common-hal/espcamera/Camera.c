@@ -15,24 +15,6 @@
 #include "shared-bindings/util.h"
 #include "common-hal/microcontroller/Pin.h"
 
-// These two includes are needed to peek into the i2c handle to get the i2c port
-// number.
-#include "sdkconfig.h"
-// Define these two macros if not defined so that we don't get the -Wundef
-// warning from i2c_private.h
-#ifndef CONFIG_I2C_ISR_IRAM_SAFE
-#define CONFIG_I2C_ISR_IRAM_SAFE 0
-#endif
-#ifndef CONFIG_PM_ENABLE
-#define CONFIG_PM_ENABLE 0
-#endif
-
-// i2c_private.h uses `#if` with some macros that may be undefined and taken as 0.
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wundef"
-#include "esp-idf/components/esp_driver_i2c/i2c_private.h"
-#pragma GCC diagnostic pop
-
 #include "esp-camera/driver/private_include/cam_hal.h"
 
 #if !CONFIG_SPIRAM
