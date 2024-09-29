@@ -39,6 +39,10 @@
 #include "shared-bindings/socketpool/__init__.h"
 #include "shared-module/os/__init__.h"
 
+#if CIRCUITPY_SDIOIO
+#include "common-hal/sdioio/SDCard.h"
+#endif
+
 #if CIRCUITPY_TOUCHIO_USE_NATIVE
 #include "peripherals/touch.h"
 #endif
@@ -344,6 +348,10 @@ void reset_port(void) {
     #if CIRCUITPY_BUSIO
     spi_reset();
     uart_reset();
+    #endif
+
+    #if CIRCUITPY_SDIOIO
+    sdioio_reset();
     #endif
 
     #if CIRCUITPY_DUALBANK
