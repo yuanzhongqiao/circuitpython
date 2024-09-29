@@ -21,10 +21,10 @@
 // all TWI instances have the same max size
 // 16 bits for 840, 10 bits for 810, 8 bits for 832
 #define I2C_MAX_XFER_LEN         MIN(((1UL << TWIM0_EASYDMA_MAXCNT_SIZE) - 1), 1024)
-#define I2C_TIMEOUT 1000 // 1 second timeout
+// 1 second timeout
+#define I2C_TIMEOUT 1000
 
-static
- twim_peripheral_t twim_peripherals[] = {
+static twim_peripheral_t twim_peripherals[] = {
     #if NRFX_CHECK(NRFX_TWIM0_ENABLED)
     // SPIM0 and TWIM0 share an address.
     { .twim = NRFX_TWIM_INSTANCE(0),
