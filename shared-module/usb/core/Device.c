@@ -159,7 +159,7 @@ static size_t _xfer(tuh_xfer_t *xfer, mp_int_t timeout) {
     _xfer_result = 0xff;
     xfer->complete_cb = _transfer_done_cb;
     if (!tuh_edpt_xfer(xfer)) {
-        mp_raise_usb_core_USBError(NULL);
+        mp_raise_usb_core_USBError(MP_ERROR_TEXT("Xfer"));
     }
     uint32_t start_time = supervisor_ticks_ms32();
     while ((timeout == 0 || supervisor_ticks_ms32() - start_time < (uint32_t)timeout) &&
@@ -176,7 +176,7 @@ static size_t _xfer(tuh_xfer_t *xfer, mp_int_t timeout) {
     xfer_result_t result = _xfer_result;
     _xfer_result = 0xff;
     if (result == XFER_RESULT_STALLED) {
-        mp_raise_usb_core_USBError(MP_ERROR_TEXT("Pipe error"));
+        mp_raise_usb_core_USBError(MP_ERROR_TEXT("Stall"));
     }
     if (result == 0xff) {
         tuh_edpt_abort_xfer(xfer->daddr, xfer->ep_addr);
@@ -205,7 +205,7 @@ static bool _open_endpoint(usb_core_device_obj_t *self, mp_int_t endpoint) {
     }
 
     if (self->configuration_descriptor == NULL) {
-        mp_raise_usb_core_USBError(MP_ERROR_TEXT("No configuration set"));
+        mp_raise_usb_core_USBError(MP_ERROR_TEXT("NoCfg"));
     }
 
     tusb_desc_configuration_t *desc_cfg = (tusb_desc_configuration_t *)self->configuration_descriptor;
@@ -239,7 +239,8 @@ static bool _open_endpoint(usb_core_device_obj_t *self, mp_int_t endpoint) {
 
 mp_int_t common_hal_usb_core_device_write(usb_core_device_obj_t *self, mp_int_t endpoint, const uint8_t *buffer, mp_int_t len, mp_int_t timeout) {
     if (!_open_endpoint(self, endpoint)) {
-        mp_raise_usb_core_USBError(NULL);
+        mp_raise_usb_core_USBError(MP_ERROR_TEXT("Endpt"));
+        return 0;
     }
     tuh_xfer_t xfer;
     xfer.daddr = self->device_number;
@@ -251,7 +252,8 @@ mp_int_t common_hal_usb_core_device_write(usb_core_device_obj_t *self, mp_int_t 
 
 mp_int_t common_hal_usb_core_device_read(usb_core_device_obj_t *self, mp_int_t endpoint, uint8_t *buffer, mp_int_t len, mp_int_t timeout) {
     if (!_open_endpoint(self, endpoint)) {
-        mp_raise_usb_core_USBError(NULL);
+        mp_raise_usb_core_USBError(MP_ERROR_TEXT("Endpt"));
+        return 0;
     }
     tuh_xfer_t xfer;
     xfer.daddr = self->device_number;
@@ -285,7 +287,7 @@ mp_int_t common_hal_usb_core_device_ctrl_transfer(usb_core_device_obj_t *self,
     _xfer_result = 0xff;
 
     if (!tuh_control_xfer(&xfer)) {
-        mp_raise_usb_core_USBError(NULL);
+        mp_raise_usb_core_USBError(MP_ERROR_TEXT("Xfer"));
     }
     uint32_t start_time = supervisor_ticks_ms32();
     while ((timeout == 0 || supervisor_ticks_ms32() - start_time < (uint32_t)timeout) &&
@@ -302,7 +304,7 @@ mp_int_t common_hal_usb_core_device_ctrl_transfer(usb_core_device_obj_t *self,
     xfer_result_t result = _xfer_result;
     _xfer_result = 0xff;
     if (result == XFER_RESULT_STALLED) {
-        mp_raise_usb_core_USBError(MP_ERROR_TEXT("Pipe error"));
+        mp_raise_usb_core_USBError(MP_ERROR_TEXT("Stall"));
     }
     if (result == 0xff) {
         tuh_edpt_abort_xfer(xfer.daddr, xfer.ep_addr);
