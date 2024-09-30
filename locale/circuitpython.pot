@@ -915,6 +915,10 @@ msgstr ""
 msgid "ESP-IDF memory allocation failed"
 msgstr ""
 
+#: shared-module/usb/core/Device.c
+msgid "Endpt"
+msgstr ""
+
 #: extmod/modre.c
 msgid "Error in regex"
 msgstr ""
@@ -1445,10 +1449,6 @@ msgstr ""
 msgid "No bootloader present"
 msgstr ""
 
-#: shared-module/usb/core/Device.c
-msgid "No configuration set"
-msgstr ""
-
 #: shared-bindings/_bleio/PacketBuffer.c
 msgid "No connection: length cannot be determined"
 msgstr ""
@@ -1516,6 +1516,10 @@ msgstr ""
 
 #: shared-module/usb/core/Device.c
 msgid "No usb host port initialized"
+msgstr ""
+
+#: shared-module/usb/core/Device.c
+msgid "NoCfg"
 msgstr ""
 
 #: ports/nordic/common-hal/_bleio/__init__.c
@@ -1724,10 +1728,6 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
 msgid "Pins must share PWM slice"
-msgstr ""
-
-#: shared-module/usb/core/Device.c
-msgid "Pipe error"
 msgstr ""
 
 #: py/builtinhelp.c
@@ -1939,6 +1939,10 @@ msgstr ""
 
 #: supervisor/shared/safe_mode.c
 msgid "Stack overflow. Increase stack size."
+msgstr ""
+
+#: shared-module/usb/core/Device.c
+msgid "Stall"
 msgstr ""
 
 #: shared-bindings/alarm/time/TimeAlarm.c
@@ -2299,6 +2303,10 @@ msgstr ""
 #: ports/espressif/common-hal/_bleio/PacketBuffer.c
 #: ports/nordic/common-hal/_bleio/PacketBuffer.c
 msgid "Writes not supported on Characteristic"
+msgstr ""
+
+#: shared-module/usb/core/Device.c
+msgid "Xfer"
 msgstr ""
 
 #: ports/atmel-samd/boards/circuitplayground_express/mpconfigboard.h
