@@ -27,9 +27,14 @@ static bool i2c_in_use[NUM_I2C];
 
 void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
     const mcu_pin_obj_t *scl, const mcu_pin_obj_t *sda, uint32_t frequency, uint32_t timeout) {
+
+    // Ensure the object starts in its deinit state.
+    common_hal_busio_i2c_mark_deinit(self);
+
     size_t instance_index = NUM_I2C;
     uint8_t scl_alt = 0;
     uint8_t sda_alt = 0;
+
     for (scl_alt = 0; scl_alt < 6; scl_alt++) {
         if (scl->functions[scl_alt].type != PIN_FUNCTION_I2C ||
             i2c_in_use[scl->functions[scl_alt].index] ||
@@ -82,8 +87,6 @@ void common_hal_busio_i2c_deinit(busio_i2c_obj_t *self) {
 
     common_hal_reset_pin(self->sda_pin);
     common_hal_reset_pin(self->scl_pin);
-    self->sda_pin = NULL;
-    self->scl_pin = NULL;
     common_hal_busio_i2c_mark_deinit(self);
 }
 

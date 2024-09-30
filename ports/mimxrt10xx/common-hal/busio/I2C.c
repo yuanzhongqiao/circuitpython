@@ -66,6 +66,9 @@ static void i2c_check_pin_config(const mcu_pin_obj_t *pin, uint32_t pull) {
 void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
     const mcu_pin_obj_t *scl, const mcu_pin_obj_t *sda, uint32_t frequency, uint32_t timeout) {
 
+    // Ensure the object starts in its deinit state.
+    common_hal_busio_i2c_mark_deinit(self);
+
     #if CIRCUITPY_REQUIRE_I2C_PULLUPS
     // Test that the pins are in a high state. (Hopefully indicating they are pulled up.)
     IOMUXC_SetPinMux(sda->mux_reg, IOMUXC_SW_MUX_CTL_PAD_MUX_MODE_ALT5, 0, 0, 0, 0);
@@ -162,8 +165,6 @@ void common_hal_busio_i2c_deinit(busio_i2c_obj_t *self) {
     common_hal_reset_pin(self->sda->pin);
     common_hal_reset_pin(self->scl->pin);
 
-    self->sda = NULL;
-    self->scl = NULL;
     common_hal_busio_i2c_mark_deinit(self);
 }
 
@@ -179,6 +180,9 @@ bool common_hal_busio_i2c_probe(busio_i2c_obj_t *self, uint8_t addr) {
 }
 
 bool common_hal_busio_i2c_try_lock(busio_i2c_obj_t *self) {
+    if (common_hal_busio_i2c_deinited(self)) {
+        return false;
+    }
     bool grabbed_lock = false;
 //    CRITICAL_SECTION_ENTER()
     if (!self->has_lock) {

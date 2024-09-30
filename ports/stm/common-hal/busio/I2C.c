@@ -50,6 +50,9 @@ static void i2c_assign_irq(busio_i2c_obj_t *self, I2C_TypeDef *I2Cx);
 void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
     const mcu_pin_obj_t *scl, const mcu_pin_obj_t *sda, uint32_t frequency, uint32_t timeout) {
 
+    // Ensure the object starts in its deinit state.
+    common_hal_busio_i2c_mark_deinit(self);
+
     // Match pins to I2C objects
     I2C_TypeDef *I2Cx;
     uint8_t sda_len = MP_ARRAY_SIZE(mcu_i2c_sda_list);
@@ -168,8 +171,6 @@ void common_hal_busio_i2c_deinit(busio_i2c_obj_t *self) {
 
     reset_pin_number(self->sda->pin->port, self->sda->pin->number);
     reset_pin_number(self->scl->pin->port, self->scl->pin->number);
-    self->sda = NULL;
-    self->scl = NULL;
     common_hal_busio_i2c_mark_deinit(self);
 }
 

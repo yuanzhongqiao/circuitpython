@@ -74,6 +74,10 @@ static void twim_event_handler(nrfx_twim_evt_t const *p_event, void *p_context) 
 }
 
 void common_hal_busio_i2c_construct(busio_i2c_obj_t *self, const mcu_pin_obj_t *scl, const mcu_pin_obj_t *sda, uint32_t frequency, uint32_t timeout) {
+
+    // Ensure the object starts in its deinit state.
+    common_hal_busio_i2c_mark_deinit(self);
+
     if (scl->number == sda->number) {
         raise_ValueError_invalid_pins();
     }
@@ -155,8 +159,6 @@ void common_hal_busio_i2c_deinit(busio_i2c_obj_t *self) {
 
     reset_pin_number(self->sda_pin_number);
     reset_pin_number(self->scl_pin_number);
-    self->sda_pin_number = NO_PIN;
-    self->scl_pin_number = NO_PIN;
 
     self->twim_peripheral->in_use = false;
     common_hal_busio_i2c_mark_deinit(self);

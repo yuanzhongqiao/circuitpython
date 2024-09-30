@@ -53,7 +53,8 @@ void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
     uint32_t sda_pinmux, scl_pinmux;
 
     // Ensure the object starts in its deinit state.
-    self->sda_pin = NO_PIN;
+    common_hal_busio_i2c_mark_deinit(self);
+
     Sercom *sercom = samd_i2c_get_sercom(scl, sda, &sercom_index, &sda_pinmux, &scl_pinmux);
     if (sercom == NULL) {
         raise_ValueError_invalid_pins();
@@ -108,7 +109,6 @@ void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
         mp_arg_error_invalid(MP_QSTR_frequency);
     }
 
-
     if (i2c_m_sync_enable(&self->i2c_desc) != ERR_NONE) {
         common_hal_busio_i2c_deinit(self);
         mp_raise_OSError(MP_EIO);
@@ -141,8 +141,6 @@ void common_hal_busio_i2c_deinit(busio_i2c_obj_t *self) {
 
     reset_pin_number(self->sda_pin);
     reset_pin_number(self->scl_pin);
-    self->sda_pin = NO_PIN;
-    self->scl_pin = NO_PIN;
     common_hal_busio_i2c_mark_deinit(self);
 }
 

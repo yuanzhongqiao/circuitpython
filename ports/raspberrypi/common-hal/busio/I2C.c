@@ -26,6 +26,10 @@ static i2c_inst_t *i2c[2] = {i2c0, i2c1};
 
 void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
     const mcu_pin_obj_t *scl, const mcu_pin_obj_t *sda, uint32_t frequency, uint32_t timeout) {
+
+    // Ensure object starts in its deinit state.
+    common_hal_busio_i2c_mark_deinit(self);
+
     self->peripheral = NULL;
     // I2C pins have a regular pattern. SCL is always odd and SDA is even. They match up in pairs
     // so we can divide by two to get the instance. This pattern repeats.
@@ -109,8 +113,6 @@ void common_hal_busio_i2c_deinit(busio_i2c_obj_t *self) {
 
     reset_pin_number(self->sda_pin);
     reset_pin_number(self->scl_pin);
-    self->sda_pin = NO_PIN;
-    self->scl_pin = NO_PIN;
     common_hal_busio_i2c_mark_deinit(self);
 }
 

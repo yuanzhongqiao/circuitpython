@@ -39,6 +39,9 @@ void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
     const mcu_pin_obj_t *sda,
     uint32_t frequency, uint32_t timeout) {
 
+    // Ensure the object starts in its deinit state.
+    common_hal_busio_i2c_mark_deinit(self);
+
     if ((scl != NULL) && (sda != NULL)) {
         if (scl->function_list[ DEFAULT_I2C_PERIPHERAL == I2C1?
                                 FN_I2C1_SCL : FN_I2C0_SCL] == 1 &&
@@ -88,8 +91,6 @@ void common_hal_busio_i2c_deinit(busio_i2c_obj_t *self) {
     I2C_Reset(self->i2cspm);
     common_hal_reset_pin(self->sda);
     common_hal_reset_pin(self->scl);
-    self->sda = NULL;
-    self->scl = NULL;
     self->i2cspm = NULL;
     in_used = false;
     common_hal_busio_i2c_mark_deinit(self);

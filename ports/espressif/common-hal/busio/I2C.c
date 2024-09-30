@@ -16,6 +16,10 @@
 
 void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
     const mcu_pin_obj_t *scl, const mcu_pin_obj_t *sda, uint32_t frequency, uint32_t timeout_us) {
+
+    // Ensure the object starts in its deinit state.
+    common_hal_busio_i2c_mark_deinit(self);
+
     // Pins 45 and 46 are "strapping" pins that impact start up behavior. They usually need to
     // be pulled-down so pulling them up for I2C is a bad idea. To make this hard, we don't
     // support I2C on these pins.
@@ -125,13 +129,11 @@ void common_hal_busio_i2c_deinit(busio_i2c_obj_t *self) {
 
     common_hal_reset_pin(self->sda_pin);
     common_hal_reset_pin(self->scl_pin);
-    self->sda_pin = NULL;
-    self->scl_pin = NULL;
     common_hal_busio_i2c_mark_deinit(self);
 }
 
 bool common_hal_busio_i2c_probe(busio_i2c_obj_t *self, uint8_t addr) {
-    esp_err_t result = i2c_master_probe(self->handle, addr, 1);
+    esp_err_t result = i2c_master_probe(self->handle, addr, 10);
     return result == ESP_OK;
 }
 
