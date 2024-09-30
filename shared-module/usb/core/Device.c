@@ -160,6 +160,7 @@ static size_t _xfer(tuh_xfer_t *xfer, mp_int_t timeout) {
     xfer->complete_cb = _transfer_done_cb;
     if (!tuh_edpt_xfer(xfer)) {
         mp_raise_usb_core_USBError(MP_ERROR_TEXT("Xfer"));
+        return 0;
     }
     uint32_t start_time = supervisor_ticks_ms32();
     while ((timeout == 0 || supervisor_ticks_ms32() - start_time < (uint32_t)timeout) &&
@@ -206,6 +207,7 @@ static bool _open_endpoint(usb_core_device_obj_t *self, mp_int_t endpoint) {
 
     if (self->configuration_descriptor == NULL) {
         mp_raise_usb_core_USBError(MP_ERROR_TEXT("NoCfg"));
+        return false;
     }
 
     tusb_desc_configuration_t *desc_cfg = (tusb_desc_configuration_t *)self->configuration_descriptor;
@@ -288,6 +290,7 @@ mp_int_t common_hal_usb_core_device_ctrl_transfer(usb_core_device_obj_t *self,
 
     if (!tuh_control_xfer(&xfer)) {
         mp_raise_usb_core_USBError(MP_ERROR_TEXT("Xfer"));
+        return 0;
     }
     uint32_t start_time = supervisor_ticks_ms32();
     while ((timeout == 0 || supervisor_ticks_ms32() - start_time < (uint32_t)timeout) &&
