@@ -200,12 +200,6 @@ void common_hal_wifi_init(bool user_initiated) {
         return;
     }
     // set the default lwip_local_hostname
-    //
-    // What happens if someone uses wifi.radio.hostname and then the
-    // interface is reset, I don't know if an interface reset is a thing
-    // but there is logic here to check for re-entry into the common_hal_wifi_init
-    // module. I would think we would want to carry the existing hostname across
-    // subsequent interface resets.
     char cpy_default_hostname[80];
     uint8_t mac[6];
     esp_wifi_get_mac(ESP_IF_WIFI_STA, mac);
