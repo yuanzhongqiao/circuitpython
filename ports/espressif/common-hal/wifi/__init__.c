@@ -200,7 +200,7 @@ void common_hal_wifi_init(bool user_initiated) {
         return;
     }
     // set the default lwip_local_hostname
-    char cpy_default_hostname[strlen(CIRCUITPY_BOARD_ID)+(MAC_ADDRESS_LENGTH*2)+6];
+    char cpy_default_hostname[strlen(CIRCUITPY_BOARD_ID) + (MAC_ADDRESS_LENGTH * 2) + 6];
     uint8_t mac[MAC_ADDRESS_LENGTH];
     esp_wifi_get_mac(ESP_IF_WIFI_STA, mac);
     sprintf(cpy_default_hostname, "cpy_%s_%x", CIRCUITPY_BOARD_ID, (unsigned int)mac);
