@@ -16,6 +16,8 @@
 #include "py/gc.h"
 #include "py/mpstate.h"
 #include "py/runtime.h"
+#include "py/objstr.h"
+#include "py/objint.h"
 
 #include "components/esp_wifi/include/esp_wifi.h"
 
@@ -197,6 +199,13 @@ void common_hal_wifi_init(bool user_initiated) {
         ESP_LOGE(TAG, "WiFi error code: %x", result);
         return;
     }
+    // set the default lwip_local_hostname
+    char cpy_default_hostname[80];
+    uint8_t mac[6];
+    esp_wifi_get_mac(ESP_IF_WIFI_STA, mac);
+    sprintf(cpy_default_hostname, "cpy_%s_%x", CIRCUITPY_BOARD_ID, (unsigned int)mac);
+    const char *default_lwip_local_hostname = cpy_default_hostname;
+    ESP_ERROR_CHECK(esp_netif_set_hostname(self->netif, default_lwip_local_hostname));
     // set station mode to avoid the default SoftAP
     common_hal_wifi_radio_start_station(self);
     // start wifi
