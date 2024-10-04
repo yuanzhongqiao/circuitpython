@@ -515,7 +515,7 @@ static mp_obj_t vfs_fat_setlabel(mp_obj_t self_in, mp_obj_t label_in) {
 }
 static MP_DEFINE_CONST_FUN_OBJ_2(fat_vfs_setlabel_obj, vfs_fat_setlabel);
 
-MP_PROPERTY_GETSET(fat_vfs_label_obj,
+static MP_PROPERTY_GETSET(fat_vfs_label_obj,
     (mp_obj_t)&fat_vfs_getlabel_obj,
     (mp_obj_t)&fat_vfs_setlabel_obj);
 #endif
