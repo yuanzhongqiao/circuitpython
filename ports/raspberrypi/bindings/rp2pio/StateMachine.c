@@ -610,13 +610,8 @@ static mp_obj_t rp2pio_statemachine_obj_get_writing(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(rp2pio_statemachine_get_writing_obj, rp2pio_statemachine_obj_get_writing);
 
-const mp_obj_property_t rp2pio_statemachine_writing_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&rp2pio_statemachine_get_writing_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
-
+MP_PROPERTY_GETTER(rp2pio_statemachine_writing_obj,
+    (mp_obj_t)&rp2pio_statemachine_get_writing_obj);
 
 //|     pending: int
 //|     """Returns the number of pending buffers for background writing.
@@ -628,12 +623,8 @@ static mp_obj_t rp2pio_statemachine_obj_get_pending(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(rp2pio_statemachine_get_pending_obj, rp2pio_statemachine_obj_get_pending);
 
-const mp_obj_property_t rp2pio_statemachine_pending_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&rp2pio_statemachine_get_pending_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(rp2pio_statemachine_pending_obj,
+    (mp_obj_t)&rp2pio_statemachine_get_pending_obj);
 
 //|     def readinto(
 //|         self,
@@ -847,13 +838,8 @@ static mp_obj_t rp2pio_statemachine_obj_get_txstall(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(rp2pio_statemachine_get_txstall_obj, rp2pio_statemachine_obj_get_txstall);
 
-const mp_obj_property_t rp2pio_statemachine_txstall_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&rp2pio_statemachine_get_txstall_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
-
+MP_PROPERTY_GETTER(rp2pio_statemachine_txstall_obj,
+    (mp_obj_t)&rp2pio_statemachine_get_txstall_obj);
 
 //|     rxstall: bool
 //|     """True when the state machine has stalled due to a full RX FIFO since the last
