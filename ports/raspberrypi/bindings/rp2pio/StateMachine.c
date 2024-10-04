@@ -623,7 +623,7 @@ static mp_obj_t rp2pio_statemachine_obj_get_pending(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(rp2pio_statemachine_get_pending_obj, rp2pio_statemachine_obj_get_pending);
 
-MP_PROPERTY_GETTER(rp2pio_statemachine_pending_obj, 
+MP_PROPERTY_GETTER(rp2pio_statemachine_pending_obj,
     (mp_obj_t)&rp2pio_statemachine_get_pending_obj);
 
 //|     def readinto(
@@ -838,7 +838,7 @@ static mp_obj_t rp2pio_statemachine_obj_get_txstall(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(rp2pio_statemachine_get_txstall_obj, rp2pio_statemachine_obj_get_txstall);
 
-MP_PROPERTY_GETTER(rp2pio_statemachine_txstall_obj, 
+MP_PROPERTY_GETTER(rp2pio_statemachine_txstall_obj,
     (mp_obj_t)&rp2pio_statemachine_get_txstall_obj);
 
 //|     rxstall: bool

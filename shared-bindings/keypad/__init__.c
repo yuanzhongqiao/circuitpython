@@ -37,7 +37,7 @@ static mp_obj_t keypad_generic_get_key_count(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(keypad_generic_get_key_count_obj, keypad_generic_get_key_count);
 
-MP_PROPERTY_GETTER(keypad_generic_key_count_obj, 
+MP_PROPERTY_GETTER(keypad_generic_key_count_obj,
     (mp_obj_t)&keypad_generic_get_key_count_obj);
 
 static mp_obj_t keypad_generic_get_events(mp_obj_t self_in) {

@@ -113,7 +113,7 @@ static mp_obj_t displayio_ondiskbitmap_obj_get_pixel_shader(mp_obj_t self_in) {
 
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_ondiskbitmap_get_pixel_shader_obj, displayio_ondiskbitmap_obj_get_pixel_shader);
 
-MP_PROPERTY_GETTER(displayio_ondiskbitmap_pixel_shader_obj, 
+MP_PROPERTY_GETTER(displayio_ondiskbitmap_pixel_shader_obj,
     (mp_obj_t)&displayio_ondiskbitmap_get_pixel_shader_obj);
 
 static const mp_rom_map_elem_t displayio_ondiskbitmap_locals_dict_table[] = {

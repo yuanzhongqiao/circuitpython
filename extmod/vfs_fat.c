@@ -485,7 +485,7 @@ static mp_obj_t vfs_fat_getreadonly(mp_obj_t self_in) {
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(fat_vfs_getreadonly_obj, vfs_fat_getreadonly);
 
-MP_PROPERTY_GETTER(fat_vfs_readonly_obj, 
+MP_PROPERTY_GETTER(fat_vfs_readonly_obj,
     (mp_obj_t)&fat_vfs_getreadonly_obj);
 
 #if MICROPY_FATFS_USE_LABEL
