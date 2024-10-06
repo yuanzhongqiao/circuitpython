@@ -12,9 +12,7 @@
 
 bool espressif_board_reset_pin_number(gpio_num_t pin_number) {
     if (pin_number == 15) {
-        /*
-         * Turn on the spare led on boot as a power indicator
-         */
+        // Turn on the spare led on boot as a power indicator.
         config_pin_as_output_with_level(pin_number, true);
         return true;
     }
