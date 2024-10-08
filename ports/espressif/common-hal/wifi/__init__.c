@@ -199,11 +199,20 @@ void common_hal_wifi_init(bool user_initiated) {
         ESP_LOGE(TAG, "WiFi error code: %x", result);
         return;
     }
-    // set the default lwip_local_hostname
-    char cpy_default_hostname[strlen(CIRCUITPY_BOARD_ID) + (MAC_ADDRESS_LENGTH * 2) + 6];
+    // Set the default lwip_local_hostname capped at 32 characters. We trim off
+    // the start of the board name (likely manufacturer) because the end is
+    // often more unique to the board.
+    size_t board_len = MIN(32 - ((MAC_ADDRESS_LENGTH * 2) + 6), strlen(CIRCUITPY_BOARD_ID));
+    size_t board_trim = strlen(CIRCUITPY_BOARD_ID) - board_len;
+    // Avoid double _ in the hostname.
+    if (CIRCUITPY_BOARD_ID[board_trim] == '_') {
+        board_trim++;
+    }
+
+    char cpy_default_hostname[board_len + (MAC_ADDRESS_LENGTH * 2) + 6];
     uint8_t mac[MAC_ADDRESS_LENGTH];
     esp_wifi_get_mac(ESP_IF_WIFI_STA, mac);
-    sprintf(cpy_default_hostname, "cpy_%s_%x", CIRCUITPY_BOARD_ID, (unsigned int)mac);
+    snprintf(cpy_default_hostname, sizeof(cpy_default_hostname), "cpy-%s-%x", CIRCUITPY_BOARD_ID + board_trim, (unsigned int)mac);
     const char *default_lwip_local_hostname = cpy_default_hostname;
     ESP_ERROR_CHECK(esp_netif_set_hostname(self->netif, default_lwip_local_hostname));
     // set station mode to avoid the default SoftAP
