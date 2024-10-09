@@ -58,6 +58,9 @@ CIRCUITPY_WATCHDOG ?= 1
 CIRCUITPY_WIFI ?= 1
 CIRCUITPY_SOCKETPOOL_IPV6 ?= 1
 
+# Turn off aesio. It is a custom API that no one uses.
+CIRCUITPY_AESIO = 0
+
 # Enable _eve module
 CIRCUITPY__EVE ?= 1
 
