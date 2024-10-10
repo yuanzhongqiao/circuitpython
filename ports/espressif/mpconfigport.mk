@@ -58,9 +58,6 @@ CIRCUITPY_WATCHDOG ?= 1
 CIRCUITPY_WIFI ?= 1
 CIRCUITPY_SOCKETPOOL_IPV6 ?= 1
 
-# Turn off aesio. It is a custom API that no one uses.
-CIRCUITPY_AESIO = 0
-
 # Enable _eve module
 CIRCUITPY__EVE ?= 1
 
@@ -140,6 +137,7 @@ CIRCUITPY_USB_DEVICE = 0
 CIRCUITPY_ESP_USB_SERIAL_JTAG ?= 1
 
 # No room in flash.
+CIRCUITPY_AESIO = 0
 CIRCUITPY_KEYPAD_DEMUX = 0
 
 else ifeq ($(IDF_TARGET),esp32c6)
